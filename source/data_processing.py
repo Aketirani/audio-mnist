@@ -1,8 +1,9 @@
 import librosa
 import numpy as np
-import statistics
-import scipy.stats
 import scipy.io.wavfile as wavf
+import statistics
+import csv
+import scipy.stats
 from typing import Tuple
 
 class DataProcessing:
@@ -81,7 +82,19 @@ class DataProcessing:
         features["skewness"] = scipy.stats.skew(fft_data)
         features["kurtosis"] = scipy.stats.kurtosis(fft_data)
         return features
-    
+
+    def normalize_features(self, features: dict) -> dict:
+        """
+        Normalize the features by min-max normalization
+        
+        :param features: dict, containing the statistical features of the FFT data
+        :return: dict, containing the normalized statistical features of the FFT data
+        """
+        feature_keys = list(features.keys())
+        for key in feature_keys:
+            features[key] = (features[key] - min(features.values()))/(max(features.values())-min(features.values()))
+        return features
+
     def add_gender(self, features: dict, gender: str) -> dict:
         """
         Add the gender to the feature dict
