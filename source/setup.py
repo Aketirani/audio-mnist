@@ -5,7 +5,7 @@ from typing import (Dict, List, Tuple, TypeVar)
 # Define a generic type variable for any type that can be used in the code
 ANY = TypeVar("ANY", Dict, List, Tuple, str, int, float)
 
-class setUp:
+class Setup:
     """
     Setup all basic inputs for the project pipeline
     """
