@@ -3,8 +3,9 @@ import numpy as np
 import scipy.io.wavfile as wavf
 import statistics
 import csv
+import pandas as pd
 import scipy.stats
-from typing import Tuple
+from typing import List, Tuple
 
 class DataProcessing:
     def __init__(self, dst: str, target_sr: int) -> None:
@@ -116,3 +117,21 @@ class DataProcessing:
         """
         features["digit"] = digit
         return features
+    
+    def create_dataframe(self, column_names: List[str]) -> pd.DataFrame:
+        """
+        Create an empty DataFrame with the given column names
+        
+        :param column_names: List[str], names of the columns for the DataFrame
+        :return: pd.DataFrame, an empty DataFrame with the given column names
+        """
+        return pd.DataFrame(columns=column_names)
+
+    def save_df_to_csv(self, dataframe: pd.DataFrame, dst: str) -> None:
+        """
+        Save the given DataFrame to a CSV file
+        
+        :param dataframe: pd.DataFrame, DataFrame to be saved
+        :param dst: str, destination to save the CSV file
+        """
+        dataframe.to_csv(dst, index=False)
