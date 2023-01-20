@@ -1,8 +1,8 @@
+import os
 import librosa
 import numpy as np
 import scipy.io.wavfile as wavf
 import statistics
-import csv
 import pandas as pd
 import scipy.stats
 from typing import List, Tuple
@@ -127,11 +127,12 @@ class DataProcessing:
         """
         return pd.DataFrame(columns=column_names)
 
-    def save_df_to_csv(self, dataframe: pd.DataFrame, dst: str) -> None:
+    def save_df_to_csv(self, dataframe: pd.DataFrame, dst: str, file_name: str) -> None:
         """
         Save the given DataFrame to a CSV file
         
         :param dataframe: pd.DataFrame, DataFrame to be saved
-        :param dst: str, destination to save the CSV file
+        :param dst: str, destination where the CSV file will be saved
+        :param file_name: str, name of the file to be saved
         """
-        dataframe.to_csv(dst, index=False)
+        dataframe.to_csv(os.path.join(dst, file_name), index=False)
