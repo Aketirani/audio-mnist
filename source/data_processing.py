@@ -1,11 +1,7 @@
-import os
 import librosa
 import numpy as np
-import scipy.io.wavfile as wavf
 import statistics
-import pandas as pd
 import scipy.stats
-from typing import List, Tuple
 
 class DataProcessing:
     def __init__(self, dst: str, target_sr: int) -> None:
@@ -17,15 +13,6 @@ class DataProcessing:
         """
         self.dst = dst
         self.target_sr = target_sr
-
-    def read_audio(self, file: str) -> Tuple[int, np.ndarray]:
-        """
-        Read the audio data from the given file and return the sample rate and audio data
-        
-        :param file: str, path to the audio file
-        :return: Tuple, containing the sample rate and audio data
-        """
-        return wavf.read(file)
 
     def resample_data(self, fs: int, data: np.ndarray, target_sr: int) -> np.ndarray:
         """
@@ -65,7 +52,7 @@ class DataProcessing:
         """
         return np.fft.fft(data)
 
-    def fft_features(self, fft_data: np.ndarray) -> dict:
+    def feature_creation(self, fft_data: np.ndarray) -> dict:
         """
         Calculate various statistical features of the given FFT data
         
@@ -117,22 +104,3 @@ class DataProcessing:
         """
         features["digit"] = digit
         return features
-    
-    def create_dataframe(self, column_names: List[str]) -> pd.DataFrame:
-        """
-        Create an empty DataFrame with the given column names
-        
-        :param column_names: List[str], names of the columns for the DataFrame
-        :return: pd.DataFrame, an empty DataFrame with the given column names
-        """
-        return pd.DataFrame(columns=column_names)
-
-    def save_df_to_csv(self, dataframe: pd.DataFrame, dst: str, file_name: str) -> None:
-        """
-        Save the given DataFrame to a CSV file
-        
-        :param dataframe: pd.DataFrame, DataFrame to be saved
-        :param dst: str, destination where the CSV file will be saved
-        :param file_name: str, name of the file to be saved
-        """
-        dataframe.to_csv(os.path.join(dst, file_name), index=False)

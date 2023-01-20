@@ -5,10 +5,8 @@ import numpy as np
 import playsound
 
 class DataVisualization:
-    def __init__(self) -> None:
-        """
-        Initialize the class
-        """
+    def __init__(self):
+        pass
 
     @staticmethod
     def plot_signal(sr: int, audio_data: np.ndarray, plot_path: str, plot_name: str) -> None:
