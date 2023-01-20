@@ -21,6 +21,7 @@ class setUp:
         self.source_meta_path = self.set_meta_data_path()
         self.source_path = self.set_source_path()
         self.destination_path = self.set_destination_path()
+        self.plot_path = self.set_plot_path()
         self.meta_data = self.read_meta_data()
 
     def read_config(self) -> Dict[str, ANY]:
@@ -57,9 +58,17 @@ class setUp:
         """
         Get the path to the folder containing each participant's preprocessed data
         
-        :return: str, path to the preprocessed data folder
+        :return: str, path to the preprocessed data_pre folder
         """
-        return os.path.join(self.cfg_setup['project_path'], "preprocessed_data")
+        return os.path.join(self.cfg_setup['project_path'], "data_pre")
+
+    def set_plot_path(self) -> str:
+        """
+        Get the path to the folder containing plots
+        
+        :return: str, path to the plot folder
+        """
+        return os.path.join(self.cfg_setup['project_path'], "plots")
 
     def read_meta_data(self) -> Dict[str, ANY]:
         """
