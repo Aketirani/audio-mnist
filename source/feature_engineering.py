@@ -77,3 +77,19 @@ class FeatureEngineering:
                 df[col] = df_original[col]
                 
         return df
+
+    @staticmethod
+    def create_label_column(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Create a label column in the DataFrame where 'female' is 0 and 'male' is 1
+
+        :param df: pd.DataFrame, input DataFrame
+        :return: pd.DataFrame, DataFrame with label column
+        """
+        # Create label column
+        df['label'] = df['gender'].map({'female': 0, 'male': 1})
+
+        # Drop the original 'gender' column
+        df = df.drop(['gender'], axis=1)
+
+        return df

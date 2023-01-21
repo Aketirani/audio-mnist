@@ -2,6 +2,7 @@ import os
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import playsound
 
 class DataVisualization:
@@ -40,3 +41,16 @@ class DataVisualization:
         :param filepath: str, path to the audio file
         """
         playsound.playsound(filepath)
+
+    @staticmethod
+    def column_distribution(df: pd.DataFrame, plot_path: str, plot_name: str) -> None:
+        """
+        Plot the column distribution of the dataframe and save it to the specified plot path.
+        
+        :param df: pd.DataFrame, dataframe to be plotted
+        :param plot_path: str, directory where the plot will be saved
+        :param plot_name: str, name of the plot to be saved
+        """
+        df.plot.hist(subplots=True, layout=(-1, 3), sharex=False, figsize=(10,10))
+        plt.savefig(os.path.join(plot_path, plot_name))
+        plt.clf()
