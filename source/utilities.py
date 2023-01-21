@@ -1,11 +1,15 @@
 import pandas as pd
 import os
+import time
 import numpy as np
 import scipy.io.wavfile as wavf
 from typing import List, Tuple
 
 class Utilities:
     def __init__(self):
+        """
+        Initialize the Utilities class
+        """
         pass
 
     @staticmethod
@@ -40,11 +44,28 @@ class Utilities:
         dataframe.to_csv(os.path.join(dst, file_name), index=False)
 
     @staticmethod
-    def csv_to_dataframe(file: str) -> pd.DataFrame:
+    def csv_to_dataframe(dst: str, file_name: str) -> pd.DataFrame:
         """
         Read the CSV file and return it as a Pandas DataFrame
         
-        :param file: str, path to the CSV file
+        :param dst: str, destination where the CSV file is stored
+        :param file_name: str, name of the file
         :return: pd.DataFrame, DataFrame created from the CSV file
         """
-        return pd.read_csv(file)
+        return pd.read_csv(os.path.join(dst, file_name))
+
+    @staticmethod
+    def loop_progress(index:int, total:int):
+        """
+        This function takes in the current index, total number of iterations and sleep time 
+        and displays the progress of the loop every iteration
+
+        :param index: int, the current index of the loop
+        :param total: int, total number of iterations in the loop
+        """
+
+        # calculate progress
+        progress = (index) / (total)
+
+        # print progress and elapsed time
+        print(f'Progress: {progress:.2%}')

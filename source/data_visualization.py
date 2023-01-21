@@ -6,6 +6,9 @@ import playsound
 
 class DataVisualization:
     def __init__(self):
+        """
+        Initialize the DataVisualization class
+        """
         pass
 
     @staticmethod
