@@ -15,7 +15,6 @@ class Setup:
         
         :param cfg_filepath: str, path to the config file
         """
-
         self.cfg_filepath = cfg_filepath
         self.cfg_setup = self.read_config()
         self.source_meta_path = self.set_meta_data_path()
