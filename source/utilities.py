@@ -32,6 +32,21 @@ class Utilities:
         return pd.DataFrame(columns=column_names)
 
     @staticmethod
+    def remove_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
+        """
+        Remove a column from DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :param column: str, column name to remove
+        :return: pd.DataFrame, DataFrame with column removed
+        """
+        if column in df.columns:
+            df = df.drop([column], axis=1)
+        else:
+            print(f"{column} not found in DataFrame.")
+        return df
+
+    @staticmethod
     def save_df_to_csv(dataframe: pd.DataFrame, dst: str, file_name: str) -> None:
         """
         Save the given DataFrame to a CSV file

@@ -10,7 +10,7 @@ It finds applications in automatic salutations, tagging audio recording, and hel
 
 In this repository, we will be using acoustic features extracted from a voice recording to predict the speaker’s gender.
 
-## The Dataset
+## Dataset
 
 [Kaggle](https://www.kaggle.com/datasets/primaryobjects/voicegender)
 
