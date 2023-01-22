@@ -5,11 +5,13 @@ import scipy.io.wavfile as wavf
 from typing import List, Tuple
 
 class Utilities:
-    def __init__(self):
+    def __init__(self, dst: str):
         """
         Initialize the Utilities class
+
+        :param dst: str, destination where the CSV file will be saved
         """
-        pass
+        self.dst = dst
 
     @staticmethod
     def read_audio(file: str) -> Tuple[int, np.ndarray]:
@@ -46,27 +48,23 @@ class Utilities:
             print(f"{column} not found in DataFrame.")
         return df
 
-    @staticmethod
-    def save_df_to_csv(dataframe: pd.DataFrame, dst: str, file_name: str) -> None:
+    def save_df_to_csv(self, dataframe: pd.DataFrame, file_name: str) -> None:
         """
         Save the given DataFrame to a CSV file
 
         :param dataframe: pd.DataFrame, DataFrame to be saved
-        :param dst: str, destination where the CSV file will be saved
         :param file_name: str, name of the file to be saved
         """
-        dataframe.to_csv(os.path.join(dst, file_name), index=False)
+        dataframe.to_csv(os.path.join(self.dst, file_name), index=False)
 
-    @staticmethod
-    def csv_to_dataframe(dst: str, file_name: str) -> pd.DataFrame:
+    def csv_to_df(self, file_name: str) -> pd.DataFrame:
         """
         Read the CSV file and return it as a Pandas DataFrame
         
-        :param dst: str, destination where the CSV file is stored
         :param file_name: str, name of the file
         :return: pd.DataFrame, DataFrame created from the CSV file
         """
-        return pd.read_csv(os.path.join(dst, file_name))
+        return pd.read_csv(os.path.join(self.dst, file_name))
 
     @staticmethod
     def loop_progress(index:int, total:int):

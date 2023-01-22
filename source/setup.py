@@ -21,6 +21,7 @@ class Setup:
         self.source_path = self.set_source_path()
         self.destination_path = self.set_destination_path()
         self.plot_path = self.set_plot_path()
+        self.result_path = self.set_result_path()
         self.meta_data = self.read_meta_data()
 
     def read_config(self) -> Dict[str, ANY]:
@@ -68,6 +69,14 @@ class Setup:
         :return: str, path to the plot folder
         """
         return os.path.join(self.cfg_setup['project_path'], "plots")
+
+    def set_result_path(self) -> str:
+        """
+        Get the path to the folder containing results
+        
+        :return: str, path to the plot folder
+        """
+        return os.path.join(self.cfg_setup['project_path'], "results")
 
     def read_meta_data(self) -> Dict[str, ANY]:
         """

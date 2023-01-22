@@ -40,7 +40,8 @@ class DataProcessing:
             raise ValueError(f"Data length {len(data)} cannot exceed padding length {padding_length}!")
         return embedded_data
     
-    def fft_data(self, data: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def fft_data(data: np.ndarray) -> np.ndarray:
         """
         Calculate the FFT of the given audio data
         
@@ -49,7 +50,8 @@ class DataProcessing:
         """
         return np.fft.fft(data)
 
-    def feature_creation(self, fft_data: np.ndarray) -> dict:
+    @staticmethod
+    def feature_creation(fft_data: np.ndarray) -> dict:
         """
         Calculate various statistical features of the given FFT data
         
@@ -68,7 +70,8 @@ class DataProcessing:
         features["kurtosis"] = scipy.stats.kurtosis(fft_data)
         return features
 
-    def normalize_features(self, features: dict) -> dict:
+    @staticmethod
+    def normalize_features(features: dict) -> dict:
         """
         Normalize the features by min-max normalization
         
@@ -80,7 +83,8 @@ class DataProcessing:
             features[key] = (features[key] - min(features.values()))/(max(features.values())-min(features.values()))
         return features
 
-    def add_gender(self, features: dict, gender: str) -> dict:
+    @staticmethod
+    def add_gender(features: dict, gender: str) -> dict:
         """
         Add the gender to the feature dict
         
@@ -90,8 +94,9 @@ class DataProcessing:
         """
         features["gender"] = gender
         return features
-    
-    def add_digit(self, features: dict, digit: str) -> dict:
+
+    @staticmethod
+    def add_digit(features: dict, digit: str) -> dict:
         """
         Add the digit to the feature dict
         
