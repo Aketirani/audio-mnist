@@ -4,35 +4,32 @@ import statistics
 import scipy.stats
 
 class DataProcessing:
-    def __init__(self, dst: str, target_sr: int) -> None:
+    def __init__(self, target_sr: int) -> None:
         """
         Initialize the class with the destination path, and target sample rate
         
-        :param dst: str, path to the destination folder to save the resampled audio recordings
         :param target_sr: int, target sample rate for the resampled audio recordings
         """
-        self.dst = dst
         self.target_sr = target_sr
 
-    def resample_data(self, fs: int, data: np.ndarray, target_sr: int) -> np.ndarray:
+    def resample_data(self, fs: int, data: np.ndarray) -> np.ndarray:
         """
         Resample the given audio data to the target sample rate and return the resampled data
         
         :param fs: int, sample rate of the audio data
         :param data: np.ndarray, audio data
-        :param target_sr: int, target sample rate for the resampled data
         :return: np.ndarray, resampled audio data
         """
-        return librosa.core.resample(y=data.astype(np.float32), orig_sr=fs, target_sr = target_sr, res_type="scipy")
+        return librosa.core.resample(y=data.astype(np.float32), orig_sr=fs, target_sr = self.target_sr, res_type="scipy")
     
-    def zero_pad(self, data: np.ndarray, padding_length: int) -> np.ndarray:
+    def zero_pad(self, data: np.ndarray) -> np.ndarray:
         """
         Pad the given audio data with zeros to the specified length
         
         :param data: np.ndarray, audio data
-        :param padding_length: int, the length to pad the audio data to
         :return: np.ndarray, the zero-padded audio data
         """
+        padding_length = self.target_sr
         if len(data) < padding_length:
             embedded_data = np.zeros(padding_length)
             offset = np.random.randint(low = 0, high = padding_length - len(data))
