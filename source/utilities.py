@@ -34,6 +34,16 @@ class Utilities:
         return pd.DataFrame(columns=column_names)
 
     @staticmethod
+    def df_shape(df: pd.DataFrame) -> Tuple[int,int]:
+        """
+        Find the shape of the given DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :return: Tuple, containing the number of rows and columns in the DataFrame
+        """
+        return df.shape
+
+    @staticmethod
     def remove_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
         """
         Remove a column from DataFrame
