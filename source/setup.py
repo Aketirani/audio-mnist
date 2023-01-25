@@ -17,12 +17,12 @@ class Setup:
         """
         self.cfg_filepath = cfg_filepath
         self.cfg_setup = self.read_config()
-        self.source_meta_path = self.set_meta_data_path()
         self.source_path = self.set_source_path()
         self.destination_path = self.set_destination_path()
+        self.source_meta_path = self.set_meta_data_path()
+        self.source_model_path = self.set_model_param_path()
         self.plot_path = self.set_plot_path()
         self.result_path = self.set_result_path()
-        self.meta_data = self.read_meta_data()
 
     def read_config(self) -> Dict[str, ANY]:
         """
@@ -54,6 +54,14 @@ class Setup:
         """
         return os.path.join(self.cfg_setup['project_path'], "data", "audioMNIST_meta.txt")
 
+    def set_model_param_path(self) -> str:
+        """
+        Get the path to the file containing model parameters information
+        
+        :return: str, path to the model parameters file
+        """
+        return os.path.join(self.cfg_setup['project_path'], "source", "model_parameters.yaml")
+
     def set_destination_path(self) -> str:
         """
         Get the path to the folder containing each participant's preprocessed data
@@ -78,16 +86,16 @@ class Setup:
         """
         return os.path.join(self.cfg_setup['project_path'], "results")
 
-    def read_meta_data(self) -> Dict[str, ANY]:
+    def read_file(self, filepath) -> Dict[str, ANY]:
         """
-        Read the meta data yaml file and return the data as a dictionary
+        Read the file and return the it as a dictionary
         
-        :return: Dict, containing the meta data
+        :return: Dict, containing the file data
         """
 
         try:
-            with open(self.source_meta_path, 'r') as file:
-                meta_data = yaml.safe_load(file)
+            with open(filepath, 'r') as file:
+                file_data = yaml.safe_load(file)
         except:
-            raise FileNotFoundError(f"{self.source_meta_path} is not a valid meta data filepath!")
-        return meta_data
+            raise FileNotFoundError(f"{filepath} is not a valid filepath!")
+        return file_data
