@@ -1,9 +1,6 @@
 import os
 import yaml
-from typing import (Dict, List, Tuple, TypeVar)
-
-# Define a generic type variable for any type that can be used in the code
-ANY = TypeVar("ANY", Dict, List, Tuple, str, int, float)
+from typing import Dict
 
 class Setup:
     """
@@ -24,7 +21,7 @@ class Setup:
         self.plot_path = self.set_plot_path()
         self.result_path = self.set_result_path()
 
-    def read_config(self) -> Dict[str, ANY]:
+    def read_config(self) -> Dict:
         """
         Read the config yaml file and return the data as a dictionary
         
@@ -85,17 +82,3 @@ class Setup:
         :return: str, path to the plot folder
         """
         return os.path.join(self.cfg_setup['project_path'], "results")
-
-    def read_file(self, filepath) -> Dict[str, ANY]:
-        """
-        Read the file and return the it as a dictionary
-        
-        :return: Dict, containing the file data
-        """
-
-        try:
-            with open(filepath, 'r') as file:
-                file_data = yaml.safe_load(file)
-        except:
-            raise FileNotFoundError(f"{filepath} is not a valid filepath!")
-        return file_data

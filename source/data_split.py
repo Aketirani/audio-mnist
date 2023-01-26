@@ -21,6 +21,7 @@ class DataSplit:
         
         :param dataframe: pd.DataFrame, dataframe to be split
         :param target_column: str, name of the column to stratify on
+        
         :return: tuple, containing the training, validation, and test dataframes in that order
         """
         # Split the dataframe into a training set and a validation+test set

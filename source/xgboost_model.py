@@ -1,6 +1,9 @@
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 import numpy as np
+import pandas as pd
+import json
+import os
 
 class XGBoostModel:
     def __init__(self, train_df, val_df, test_df):
@@ -52,7 +55,7 @@ class XGBoostModel:
                      tree_method=model_param["tree_method"],
                      verbosity=model_param["verbosity"])
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray):
+    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path:str, file_name:str):
         """
         Fit the model on training data
         
@@ -60,14 +63,64 @@ class XGBoostModel:
         :param y_train: numpy.ndarray, labels for training
         :param X_val: numpy.ndarray, features for validation
         :param y_val: numpy.ndarray, labels for validation
+        :param file_path: str, path where the eval_metrics should be saved
+        :param file_name: str, name of the file to be saved
         """
+
         # define accuracy metric function
         def accuracy(preds, dtrain):
+            """
+            Calculates the accuracy of predictions made by a model
+            
+            :param preds: np.array, an array of predictions made by the model
+            :param dtrain: object, the training data that is used to evaluate the accuracy of the model
+
+            :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
+            """
+            # Retrieve true labels from the training data
             labels = dtrain.get_label()
+            
+            # Calculate accuracy by comparing true labels to the rounded predictions
             return 'accuracy', accuracy_score(labels, np.round(preds))
 
+        def save_eval_metrics(file_path:str, result):
+            """
+            Save the eval_metrics of a model in yaml format
+
+            :param file_path: str, path where the eval_metrics should be saved
+            :param result: object, the result returned by the fit method of a model
+            """
+            # Open the file in write mode
+            with open(file_path, 'w') as f:
+                # dump the eval_result_ attribute of the result object into the file
+                json.dump(result.evals_result_, f)
+
         # fit the model on the training data and evaluate on validation data
-        self.model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=True)
+        result = self.model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=0)
+
+        # save evaluation metrics to file
+        save_eval_metrics(os.path.join(file_path, file_name), result)
+
+        return self.model.evals_result()
+
+    @staticmethod
+    def create_log_df(log_data: dict) -> pd.DataFrame:
+        """
+        Create a DataFrame from log data
+
+        :param log_data: dict, log data
+        :return: pd.DataFrame, DataFrame containing log data
+        """
+        # Extract data from log data
+        train_loss = log_data['validation_0']['logloss']
+        train_acc = log_data['validation_1']['logloss']
+        val_loss = log_data['validation_0']['accuracy']
+        val_acc = log_data['validation_1']['accuracy']
+
+        # Define column names
+        columns = ['train_loss', 'train_acc', 'val_loss', 'val_acc']
+        # Create DataFrame from extracted data and column names
+        return pd.DataFrame(list(zip(train_loss, train_acc, val_loss, val_acc)), columns=columns)
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
         """
@@ -78,9 +131,7 @@ class XGBoostModel:
         :return: numpy.ndarray, array containing the predicted labels for test data
         """
         # make predictions on the test data using the trained model
-        y_pred = self.model.predict(X_test)
-        # return the predicted labels
-        return y_pred
+        return self.model.predict(X_test)
 
     def evaluate_predictions(self, y_test: np.ndarray, y_pred: np.ndarray) -> float:
         """
@@ -95,7 +146,4 @@ class XGBoostModel:
         predictions = [round(value) for value in y_pred]
 
         # calculate accuracy
-        accuracy = accuracy_score(y_test, predictions)
-
-        # return the accuracy
-        return accuracy
+        return accuracy_score(y_test, predictions)
