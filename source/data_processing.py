@@ -56,19 +56,31 @@ class DataProcessing:
         Calculate various statistical features of the given FFT data
         
         :param fft_data: np.ndarray, FFT data
-        :return: dict, containing the mean, std, avg, median, max, min, skewness, kurtois
+        :return: dict, containing created features
         """
+        # Take the absolute value of the FFT data
         fft_data = np.abs(fft_data)
         features = {}
+        # Mean of the FFT data
         features["mean"] = np.mean(fft_data)
+        # Standard deviation of the FFT data
         features["std"] = np.std(fft_data)
-        features["avg"] = statistics.mean(fft_data)
+        # Median of the FFT data
         features["median"] = statistics.median(fft_data)
+        # Maximum value of the FFT data
         features["max"] = max(fft_data)
+        # Minimum value of the FFT data
         features["min"] = min(fft_data)
+        # Skewness of the FFT data
         features["skewness"] = scipy.stats.skew(fft_data)
+        # Kurtosis of the FFT data
         features["kurtosis"] = scipy.stats.kurtosis(fft_data)
+        # Range of the FFT data
+        features["dfrange"] = features["max"] - features["min"]
+        # Modulation index of the FFT data
+        features["modindx"] = np.std(np.diff(fft_data))/np.mean(np.diff(fft_data))
         return features
+
 
     @staticmethod
     def normalize_features(features: dict) -> dict:

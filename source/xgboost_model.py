@@ -81,8 +81,9 @@ class XGBoostModel:
             labels = dtrain.get_label()
             
             # Calculate accuracy by comparing true labels to the rounded predictions
-            return 'accuracy', accuracy_score(labels, np.round(preds))
-
+            accuracy = accuracy_score(labels, np.round(preds))
+            return 'accuracy', accuracy
+        
         def save_eval_metrics(file_path:str, result):
             """
             Save the eval_metrics of a model in yaml format
@@ -101,8 +102,6 @@ class XGBoostModel:
         # save evaluation metrics to file
         save_eval_metrics(os.path.join(file_path, file_name), result)
 
-        return self.model.evals_result()
-
     @staticmethod
     def create_log_df(log_data: dict) -> pd.DataFrame:
         """
@@ -116,11 +115,13 @@ class XGBoostModel:
         train_acc = log_data['validation_1']['logloss']
         val_loss = log_data['validation_0']['accuracy']
         val_acc = log_data['validation_1']['accuracy']
+        iteration = list(range(0,len(train_loss)))
 
         # Define column names
-        columns = ['train_loss', 'train_acc', 'val_loss', 'val_acc']
+        columns = ['iteration', 'train_loss', 'train_acc', 'val_loss', 'val_acc']
+
         # Create DataFrame from extracted data and column names
-        return pd.DataFrame(list(zip(train_loss, train_acc, val_loss, val_acc)), columns=columns)
+        return pd.DataFrame(list(zip(iteration, train_loss, train_acc, val_loss, val_acc)), columns=columns)
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
         """
