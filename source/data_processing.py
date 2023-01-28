@@ -20,6 +20,11 @@ class DataProcessing:
         :param data: np.ndarray, audio data
         :return: np.ndarray, resampled audio data
         """
+        # use librosa library's resample function to resample the audio data
+        # the input data should be in float32 format
+        # the original sample rate (fs) is passed as orig_sr
+        # the target sample rate is passed as target_sr
+        # res_type is set to "scipy" for high quality resampling
         return librosa.core.resample(y=data.astype(np.float32), orig_sr=fs, target_sr = self.target_sr, res_type="scipy")
     
     def zero_pad(self, data: np.ndarray) -> np.ndarray:
@@ -29,15 +34,21 @@ class DataProcessing:
         :param data: np.ndarray, audio data
         :return: np.ndarray, the zero-padded audio data
         """
+        # padding length set to target sample rate for the resampled audio recordings
         padding_length = self.target_sr
         if len(data) < padding_length:
+            # if the data is shorter than the target length, pad the data with zeros
             embedded_data = np.zeros(padding_length)
             offset = np.random.randint(low = 0, high = padding_length - len(data))
             embedded_data[offset:offset+len(data)] = data
         elif len(data) == padding_length:
+            # if the data is already of the target length, no padding is needed
             embedded_data = data
         elif len(data) > padding_length:
+            # if the data is longer than the target length, raise an error
             raise ValueError(f"Data length {len(data)} cannot exceed padding length {padding_length}!")
+        
+        # return embedded data
         return embedded_data
     
     @staticmethod
@@ -48,7 +59,11 @@ class DataProcessing:
         :param data: np.ndarray, audio data
         :return: np.ndarray, the FFT of the audio data
         """
-        return np.fft.fft(data)
+        # perform FFT on the input data
+        fft_data = np.fft.fft(data)
+
+        # return FFT data
+        return fft_data
 
     @staticmethod
     def feature_creation(fft_data: np.ndarray) -> dict:
@@ -81,7 +96,6 @@ class DataProcessing:
         features["modindx"] = np.std(np.diff(fft_data))/np.mean(np.diff(fft_data))
         return features
 
-
     @staticmethod
     def normalize_features(features: dict) -> dict:
         """
@@ -90,9 +104,13 @@ class DataProcessing:
         :param features: dict, containing the statistical features of the FFT data
         :return: dict, containing the normalized statistical features of the FFT data
         """
+        # loop through all the keys in the feature dictionary
         feature_keys = list(features.keys())
         for key in feature_keys:
+            # normalize the feature by min-max normalization
             features[key] = (features[key] - min(features.values()))/(max(features.values())-min(features.values()))
+        
+        # return normalized features
         return features
 
     @staticmethod
@@ -104,7 +122,10 @@ class DataProcessing:
         :param gender: str, the gender to add to the dict
         :return: dict, containing the statistical features of the FFT data with the added "gender" key
         """
+        # add the gender to the feature dict with key "gender"
         features["gender"] = gender
+
+        # return the updated feature dictionary
         return features
 
     @staticmethod
@@ -116,5 +137,8 @@ class DataProcessing:
         :param digit: str, the digit to add to the dict
         :return: dict, containing the statistical features of the FFT data with the added "digit" key
         """
+        # add the digit as a key to the feature dictionary
         features["digit"] = digit
+        
+        # return the updated feature dictionary
         return features

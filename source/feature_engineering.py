@@ -17,7 +17,6 @@ class FeatureEngineering:
         :param columns_to_leave_out: List[str], list of column names to exclude while calculating correlation
         :return: pd.DataFrame, DataFrame containing correlation coefficients
         """
-        
         # drop columns with only one unique value
         df = df.loc[:, df.nunique() > 1]
         
@@ -35,10 +34,10 @@ class FeatureEngineering:
         :param columns_to_leave_out: List[str], columns to exclude from removal
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
-        # Get the columns with constant values
+        # get the columns with constant values
         constant_columns = [col for col in df.columns if df[col].nunique() <= 1 and col not in columns_to_leave_out]
 
-        # Remove the constant value columns
+        # remove the constant value columns
         df = df.drop(constant_columns, axis=1)
 
         return df
@@ -53,14 +52,13 @@ class FeatureEngineering:
         :param columns_to_leave_out: List[str], column names to leave out of the correlation calculation but keep in the final output
         :return: pd.DataFrame, DataFrame with correlated columns removed
         """
-
-        # Store a copy of the original DataFrame
+        # store a copy of the original DataFrame
         df_original = df.copy()
 
-        # Calculate correlation matrix
+        # calculate correlation matrix
         corr_matrix = df.drop(columns_to_leave_out, axis=1).corr()
         
-        # Identify correlated columns
+        # identify correlated columns
         correlated_columns = set()
         for i in range(len(corr_matrix.columns)):
             for j in range(i):
@@ -68,14 +66,15 @@ class FeatureEngineering:
                     colname = corr_matrix.columns[i]
                     correlated_columns.add(colname)
         
-        # Drop correlated columns
+        # drop correlated columns
         df = df.drop(correlated_columns, axis=1)
         
-        # Add back the columns that were left out
+        # add back the columns that were left out
         for col in columns_to_leave_out:
             if col not in df.columns:
                 df[col] = df_original[col]
-                
+
+        # return dataframe
         return df
 
     @staticmethod
@@ -92,4 +91,5 @@ class FeatureEngineering:
         # Drop the original 'gender' column
         df = df.drop(['gender'], axis=1)
 
+        # return dataframe
         return df
