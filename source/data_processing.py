@@ -40,7 +40,8 @@ class DataProcessing:
             raise ValueError(f"Data length {len(data)} cannot exceed padding length {padding_length}!")
         return embedded_data
     
-    def fft_data(self, data: np.ndarray) -> np.ndarray:
+    @staticmethod
+    def fft_data(data: np.ndarray) -> np.ndarray:
         """
         Calculate the FFT of the given audio data
         
@@ -49,26 +50,40 @@ class DataProcessing:
         """
         return np.fft.fft(data)
 
-    def feature_creation(self, fft_data: np.ndarray) -> dict:
+    @staticmethod
+    def feature_creation(fft_data: np.ndarray) -> dict:
         """
         Calculate various statistical features of the given FFT data
         
         :param fft_data: np.ndarray, FFT data
-        :return: dict, containing the mean, std, avg, median, max, min, skewness, kurtois
+        :return: dict, containing created features
         """
+        # Take the absolute value of the FFT data
         fft_data = np.abs(fft_data)
         features = {}
+        # Mean of the FFT data
         features["mean"] = np.mean(fft_data)
+        # Standard deviation of the FFT data
         features["std"] = np.std(fft_data)
-        features["avg"] = statistics.mean(fft_data)
+        # Median of the FFT data
         features["median"] = statistics.median(fft_data)
+        # Maximum value of the FFT data
         features["max"] = max(fft_data)
+        # Minimum value of the FFT data
         features["min"] = min(fft_data)
+        # Skewness of the FFT data
         features["skewness"] = scipy.stats.skew(fft_data)
+        # Kurtosis of the FFT data
         features["kurtosis"] = scipy.stats.kurtosis(fft_data)
+        # Range of the FFT data
+        features["dfrange"] = features["max"] - features["min"]
+        # Modulation index of the FFT data
+        features["modindx"] = np.std(np.diff(fft_data))/np.mean(np.diff(fft_data))
         return features
 
-    def normalize_features(self, features: dict) -> dict:
+
+    @staticmethod
+    def normalize_features(features: dict) -> dict:
         """
         Normalize the features by min-max normalization
         
@@ -80,7 +95,8 @@ class DataProcessing:
             features[key] = (features[key] - min(features.values()))/(max(features.values())-min(features.values()))
         return features
 
-    def add_gender(self, features: dict, gender: str) -> dict:
+    @staticmethod
+    def add_gender(features: dict, gender: str) -> dict:
         """
         Add the gender to the feature dict
         
@@ -90,8 +106,9 @@ class DataProcessing:
         """
         features["gender"] = gender
         return features
-    
-    def add_digit(self, features: dict, digit: str) -> dict:
+
+    @staticmethod
+    def add_digit(features: dict, digit: str) -> dict:
         """
         Add the digit to the feature dict
         

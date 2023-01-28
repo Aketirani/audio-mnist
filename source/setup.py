@@ -1,9 +1,6 @@
 import os
 import yaml
-from typing import (Dict, List, Tuple, TypeVar)
-
-# Define a generic type variable for any type that can be used in the code
-ANY = TypeVar("ANY", Dict, List, Tuple, str, int, float)
+from typing import Dict
 
 class Setup:
     """
@@ -17,13 +14,14 @@ class Setup:
         """
         self.cfg_filepath = cfg_filepath
         self.cfg_setup = self.read_config()
-        self.source_meta_path = self.set_meta_data_path()
         self.source_path = self.set_source_path()
         self.destination_path = self.set_destination_path()
+        self.source_meta_path = self.set_meta_data_path()
+        self.source_model_path = self.set_model_param_path()
         self.plot_path = self.set_plot_path()
-        self.meta_data = self.read_meta_data()
+        self.result_path = self.set_result_path()
 
-    def read_config(self) -> Dict[str, ANY]:
+    def read_config(self) -> Dict:
         """
         Read the config yaml file and return the data as a dictionary
         
@@ -53,6 +51,14 @@ class Setup:
         """
         return os.path.join(self.cfg_setup['project_path'], "data", "audioMNIST_meta.txt")
 
+    def set_model_param_path(self) -> str:
+        """
+        Get the path to the file containing model parameters information
+        
+        :return: str, path to the model parameters file
+        """
+        return os.path.join(self.cfg_setup['project_path'], "source", "model_parameters.yaml")
+
     def set_destination_path(self) -> str:
         """
         Get the path to the folder containing each participant's preprocessed data
@@ -69,16 +75,10 @@ class Setup:
         """
         return os.path.join(self.cfg_setup['project_path'], "plots")
 
-    def read_meta_data(self) -> Dict[str, ANY]:
+    def set_result_path(self) -> str:
         """
-        Read the meta data yaml file and return the data as a dictionary
+        Get the path to the folder containing results
         
-        :return: Dict, containing the meta data
+        :return: str, path to the plot folder
         """
-
-        try:
-            with open(self.source_meta_path, 'r') as file:
-                meta_data = yaml.safe_load(file)
-        except:
-            raise FileNotFoundError(f"{self.source_meta_path} is not a valid meta data filepath!")
-        return meta_data
+        return os.path.join(self.cfg_setup['project_path'], "results")
