@@ -1,5 +1,6 @@
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
 import numpy as np
 import pandas as pd
 import json
@@ -47,6 +48,7 @@ class XGBoostModel:
         self.model.set_params(learning_rate=model_param["learning_rate"],
                      max_depth=model_param["max_depth"],
                      n_estimators=model_param["n_estimators"],
+                     num_parallel_tree=model_param["num_parallel_tree"],
                      gamma=model_param["gamma"],
                      reg_lambda=model_param["lambda"],
                      scale_pos_weight=model_param["scale_pos_weight"],
@@ -55,7 +57,7 @@ class XGBoostModel:
                      tree_method=model_param["tree_method"],
                      verbosity=model_param["verbosity"])
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path:str, file_name:str):
+    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path: str, file_name: str):
         """
         Fit the model on training data
         
@@ -66,7 +68,6 @@ class XGBoostModel:
         :param file_path: str, path where the eval_metrics should be saved
         :param file_name: str, name of the file to be saved
         """
-
         # define accuracy metric function
         def accuracy(preds, dtrain):
             """
@@ -74,7 +75,6 @@ class XGBoostModel:
             
             :param preds: np.array, an array of predictions made by the model
             :param dtrain: object, the training data that is used to evaluate the accuracy of the model
-
             :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
             """
             # Retrieve true labels from the training data
@@ -84,7 +84,7 @@ class XGBoostModel:
             accuracy = accuracy_score(labels, np.round(preds))
             return 'accuracy', accuracy
         
-        def save_eval_metrics(file_path:str, result):
+        def save_eval_metrics(file_path:str, file_name:str, result):
             """
             Save the eval_metrics of a model in yaml format
 
@@ -92,7 +92,7 @@ class XGBoostModel:
             :param result: object, the result returned by the fit method of a model
             """
             # Open the file in write mode
-            with open(file_path, 'w') as f:
+            with open(os.path.join(file_path, file_name), 'w') as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(result.evals_result_, f)
 
@@ -100,7 +100,43 @@ class XGBoostModel:
         result = self.model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=0)
 
         # save evaluation metrics to file
-        save_eval_metrics(os.path.join(file_path, file_name), result)
+        save_eval_metrics(file_path, file_name, result)
+
+    def grid_search(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path: str, file_name: str, grid_params: dict):
+        """
+        Runs a grid search to tune the hyperparameters of the model
+
+        :param X_train: numpy.ndarray, features for training
+        :param y_train: numpy.ndarray, labels for training
+        :param X_val: numpy.ndarray, features for validation
+        :param y_val: numpy.ndarray, labels for validation
+        :param file_path: str, path to save the best results
+        :param file_name: str, name of the file to save the best results
+        :param grid_params: str, dictionary containing the grid search parameters
+        """
+        # create an instance of the XGBClassifier
+        self.model = XGBClassifier()
+
+        # create an instance of the GridSearchCV class
+        grid = GridSearchCV(self.model, grid_params, cv=3, scoring='accuracy', n_jobs=-1)
+
+        # fit the GridSearchCV object on the training data
+        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric='error', verbose=0)
+
+        def save_best_parameters(file_path:str, file_name:str, grid):
+            """
+            Save the best parameters and best score of a model in yaml format
+
+            :param file_path: str, path where the best parameters and best score should be saved
+            :param grid: object, the grid returned by the fit method of a model
+            """
+            # Open the file in write mode
+            with open(os.path.join(file_path, file_name), 'w') as f:
+                # dump the eval_result_ attribute of the result object into the file
+                json.dump(grid.best_params_, f)
+
+        # save evaluation metrics to file
+        save_best_parameters(file_path, file_name, grid)
 
     @staticmethod
     def create_log_df(log_data: dict) -> pd.DataFrame:
@@ -128,7 +164,6 @@ class XGBoostModel:
         Make predictions for test data
         
         :param X_test: numpy.ndarray, features for test
-        
         :return: numpy.ndarray, array containing the predicted labels for test data
         """
         # make predictions on the test data using the trained model
@@ -140,7 +175,6 @@ class XGBoostModel:
         
         :param y_test: numpy.ndarray, true labels for test data
         :param y_pred: numpy.ndarray, predicted labels for test data
-        
         :return: float, accuracy score
         """
         # round the predictions to the nearest integer

@@ -21,13 +21,13 @@ class DataSplit:
         
         :param dataframe: pd.DataFrame, dataframe to be split
         :param target_column: str, name of the column to stratify on
-        
         :return: tuple, containing the training, validation, and test dataframes in that order
         """
-        # Split the dataframe into a training set and a validation+test set
+        # split the dataframe into a training set and a validation+test set
         train_df, val_test_df = train_test_split(dataframe, test_size=self.val_size + self.test_size, stratify=dataframe[target_column])
         
-        # Split the validation+test set further into a validation set and a test set
+        # split the validation+test set further into a validation set and a test set
         val_df, test_df = train_test_split(val_test_df, test_size=self.test_size/(self.val_size+self.test_size), stratify=val_test_df[target_column])
         
+        # return data splits
         return train_df, val_df, test_df

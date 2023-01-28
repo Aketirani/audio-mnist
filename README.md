@@ -1,5 +1,4 @@
 # Gender Recognition By Voice & Speech Analysis
-
 A voice recording is analyzed for many inferences like the content spoken, the emotion, gender, and identity of the speaker, and many more.
 
 While recognizing the characteristics of the speaker from the recording, identity recognition requires a reference dataset and is limited to identifying the people in the dataset. In many cases, this level of specificity may not be needed.
@@ -11,7 +10,6 @@ It finds applications in automatic salutations, tagging audio recording, and hel
 In this repository, we will be using acoustic features extracted from a voice recording to predict the speaker’s gender.
 
 ## Dataset
-
 [Kaggle](https://www.kaggle.com/datasets/primaryobjects/voicegender)
 
 The dataset consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
@@ -36,11 +34,14 @@ To Be Done...
 |   ├── audio_data.csv          <-- Preprocced Audio CSV File
 |   ├── final_data.csv          <-- Final Features CSV File
 |
+├── model_param
+|   ├── *.yaml                  <-- Model Parameters
+|
 ├── plots
 |   ├── *.png                   <-- Plots
 |
 ├── results
-|   ├── log.yaml                <-- Model Results
+|   ├── *.yaml                  <-- Model Results
 |
 ├── source
 |   ├── config.yaml             <-- Configuration File Including Paths
