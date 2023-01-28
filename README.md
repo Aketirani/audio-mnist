@@ -20,7 +20,7 @@ There is one directory per speaker holding the audio recordings.
 
 Additionally "audioMNIST_meta.txt" provides meta information such as gender or age of each speaker.
 
-## Machine Learning Models
+## Machine Learning Model
 To Be Done...
 
 ## Structure
@@ -37,15 +37,22 @@ To Be Done...
 |   ├── final_data.csv          <-- Final Features CSV File
 |
 ├── plots
-|   ├── *.png                   <-- Audio Recording Plots
+|   ├── *.png                   <-- Plots
+|
+├── results
+|   ├── log.yaml                <-- Model Results
 |
 ├── source
 |   ├── config.yaml             <-- Configuration File Including Paths
-|   ├── data_processing.py      <-- Data Processing Script
-|   ├── feature_engineering.py  <-- Feature Engineering Script
-|   ├── main.ipynb              <-- Main Script Executing Pipeline
-|   ├── setup.py                <-- Setup Script
-|   ├── utilites.py             <-- Utilities Script
+|   ├── data_processing.py      <-- Data Processing
+|   ├── data_split.py           <-- Data Split
+|   ├── data_visualization.py   <-- Data Visualization
+|   ├── feature_engineering.py  <-- Feature Engineering
+|   ├── main.ipynb              <-- Executing Whole Pipeline
+|   ├── model_parameters.yaml   <-- Model Parameters
+|   ├── setup.py                <-- Setup
+|   ├── utilites.py             <-- Utilities
+|   ├── xgboost_model.py        <-- Model Training And Prediction
 ```
 
 ## Exectuion
