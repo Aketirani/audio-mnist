@@ -13,32 +13,33 @@ In this repository, we will be using acoustic features extracted from a voice re
 ```
 ├── readme.md                   <-- You Are Here
 |
+├── config                      <-- Configuration Folder
+|   ├── config.yaml             <-- Project Paths
+|
 ├── data                        <-- Data Folder
-|   ├── audioMNIST_meta.txt     <-- Meta Information
-|   ├── number                  <-- Folder Number
+|   ├── recordings              <-- Recordings Folder
 |       ├── *.wav               <-- Audio Recordings
+|   ├── audioMNIST_meta.txt     <-- Meta Information
 |
 ├── data_pre                    <-- Preprocced Data Folder
-|   ├── features_data.csv       <-- Features Dataset CSV File
-|   ├── final_data.csv          <-- Final Dataset CSV File
+|   ├── features_data.csv       <-- Features Dataset
+|   ├── final_data.csv          <-- Final Dataset
 |
-├── model_param
+├── model_param                 <-- Model Parameters Folder
 |   ├── *.yaml                  <-- Model Parameters
 |
-├── plots
+├── plots                       <-- Plots Folder
 |   ├── *.png                   <-- Plots
 |
-├── results
+├── results                     <-- Results Folder
 |   ├── *.yaml                  <-- Model Results
 |
-├── source
-|   ├── config.yaml             <-- Configuration File Including Paths
+├── source                      <-- Source Folder
 |   ├── data_processing.py      <-- Data Processing
 |   ├── data_split.py           <-- Data Split
 |   ├── data_visualization.py   <-- Data Visualization
 |   ├── feature_engineering.py  <-- Feature Engineering
 |   ├── main.ipynb              <-- Executing Whole Pipeline
-|   ├── model_parameters.yaml   <-- Model Parameters
 |   ├── setup.py                <-- Setup
 |   ├── utilites.py             <-- Utilities
 |   ├── xgboost_model.py        <-- Model Training And Prediction

@@ -5,13 +5,13 @@ class Setup:
     """
     Setup all basic inputs for the project pipeline
     """
-    def __init__(self, cfg_filepath: str) -> None:
+    def __init__(self, cfg_file: str) -> None:
         """
-        Initialize the class with the config file path and set up the paths and files
+        Initialize the class with the config file, and set up the paths and files
         
-        :param cfg_filepath: str, path to the config file
+        :param cfg_file: str, name to the config file
         """
-        self.cfg_filepath = cfg_filepath
+        self.cfg_file = cfg_file
         self.cfg_setup = self.read_config()
         self.source_path = self.set_source_path()
         self.meta_path = self.set_meta_data_path()
@@ -26,15 +26,19 @@ class Setup:
         """
         Read the config yaml file and return the data as a dictionary
         
-        :return: dict, containing the config data
+        :return: dict, containing the configuration data
         """
         try:
-            with open(self.cfg_filepath, 'r') as file:
-                # load the yaml file into a dictionary
+            # change the directory to the configuration folder
+            os.chdir('../config')
+
+            # open the configuration folder
+            with open(self.cfg_file, 'r') as file:
+                # load the configuration file into a dictionary
                 cfg_setup = yaml.safe_load(file)
         except:
-            # raise an error if the filepath is not valid
-            raise FileNotFoundError(f"{self.cfg_filepath} is not a valid config filepath!")
+            # raise an error if the filename is not valid
+            raise FileNotFoundError(f"{self.cfg_file} is not a valid config filepath!")
 
         # return the configuration data
         return cfg_setup
