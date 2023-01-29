@@ -69,35 +69,36 @@ The XGBoost model used in this project is a gradient boosting tree ensemble mode
 
 The model uses the following key parameters:
 
-- learning_rate (eta): The step size of the optimization algorithm
-- max_depth: The maximum depth of a tree
-- n_estimators: The number of of trees in the ensemble
-- num_parallel_tree: Number of parallel trees to be built
-- gamma: Minimum split loss
-- lambda: Regularization term
-- scale_pos_weight: The balance between positive and negative weights
-- min_child_weight: Minimum sum of weights of all observations in a child
-- objective: Loss function
-- tree_method: Method used to grow the tree
-- verbosity: Level of verbosity of printing messages
+- `learning_rate`: The step size of the optimization algorithm
+- `max_depth`: The maximum depth of a tree
+- `n_estimators`: The number of of trees in the ensemble
+- `num_parallel_tree`: Number of parallel trees to be built
+- `gamma`: Minimum split loss
+- `lambda`: Regularization term
+- `scale_pos_weight`: The balance between positive and negative weights
+- `min_child_weight`: Minimum sum of weights of all observations in a child
+- `objective`: Loss function
+- `tree_method`: Method used to grow the tree
+- `verbosity`: Level of verbosity of printing messages
 
 By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
 ## Model Features
-The features are calculates by various statistical features of the given audio data and FFT data.
+The features are calculates by various statistical features of the given FFT data.
 
 These features include:
 
-- Mean of the data
-- Standard deviation of the data
-- Median of the data
-- 25th percentiles of the data
-- 75th percentiles of the data
-- Minimum value of the data
-- Maximum value of the data
-- Skewness of the data
-- Kurtosis of the data
-- Range of the data
+- `mean`: Mean of the FFT data
+- `std`: Standard deviation of the FFT data
+- `med`: Median of the FFT data
+- `q25`: 25th percentiles of the FFT data
+- `q75`: 75th percentiles of the FFT data
+- `min`: Minimum value of the FFT data
+- `max`: Maximum value of the FFT data
+- `skew`: Skewness of the FFT data
+- `kurt`: Kurtosis of the FFT data
+- `sfm`: Spectral flatness of the FFT data
+- `cent`: Frequency centroid of the FFT data
 
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
