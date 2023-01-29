@@ -65,74 +65,74 @@ class DataProcessing:
         # return FFT data
         return fft_data
 
+    def bandpass_filter(self, fft_data: np.ndarray, low_threshold: float, high_threshold: float) -> np.ndarray:
+        """
+        Apply bandpass filter to the given FFT data to keep frequencies between the lower and higher threshold
+        
+        :param fft_data: np.ndarray, the FFT data
+        :param low_threshold: float, the lower threshold frequency
+        :param high_threshold: float, the higher threshold frequency
+        :return: np.ndarray, the filtered FFT data
+        """
+        # calculate the cutoff frequencies
+        low_cutoff = low_threshold / self.target_sr
+        high_cutoff = high_threshold / self.target_sr
+        
+        # create bandpass filter
+        b, a = scipy.signal.butter(4, [low_cutoff, high_cutoff], btype='band', analog=False, output='ba')
+        
+        # apply bandpass filter to the FFT data
+        filtered_fft_data = scipy.signal.lfilter(b, a, fft_data)
+        
+        # return filtered FFT data
+        return filtered_fft_data
+
     @staticmethod
-    def feature_creation(audio_data: np.ndarray, fft_data: np.ndarray) -> dict:
+    def feature_creation(fft_data: np.ndarray) -> dict:
         """
         Calculate various statistical features of the given FFT data
         
-        :param audio_data: np.ndarray, audio data
         :param fft_data: np.ndarray, FFT data
         :return: dict, containing created features
         """
-        # Take the absolute value of the FFT data
+        # take the absolute value of the FFT data
         fft_data = np.abs(fft_data)
+
+        # create empty dictionary
         features = {}
 
-        # mean of the data
-        features["mean_audio"] = np.mean(audio_data)
-        features["mean_fft"] = np.mean(fft_data)
+        # mean
+        features["mean"] = np.mean(fft_data)
 
-        # standard deviation of the data
-        features["std_audio"] = np.std(audio_data)
-        features["std_fft"] = np.std(fft_data)
+        # standard deviation
+        features["std"] = np.std(fft_data)
 
-        # median of the data
-        features["median_audio"] = statistics.median(audio_data)
-        features["median_fft"] = statistics.median(fft_data)
+        # median
+        features["med"] = statistics.median(fft_data)
 
-        # maximum value of the data
-        features["max_audio"] = max(audio_data)
-        features["max_fft"] = max(fft_data)
+        # 25th percentiles
+        features["q25"] = np.percentile(fft_data,25)
 
-        # minimum value of the data
-        features["min_audio"] = min(audio_data)
-        features["min_fft"] = min(fft_data)
+        # 75th percentiles
+        features["q75"] = np.percentile(fft_data,75)
 
-        # skewness of the data
-        features["skewness_audio"] = scipy.stats.skew(audio_data)
-        features["skewness_fft"] = scipy.stats.skew(fft_data)
+        # minimum value
+        features["min"] = min(fft_data)
 
-        # kurtosis of the data
-        features["kurtosis_audio"] = scipy.stats.kurtosis(audio_data)
-        features["kurtosis_fft"] = scipy.stats.kurtosis(fft_data)
+        # maximum value
+        features["max"] = max(fft_data)
 
-        # range of the data
-        features["dfrange_audio"] = np.abs(max(audio_data)-min(audio_data))
-        features["dfrange_fft"] = np.abs(max(fft_data)-min(fft_data))
+        # skewness
+        features["skew"] = scipy.stats.skew(fft_data)
 
-        # log of the data
-        features["log_mean_audio"] = np.log(np.mean(audio_data))
-        features["log_mean_fft"] = np.log(np.mean(fft_data))
+        # kurtosis
+        features["kurt"] = scipy.stats.kurtosis(fft_data)
 
-        # root of the mean data
-        features["root_mean_audio"] = np.sqrt(np.mean(audio_data))
-        features["root_mean_fft"] = np.sqrt(np.mean(fft_data))
+        # spectral flatness
+        features["sfm"] = scipy.stats.gmean(fft_data)/np.mean(fft_data)
 
-        # square of the mean data
-        features["square_mean_audio"] = np.square(np.mean(audio_data))
-        features["square_mean_fft"] = np.square(np.mean(fft_data))
-
-        # log of the standard deviation
-        features["log_std_audio"] = np.log(np.std(audio_data))
-        features["log_std_fft"] = np.log(np.std(fft_data))
-
-        # root of the standard deviation
-        features["root_std_audio"] = np.sqrt(np.std(audio_data))
-        features["root_std_fft"] = np.sqrt(np.std(fft_data))
-
-        # square of the standard deviation
-        features["square_std_audio"] = np.square(np.std(audio_data))
-        features["square_std_fft"] = np.square(np.std(fft_data))
+        # frequency centroid
+        features["cent"] = scipy.stats.mstats.gmean(fft_data)
 
         # return features
         return features

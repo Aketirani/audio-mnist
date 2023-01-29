@@ -9,18 +9,6 @@ It finds applications in automatic salutations, tagging audio recording, and hel
 
 In this repository, we will be using acoustic features extracted from a voice recording to predict the speaker’s gender.
 
-## Dataset
-[Kaggle](https://www.kaggle.com/datasets/primaryobjects/voicegender)
-
-The dataset consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
-
-There is one directory per speaker holding the audio recordings.
-
-Additionally "audioMNIST_meta.txt" provides meta information such as gender or age of each speaker.
-
-## Machine Learning Model
-To Be Done...
-
 ## Structure
 ```
 ├── readme.md                   <-- You Are Here
@@ -31,8 +19,8 @@ To Be Done...
 |       ├── *.wav               <-- Audio Recordings
 |
 ├── data_pre                    <-- Preprocced Data Folder
-|   ├── audio_data.csv          <-- Preprocced Audio CSV File
-|   ├── final_data.csv          <-- Final Features CSV File
+|   ├── features_data.csv       <-- Features Dataset CSV File
+|   ├── final_data.csv          <-- Final Dataset CSV File
 |
 ├── model_param
 |   ├── *.yaml                  <-- Model Parameters
@@ -55,6 +43,64 @@ To Be Done...
 |   ├── utilites.py             <-- Utilities
 |   ├── xgboost_model.py        <-- Model Training And Prediction
 ```
+
+## Dataset
+[Kaggle](https://www.kaggle.com/datasets/primaryobjects/voicegender)
+
+The dataset consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
+
+There is one directory per speaker holding the audio recordings.
+
+Additionally "audioMNIST_meta.txt" provides meta information such as gender or age of each speaker.
+
+## Model Selection
+XGBoost (eXtreme Gradient Boosting) is a powerful and popular machine learning library for gradient boosting. It is designed to be efficient and scalable, and is particularly useful for large datasets and complex models.
+
+One of the key advantages of XGBoost is its ability to handle missing values and categorical variables, which makes it a great choice for datasets like ours that may have missing or categorical data. Additionally, XGBoost is known for its ability to handle high dimensional data, which is useful for our audio classification task as we are using a large number of features extracted from the audio recordings.
+
+XGBoost also includes a number of regularization techniques, such as L1 and L2 regularization, which can help prevent overfitting and improve the generalizability of the model.
+
+Another important advantage of XGBoost is its ability to handle non-linear relationships between the features and the target variable, which is useful for our task as the relationship between the audio features and the speaker's gender may not be linear.
+
+In summary, XGBoost is a powerful and versatile tool that is well-suited for our audio classification task due to its ability to handle high dimensional data, missing values, categorical variables, and non-linear relationships.
+
+## Model Architecture
+The XGBoost model used in this project is a gradient boosting tree ensemble model. The architecture of this model is composed of several decision trees, each of which is trained to make a prediction for the target variable (speaker's gender). The final prediction is made by combining the predictions of all the individual trees.
+
+The model uses the following key parameters:
+
+- `learning_rate`: The step size of the optimization algorithm
+- `max_depth`: The maximum depth of a tree
+- `n_estimators`: The number of of trees in the ensemble
+- `num_parallel_tree`: Number of parallel trees to be built
+- `gamma`: Minimum split loss
+- `lambda`: Regularization term
+- `scale_pos_weight`: The balance between positive and negative weights
+- `min_child_weight`: Minimum sum of weights of all observations in a child
+- `objective`: Loss function
+- `tree_method`: Method used to grow the tree
+- `verbosity`: Level of verbosity of printing messages
+
+By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
+
+## Model Features
+The features are calculates by various statistical features of the given FFT data.
+
+These features include:
+
+- `mean`: Mean of the FFT data
+- `std`: Standard deviation of the FFT data
+- `med`: Median of the FFT data
+- `q25`: 25th percentiles of the FFT data
+- `q75`: 75th percentiles of the FFT data
+- `min`: Minimum value of the FFT data
+- `max`: Maximum value of the FFT data
+- `skew`: Skewness of the FFT data
+- `kurt`: Kurtosis of the FFT data
+- `sfm`: Spectral flatness of the FFT data
+- `cent`: Frequency centroid of the FFT data
+
+These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Exectuion
 Run `main.ipynb` script to execute whole pipeline

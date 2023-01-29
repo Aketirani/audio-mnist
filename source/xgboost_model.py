@@ -77,10 +77,10 @@ class XGBoostModel:
             :param dtrain: object, the training data that is used to evaluate the accuracy of the model
             :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
             """
-            # Retrieve true labels from the training data
+            # retrieve true labels from the training data
             labels = dtrain.get_label()
             
-            # Calculate accuracy by comparing true labels to the rounded predictions
+            # calculate accuracy by comparing true labels to the rounded predictions
             accuracy = accuracy_score(labels, np.round(preds))
             return 'accuracy', accuracy
         
@@ -91,7 +91,7 @@ class XGBoostModel:
             :param file_path: str, path where the eval_metrics should be saved
             :param result: object, the result returned by the fit method of a model
             """
-            # Open the file in write mode
+            # open the file in write mode
             with open(os.path.join(file_path, file_name), 'w') as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(result.evals_result_, f)
@@ -130,13 +130,23 @@ class XGBoostModel:
             :param file_path: str, path where the best parameters and best score should be saved
             :param grid: object, the grid returned by the fit method of a model
             """
-            # Open the file in write mode
+            # open the file in write mode
             with open(os.path.join(file_path, file_name), 'w') as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(grid.best_params_, f)
 
         # save evaluation metrics to file
         save_best_parameters(file_path, file_name, grid)
+
+    def feature_importance(self):
+        """
+        Calculates the feature importance of the model
+        """
+        # retrieve feature importances
+        feature_importance = self.model.feature_importances_
+
+        # return feature importance
+        return feature_importance
 
     @staticmethod
     def create_log_df(log_data: dict) -> pd.DataFrame:
