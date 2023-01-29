@@ -1,6 +1,7 @@
 import os
 import yaml
 
+
 class Setup:
     """
     Setup all basic inputs for the project pipeline
