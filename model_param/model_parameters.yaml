@@ -1,7 +1,7 @@
-learning_rate: 0.12           # Learning rate eta
-max_depth: 10                 # Naxunyn depth of a tree
-n_estimators: 50              # Number of estimators
-num_parallel_tree: 1          # Number of parallel trees
+learning_rate: 0.1            # Learning rate eta
+max_depth: 8                  # Maximum depth of a tree
+n_estimators: 100             # Number of estimators
+num_parallel_tree: 2          # Number of parallel trees
 gamma: 0                      # Minimum split loss
 lambda: 1                     # Regularization term
 scale_pos_weight: 1           # Balance between positive and negative weights
