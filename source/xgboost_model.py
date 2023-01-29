@@ -118,10 +118,10 @@ class XGBoostModel:
         self.model = XGBClassifier()
 
         # create an instance of the GridSearchCV class
-        grid = GridSearchCV(self.model, grid_params, cv=3, scoring='accuracy', n_jobs=-1)
+        grid = GridSearchCV(self.model, grid_params, cv=3, scoring='accuracy', n_jobs=-1, verbose=1)
 
         # fit the GridSearchCV object on the training data
-        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric='error', verbose=0)
+        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric='logloss')
 
         def save_best_parameters(file_path:str, file_name:str, grid):
             """
@@ -156,17 +156,17 @@ class XGBoostModel:
         :param log_data: dict, log data
         :return: pd.DataFrame, DataFrame containing log data
         """
-        # Extract data from log data
+        # extract data from log data
         train_loss = log_data['validation_0']['logloss']
         train_acc = log_data['validation_1']['logloss']
         val_loss = log_data['validation_0']['accuracy']
         val_acc = log_data['validation_1']['accuracy']
         iteration = list(range(0,len(train_loss)))
 
-        # Define column names
+        # define column names
         columns = ['iteration', 'train_loss', 'train_acc', 'val_loss', 'val_acc']
 
-        # Create DataFrame from extracted data and column names
+        # create DataFrame from extracted data and column names
         return pd.DataFrame(list(zip(iteration, train_loss, train_acc, val_loss, val_acc)), columns=columns)
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
