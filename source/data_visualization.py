@@ -169,3 +169,23 @@ class DataVisualization:
         
         # clear the current figure
         plt.clf()
+
+    def plot_feature_importance(self, feature_importance: list, columns: list, plot_name: str) -> None:
+        """
+        Plot the feature importance of the dataset and save it to the specified plot path
+        
+        :param feature_importance: list[float], feature importance values
+        :param columns: list[str], column names to be used as x-axis labels
+        :param plot_name: str, name of the plot to be saved
+        """
+        # create the bar chart
+        plt.bar(columns, feature_importance)
+        
+        # add a title to the plot
+        plt.title("Feature Importance")
+        
+        # save the plot to the specified filepath with the given file name
+        plt.savefig(os.path.join(self.plot_path, plot_name))
+        
+        # clear the current figure
+        plt.clf()
