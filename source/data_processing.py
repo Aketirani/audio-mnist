@@ -1,6 +1,6 @@
+import statistics
 import librosa
 import numpy as np
-import statistics
 import scipy.stats
 
 class DataProcessing:

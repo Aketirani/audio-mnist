@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import List
+
 
 class FeatureEngineering:
     def __init__(self):
@@ -9,12 +9,12 @@ class FeatureEngineering:
         pass
 
     @staticmethod
-    def pearson_correlation(df: pd.DataFrame, columns_to_leave_out: List[str]=[]) -> pd.DataFrame:
+    def pearson_correlation(df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
         """
         Calculate the Pearson correlation coefficient on a DataFrame, excluding the specified columns
         
         :param df: pd.DataFrame, DataFrame on which correlation has to be calculated
-        :param columns_to_leave_out: List[str], list of column names to exclude while calculating correlation
+        :param columns_to_leave_out: list, list of column names to exclude while calculating correlation
         :return: pd.DataFrame, DataFrame containing correlation coefficients
         """
         # drop columns with only one unique value
@@ -26,12 +26,12 @@ class FeatureEngineering:
         # calculate correlation matrix for the columns
         return df[columns_to_use].corr(method='pearson')
 
-    def remove_constant_columns(self, df: pd.DataFrame, columns_to_leave_out: List[str]) -> pd.DataFrame:
+    def remove_constant_columns(self, df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
         """
         Remove columns with constant values from the DataFrame, except for the ones specified in 'columns_to_leave_out'
 
         :param df: pd.DataFrame, input DataFrame
-        :param columns_to_leave_out: List[str], columns to exclude from removal
+        :param columns_to_leave_out: list, columns to exclude from removal
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
         # get the columns with constant values
@@ -43,13 +43,13 @@ class FeatureEngineering:
         return df
 
     @staticmethod
-    def remove_correlated_columns(df: pd.DataFrame, threshold: float, columns_to_leave_out: List[str]) -> pd.DataFrame:
+    def remove_correlated_columns(df: pd.DataFrame, threshold: float, columns_to_leave_out: list) -> pd.DataFrame:
         """
         Remove correlated columns from the DataFrame that have a correlation above the given threshold
         
         :param df: pd.DataFrame, DataFrame to remove correlated columns from
         :param threshold: float, correlation threshold above which columns will be removed
-        :param columns_to_leave_out: List[str], column names to leave out of the correlation calculation but keep in the final output
+        :param columns_to_leave_out: list, column names to leave out of the correlation calculation but keep in the final output
         :return: pd.DataFrame, DataFrame with correlated columns removed
         """
         # store a copy of the original DataFrame

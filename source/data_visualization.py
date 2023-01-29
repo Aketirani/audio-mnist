@@ -6,6 +6,7 @@ import pandas as pd
 import playsound
 import seaborn as sns
 
+
 class DataVisualization:
     def __init__(self, plot_path: str):
         """

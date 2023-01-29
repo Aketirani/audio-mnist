@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+
 class DataSplit:
     """
     The DataSplit class is used to split a dataframe into training, validation, and test sets.
