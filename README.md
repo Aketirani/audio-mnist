@@ -28,7 +28,7 @@ In this repository, we will be using acoustic features extracted from a voice re
 ├── logs                        <-- Log Folder
 |   ├── *.log                   <-- Log Files
 |
-├── model_param                 <-- Model Parameters Folder
+├── parameters                  <-- Parameters Folder
 |   ├── *.yaml                  <-- Model Parameters
 |
 ├── plots                       <-- Plots Folder
