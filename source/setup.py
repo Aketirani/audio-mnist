@@ -95,10 +95,10 @@ class Setup:
         """
         Get the path to the folder containing model parameters
 
-        :return: str, path to the model parameters model_param folder
+        :return: str, path to the model parameters parameters folder
         """
-        # Combine the project path and the model_param folder path
-        return os.path.join(self.cfg_setup['project_path'], "model_param")
+        # Combine the project path and the parameters folder path
+        return os.path.join(self.cfg_setup['project_path'], "parameters")
 
     def set_model_param_path(self) -> str:
         """
@@ -106,8 +106,8 @@ class Setup:
 
         :return: str, path to the model parameters file
         """
-        # Combine the project path and the model_param folder path to get the model parameters file path
-        return os.path.join(self.cfg_setup['project_path'], "model_param", "model_parameters.yaml")
+        # Combine the project path and the parameters folder path to get the model parameters file path
+        return os.path.join(self.cfg_setup['project_path'], "parameters", "model_parameters.yaml")
 
     def set_model_hyperparam_path(self) -> str:
         """
@@ -115,5 +115,5 @@ class Setup:
 
         :return: str, path to the model hyperparameters file
         """
-        # Combine the project path and the model_param folder path to get the model hyperparameters file path
-        return os.path.join(self.cfg_setup['project_path'], "model_param", "model_hyperparameters.yaml")
+        # Combine the project path and the parameters folder path to get the model hyperparameters file path
+        return os.path.join(self.cfg_setup['project_path'], "parameters", "model_hyperparameters.yaml")
