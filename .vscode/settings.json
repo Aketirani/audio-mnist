@@ -1,3 +1,10 @@
 {
-    "python.analysis.typeCheckingMode": "basic"
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+      },
+    "python.languageServer": "Default"
 }

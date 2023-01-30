@@ -18,7 +18,7 @@ class Utilities:
     def read_audio(filepath: str) -> tuple:
         """
         Read the audio data from the given file and return the sample rate and audio data
-        
+
         :param filepath: str, path to the audio file
         :return audio: tuple, containing the sample rate and audio data
         """
@@ -35,7 +35,7 @@ class Utilities:
     def read_file(self, filepath) -> dict:
         """
         Read the file and return the it as a dictionary
-        
+
         :param filepath: str, path to the file to be read
         :return: dict, containing the file data
         """
@@ -80,6 +80,18 @@ class Utilities:
         return df.shape
 
     @staticmethod
+    def column_value_counts(df: pd.DataFrame, column: str) -> pd.Series:
+        """
+        Returns the value counts of a given column in a DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :param column: str, name of the column in the DataFrame
+        :return: pd.Series, containing the value counts of the specified column
+        """
+        # return the value counts of the specified column in the dataframe
+        return df[column].value_counts()
+
+    @staticmethod
     def remove_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
         """
         Remove a column from DataFrame
@@ -112,7 +124,7 @@ class Utilities:
     def csv_to_df(self, file_name: str) -> pd.DataFrame:
         """
         Read the CSV file and return it as a Pandas DataFrame
-        
+
         :param file_name: str, name of the file
         :return: pd.DataFrame, DataFrame created from the CSV file
         """
@@ -131,10 +143,10 @@ class Utilities:
         data_list = np.array(data_list)
 
         # reshape numpy array
-        return data_list.reshape(1,len(data_list))
+        return data_list.reshape(1, len(data_list))
 
     @staticmethod
-    def loop_progress(index:int, total:int):
+    def loop_progress(index: int, total: int):
         """
         This function takes in the current index, total number of iterations and sleep time 
         and displays the progress of the loop every iteration

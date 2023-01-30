@@ -12,17 +12,18 @@ class FeatureEngineering:
     def pearson_correlation(df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
         """
         Calculate the Pearson correlation coefficient on a DataFrame, excluding the specified columns
-        
+
         :param df: pd.DataFrame, DataFrame on which correlation has to be calculated
         :param columns_to_leave_out: list, list of column names to exclude while calculating correlation
         :return: pd.DataFrame, DataFrame containing correlation coefficients
         """
         # drop columns with only one unique value
         df = df.loc[:, df.nunique() > 1]
-        
+
         # list of columns to use for correlation calculation
-        columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
-        
+        columns_to_use = [
+            col for col in df.columns if col not in columns_to_leave_out]
+
         # calculate correlation matrix for the columns
         return df[columns_to_use].corr(method='pearson')
 
@@ -35,7 +36,8 @@ class FeatureEngineering:
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
         # get the columns with constant values
-        constant_columns = [col for col in df.columns if df[col].nunique() <= 1 and col not in columns_to_leave_out]
+        constant_columns = [col for col in df.columns if df[col].nunique(
+        ) <= 1 and col not in columns_to_leave_out]
 
         # remove the constant value columns
         df = df.drop(constant_columns, axis=1)
@@ -46,7 +48,7 @@ class FeatureEngineering:
     def remove_correlated_columns(df: pd.DataFrame, threshold: float, columns_to_leave_out: list) -> pd.DataFrame:
         """
         Remove correlated columns from the DataFrame that have a correlation above the given threshold
-        
+
         :param df: pd.DataFrame, DataFrame to remove correlated columns from
         :param threshold: float, correlation threshold above which columns will be removed
         :param columns_to_leave_out: list, column names to leave out of the correlation calculation but keep in the final output
@@ -57,7 +59,7 @@ class FeatureEngineering:
 
         # calculate correlation matrix
         corr_matrix = df.drop(columns_to_leave_out, axis=1).corr()
-        
+
         # identify correlated columns
         correlated_columns = set()
         for i in range(len(corr_matrix.columns)):
@@ -65,10 +67,10 @@ class FeatureEngineering:
                 if abs(corr_matrix.iloc[i, j]) > threshold:
                     colname = corr_matrix.columns[i]
                     correlated_columns.add(colname)
-        
+
         # drop correlated columns
         df = df.drop(correlated_columns, axis=1)
-        
+
         # add back the columns that were left out
         for col in columns_to_leave_out:
             if col not in df.columns:

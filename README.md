@@ -25,6 +25,9 @@ In this repository, we will be using acoustic features extracted from a voice re
 |   ├── features_data.csv       <-- Features Dataset
 |   ├── final_data.csv          <-- Final Dataset
 |
+├── logs                        <-- Log Folder
+|   ├── *.log                   <-- Log Files
+|
 ├── model_param                 <-- Model Parameters Folder
 |   ├── *.yaml                  <-- Model Parameters
 |
@@ -43,6 +46,12 @@ In this repository, we will be using acoustic features extracted from a voice re
 |   ├── setup.py                <-- Setup
 |   ├── utilites.py             <-- Utilities
 |   ├── xgboost_model.py        <-- Model Training And Prediction
+|
+├── main.py                     <-- Main Python Script
+|
+├── main.sh                     <-- Main Shell Script
+|
+├── requirements.txt            <-- Package Requirements
 ```
 
 ## Dataset
@@ -104,4 +113,7 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Exectuion
-Run `main.ipynb` script to execute whole pipeline
+Run `main.sh` script to execute whole pipeline.
+
+## Unit Test
+To come...
