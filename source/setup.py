@@ -6,10 +6,11 @@ class Setup:
     """
     Setup all basic inputs for the project pipeline
     """
+
     def __init__(self, cfg_file: str) -> None:
         """
         Initialize the class with the config file, and set up the paths and files
-        
+
         :param cfg_file: str, name to the config file
         """
         self.cfg_file = cfg_file
@@ -26,12 +27,12 @@ class Setup:
     def read_config(self) -> dict:
         """
         Read the config yaml file and return the data as a dictionary
-        
+
         :return: dict, containing the configuration data
         """
         try:
             # change the directory to the configuration folder
-            os.chdir('../config')
+            os.chdir(os.path.join(os.getcwd(), "config"))
 
             # open the configuration folder
             with open(self.cfg_file, 'r') as file:
@@ -39,7 +40,8 @@ class Setup:
                 cfg_setup = yaml.safe_load(file)
         except:
             # raise an error if the filename is not valid
-            raise FileNotFoundError(f"{self.cfg_file} is not a valid config filepath!")
+            raise FileNotFoundError(
+                f"{self.cfg_file} is not a valid config filepath!")
 
         # return the configuration data
         return cfg_setup
@@ -47,7 +49,7 @@ class Setup:
     def set_source_path(self) -> str:
         """
         Get the path to the folder containing each participant's data
-        
+
         :return: str, path to the data folder
         """
         # Combine the project path and the data folder path
@@ -56,7 +58,7 @@ class Setup:
     def set_meta_data_path(self) -> str:
         """
         Get the path to the file containing meta data information
-        
+
         :return: str, path to the meta data file
         """
         # Combine the project path and the data folder path to get the meta data file path
@@ -65,7 +67,7 @@ class Setup:
     def set_destination_path(self) -> str:
         """
         Get the path to the folder containing each participant's preprocessed data
-        
+
         :return: str, path to the preprocessed data_pre folder
         """
         # Combine the project path and the data_pre folder path
@@ -74,7 +76,7 @@ class Setup:
     def set_plot_path(self) -> str:
         """
         Get the path to the folder containing plots
-        
+
         :return: str, path to the plot folder
         """
         # Combine the project path and the plots folder path
@@ -83,7 +85,7 @@ class Setup:
     def set_result_path(self) -> str:
         """
         Get the path to the folder containing results
-        
+
         :return: str, path to the plot folder
         """
         # Combine the project path and the results folder path
@@ -92,7 +94,7 @@ class Setup:
     def set_model_folder_path(self) -> str:
         """
         Get the path to the folder containing model parameters
-        
+
         :return: str, path to the model parameters model_param folder
         """
         # Combine the project path and the model_param folder path
@@ -101,7 +103,7 @@ class Setup:
     def set_model_param_path(self) -> str:
         """
         Get the path to the file containing model parameters information
-        
+
         :return: str, path to the model parameters file
         """
         # Combine the project path and the model_param folder path to get the model parameters file path
@@ -110,7 +112,7 @@ class Setup:
     def set_model_hyperparam_path(self) -> str:
         """
         Get the path to the file containing model hyperparameters information
-        
+
         :return: str, path to the model hyperparameters file
         """
         # Combine the project path and the model_param folder path to get the model hyperparameters file path
