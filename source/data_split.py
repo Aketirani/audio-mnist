@@ -4,9 +4,8 @@ from sklearn.model_selection import train_test_split
 
 class DataSplit:
     """
-    The DataSplit class is used to split a dataframe into training, validation, and test sets.
+    The DataSplit class is used to split a dataframe into training, validation, and test sets
     """
-
     def __init__(self, test_size: float = 0.1, val_size: float = 0.1):
         """
         Initialize the DataSplit class
@@ -19,7 +18,7 @@ class DataSplit:
 
     def split(self, dataframe: pd.DataFrame, target_column: str) -> tuple:
         """
-        Split the dataframe into training, validation, and test sets.
+        Split the dataframe into training, validation, and test sets
 
         :param dataframe: pd.DataFrame, dataframe to be split
         :param target_column: str, name of the column to stratify on

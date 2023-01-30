@@ -6,6 +6,9 @@ import yaml
 
 
 class Utilities:
+    """
+    The Utilities class is used to read files, create dataframes, save csv files, and other basic functionalities
+    """
     def __init__(self, dst: str):
         """
         Initialize the Utilities class

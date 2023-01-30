@@ -8,6 +8,9 @@ from xgboost import XGBClassifier
 
 
 class XGBoostModel:
+    """
+    The XGBoostModel class is used to do hyperparameter tuning, model training, prediction and evaluation
+    """
     def __init__(self, train_df, val_df, test_df):
         """
         Initialize the class with training, validation and test dataframes

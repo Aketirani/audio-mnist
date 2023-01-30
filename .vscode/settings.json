@@ -6,5 +6,6 @@
             "source.organizeImports": true
         },
       },
-    "python.languageServer": "Default"
+    "python.languageServer": "Default",
+    "python.analysis.typeCheckingMode": "off"
 }

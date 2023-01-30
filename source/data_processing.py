@@ -5,6 +5,9 @@ import scipy.stats
 
 
 class DataProcessing:
+    """
+    The DataProcessing class is used to prepare audio data for analysis
+    """
     def __init__(self, target_sr: int) -> None:
         """
         Initialize the class with the destination path, and target sample rate

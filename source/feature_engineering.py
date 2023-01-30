@@ -2,6 +2,9 @@ import pandas as pd
 
 
 class FeatureEngineering:
+    """
+    The FeatureEngineering class is used to prepare final data for modelling
+    """
     def __init__(self):
         """
         Initialize the FeatureEngineering class

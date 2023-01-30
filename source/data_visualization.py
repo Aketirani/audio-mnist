@@ -8,6 +8,9 @@ import seaborn as sns
 
 
 class DataVisualization:
+    """
+    The DataVisualization class is used to visualize data
+    """
     def __init__(self, plot_path: str):
         """
         Initialize the DataVisualization class
