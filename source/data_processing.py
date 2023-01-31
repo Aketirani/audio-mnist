@@ -5,6 +5,9 @@ import scipy.stats
 
 
 class DataProcessing:
+    """
+    The DataProcessing class is used to prepare audio data for analysis
+    """
     def __init__(self, target_sr: int) -> None:
         """
         Initialize the class with the destination path, and target sample rate
@@ -21,8 +24,12 @@ class DataProcessing:
         :param data: np.ndarray, audio data
         :return: np.ndarray, resampled audio data
         """
-        # use librosa library's resample function to resample the audio data
-        return librosa.core.resample(y=data.astype(np.float32), orig_sr=fs, target_sr=self.target_sr, res_type="scipy")
+        # convert data to floating-point
+        if not isinstance(data, float) or not (hasattr(data, 'dtype') and np.issubdtype(data.dtype, np.floating)):
+            data = data.astype(np.float32)
+
+        # resample the audio data
+        return librosa.core.resample(y=data, orig_sr=fs, target_sr=self.target_sr, res_type="scipy")
 
     def zero_pad(self, data: np.ndarray) -> np.ndarray:
         """
@@ -77,8 +84,7 @@ class DataProcessing:
         high_cutoff = high_threshold / self.target_sr
 
         # create bandpass filter
-        b, a = scipy.signal.butter(
-            4, [low_cutoff, high_cutoff], btype='band', analog=False, output='ba')
+        b, a = scipy.signal.butter(4, [low_cutoff, high_cutoff], btype='band', analog=False, output='ba')
 
         # apply bandpass filter to the FFT data
         filtered_fft_data = scipy.signal.lfilter(b, a, fft_data)
@@ -148,38 +154,7 @@ class DataProcessing:
         feature_keys = list(features.keys())
         for key in feature_keys:
             # normalize the feature by min-max normalization
-            features[key] = (features[key] - min(features.values())) / \
-                (max(features.values())-min(features.values()))
+            features[key] = (features[key]-min(features.values()))/(max(features.values())-min(features.values()))
 
         # return normalized features
-        return features
-
-    @staticmethod
-    def add_gender(features: dict, gender: str) -> dict:
-        """
-        Add the gender to the feature dict
-
-        :param features: dict, containing the statistical features of the FFT data
-        :param gender: str, the gender to add to the dict
-        :return: dict, containing the statistical features of the FFT data with the added "gender" key
-        """
-        # add the gender to the feature dict with key "gender"
-        features["gender"] = gender
-
-        # return the updated feature dictionary
-        return features
-
-    @staticmethod
-    def add_digit(features: dict, digit: str) -> dict:
-        """
-        Add the digit to the feature dict
-
-        :param features: dict, containing the statistical features of the FFT data
-        :param digit: str, the digit to add to the dict
-        :return: dict, containing the statistical features of the FFT data with the added "digit" key
-        """
-        # add the digit as a key to the feature dictionary
-        features["digit"] = digit
-
-        # return the updated feature dictionary
         return features

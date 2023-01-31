@@ -4,9 +4,8 @@ import yaml
 
 class Setup:
     """
-    Setup all basic inputs for the project pipeline
+    The Setup class is used to set up paths
     """
-
     def __init__(self, cfg_file: str) -> None:
         """
         Initialize the class with the config file, and set up the paths and files
