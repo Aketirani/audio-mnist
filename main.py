@@ -42,7 +42,6 @@ FE = FeatureEngineering()
 DS = DataSplit()
 DS = DataSplit(test_size=0.1, val_size=0.1)
 
-
 def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mode: bool):
     """
     Prepares audio data for analysis
@@ -104,8 +103,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             fft_data = DP.fft_data(audio_data)
 
             # Apply bandpass filter
-            bp_data = DP.bandpass_filter(
-                fft_data, low_threshold=100, high_threshold=250)
+            bp_data = DP.bandpass_filter(fft_data, low_threshold=100, high_threshold=250)
 
             # Feature creation
             features = DP.feature_creation(fft_data)
@@ -114,8 +112,8 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             n_features = DP.normalize_features(features)
 
             # Add gender and digit label
-            features = DP.add_gender(n_features, meta_data[vp]["gender"])
-            features = DP.add_digit(n_features, dig[-1])
+            features = UT.add_column(n_features, "gender", meta_data[vp]["gender"])
+            features = UT.add_column(n_features, "digit", dig[-1])
 
             # Append new dict values to the DataFrame
             df = df.append(features, ignore_index=True)
@@ -127,7 +125,6 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     # Save data to CSV
     if (test_mode == False):
         UT.save_df_to_csv(df, csv_name="features_data.csv")
-
 
 def DataFinal(plot_mode: bool, print_mode: bool):
     """
@@ -142,8 +139,7 @@ def DataFinal(plot_mode: bool, print_mode: bool):
 
     if (print_mode == True):
         # Show size of dataset
-        print(
-            f"Size of data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}")
+        print(f"Size of data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}")
 
     # Remove digit column
     df = UT.remove_column(df, "digit")
@@ -166,12 +162,10 @@ def DataFinal(plot_mode: bool, print_mode: bool):
         DV.plot_corr_matrix(corr_matrix, plot_name="correlation_matrix.png")
 
     # Remove correlated columns
-    df = FE.remove_correlated_columns(
-        df, threshold=0.95, columns_to_leave_out=["label"])
+    df = FE.remove_correlated_columns(df, threshold=0.95, columns_to_leave_out=["label"])
 
     # Save data to CSV
     UT.save_df_to_csv(df, file_name="final_data.csv")
-
 
 def DataSplit(print_mode: bool) -> pd.DataFrame:
     """
@@ -191,12 +185,9 @@ def DataSplit(print_mode: bool) -> pd.DataFrame:
         train_size = UT.df_shape(train_df)
         val_size = UT.df_shape(val_df)
         test_size = UT.df_shape(test_df)
-        print(
-            f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}")
-        print(
-            f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
-        print(
-            f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}")
+        print(f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}")
+        print(f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
+        print(f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}")
 
         # Show gender balance
         gender_count = UT.column_value_counts(df, "label")
@@ -204,7 +195,6 @@ def DataSplit(print_mode: bool) -> pd.DataFrame:
         print(f"Number of male audio recordings: {gender_count[1]}")
 
     return train_df, val_df, test_df
-
 
 def Modelling(plot_mode: bool, print_mode: bool, hyperparam_mode: bool):
     """
@@ -220,23 +210,20 @@ def Modelling(plot_mode: bool, print_mode: bool, hyperparam_mode: bool):
 
     # Hyperparameters tuning
     if (hyperparam_mode == True):
-        XM.grid_search(X_train, y_train, X_val, y_val, result_path,
-                       file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
+        XM.grid_search(X_train, y_train, X_val, y_val, result_path, file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
 
     # Set model parameters
     XM.set_params(model_param)
 
     # Train model
-    XM.fit(X_train, y_train, X_val, y_val,
-           result_path, file_name="model_results.yaml")
+    XM.fit(X_train, y_train, X_val, y_val, result_path, file_name="model_results.yaml")
 
     # Feature importance
     feature_importance = XM.feature_importance()
 
     # Plot feature importance
     if (plot_mode == True):
-        DV.plot_feature_importance(
-            feature_importance, test_df.iloc[:, :-1].columns, plot_name="feature_importance.png")
+        DV.plot_feature_importance(feature_importance, test_df.iloc[:,:-1].columns, plot_name="feature_importance.png")
 
     # Make predictions
     y_pred = XM.predict(X_test)
@@ -247,24 +234,19 @@ def Modelling(plot_mode: bool, print_mode: bool, hyperparam_mode: bool):
         print("Model Accuracy: %.2f%%" % (accuracy*100))
 
     # Read model results
-    model_results = UT.read_file(
-        os.path.join(result_path, "model_results.yaml"))
+    model_results = UT.read_file(os.path.join(result_path,"model_results.yaml"))
 
     # Load results into pandas dataframe
     df = XM.create_log_df(model_results)
 
     if (plot_mode == True):
         # Plot training and validation accuracy and loss
-        DV.plot_loss(df["iteration"], df["train_loss"],
-                     df["val_loss"], plot_name="model_loss.png")
-        DV.plot_accuracy(df["iteration"], df["train_acc"],
-                         df["val_acc"], plot_name="model_accuracy.png")
-
+        DV.plot_loss(df["iteration"], df["train_loss"], df["val_loss"], plot_name="model_loss.png")
+        DV.plot_accuracy(df["iteration"], df["train_acc"], df["val_acc"], plot_name="model_accuracy.png")
 
 if __name__ == "__main__":
     # Prepare audio data for analysis
-    DataPreparation(plot_mode=False, play_mode=False,
-                    print_mode=False, test_mode=True)
+    DataPreparation(plot_mode=False, play_mode=False, print_mode=False, test_mode=True)
 
     # Prepare final data for modelling
     DataFinal(plot_mode=False, print_mode=False)

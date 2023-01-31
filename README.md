@@ -113,7 +113,7 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Exectuion
-Run `main.sh` script to execute whole pipeline.
+Run `main.sh` to execute whole pipeline.
 
 ## Unit Test
-To come...
+Run `python -m unittest` to run all unit tests.

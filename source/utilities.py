@@ -114,6 +114,22 @@ class Utilities:
         # return dataframe
         return df
 
+    @staticmethod
+    def add_column(features: dict, column_name: str, value: str) -> dict:
+        """
+        Add column and value to the feature dict
+
+        :param features: dict, input dictionary
+        :param column_name: str, column name to add to the dict
+        :param value: str, value to add to the dict
+        :return: dict, dictionary with column added
+        """
+        # add the column to the dictionary
+        features[column_name] = value
+
+        # return the updated feature dictionary
+        return features
+
     def save_df_to_csv(self, dataframe: pd.DataFrame, file_name: str) -> None:
         """
         Save the given DataFrame to a CSV file
