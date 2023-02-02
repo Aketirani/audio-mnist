@@ -3,13 +3,13 @@ import glob
 import os
 import warnings
 import pandas as pd
-from source.data_processing import DataProcessing
-from source.data_split import DataSplit
-from source.data_visualization import DataVisualization
-from source.feature_engineering import FeatureEngineering
-from source.setup import Setup
-from source.utilities import Utilities
-from source.xgboost_model import XGBoostModel
+from src.data_processing import DataProcessing
+from src.data_split import DataSplit
+from src.data_visualization import DataVisualization
+from src.feature_engineering import FeatureEngineering
+from src.setup import Setup
+from src.utilities import Utilities
+from src.xgboost_model import XGBoostModel
 
 # Ignore warnings
 warnings.filterwarnings("ignore")

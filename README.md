@@ -37,15 +37,17 @@ In this repository, we will be using acoustic features extracted from a voice re
 ├── results                     <-- Results Folder
 |   ├── *.yaml                  <-- Model Results
 |
-├── source                      <-- Source Folder
+├── src                         <-- Source Folder
 |   ├── data_processing.py      <-- Data Processing
 |   ├── data_split.py           <-- Data Split
 |   ├── data_visualization.py   <-- Data Visualization
 |   ├── feature_engineering.py  <-- Feature Engineering
-|   ├── main.ipynb              <-- Executing Whole Pipeline
-|   ├── setup.py                <-- Setup
-|   ├── utilites.py             <-- Utilities
+|   ├── setup.py                <-- Set Up Paths
+|   ├── utilites.py             <-- Help Functions
 |   ├── xgboost_model.py        <-- Model Training And Prediction
+|
+├── test                        <-- Test Folder
+|   ├── *.py                    <-- Unit Tests
 |
 ├── main.py                     <-- Main Python Script
 |
