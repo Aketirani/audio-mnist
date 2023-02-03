@@ -14,30 +14,11 @@ from src.xgboost_model import XGBoostModel
 # Ignore warnings
 warnings.filterwarnings("ignore")
 
-# Initialize class
-SU = Setup(cfg_file="config.yaml")
-
-# Get the paths
-source_path = SU.source_path
-meta_path = SU.meta_path
-destination_path = SU.destination_path
-plot_path = SU.plot_path
-result_path = SU.result_path
-model_folder_path = SU.model_folder_path
-model_param_path = SU.param_path
-model_hyperparam_path = SU.hyperparam_path
-
-# Initialize class
-UT = Utilities(destination_path)
-
-# Read files
-meta_data = UT.read_file(meta_path)
-model_param = UT.read_file(model_param_path)
-model_hyperparam = UT.read_file(model_hyperparam_path)
-
 # Initialize classes
+SU = Setup(cfg_file="config.yaml")
+UT = Utilities(dst_path=SU.dst_path)
 DP = DataProcessing(target_sr=8000)
-DV = DataVisualization(plot_path)
+DV = DataVisualization(plot_path=SU.plot_path)
 FE = FeatureEngineering()
 DS = DataSplit()
 DS = DataSplit(test_size=0.1, val_size=0.1)
@@ -52,6 +33,11 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     :param test_mode: bool, a flag indicating whether to run the function in test mode
     :return: None
     """
+    # Get path and read meta data file
+    src_path = SU.src_path
+    meta_path = SU.meta_path
+    meta_data = UT.read_file(meta_path)
+
     # Create empty dataframe
     df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
 
@@ -59,7 +45,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     if (test_mode == True):
         num_folders = 2
     elif (test_mode == False):
-        num_folders = len(next(os.walk(source_path))[1])+1
+        num_folders = len(next(os.walk(src_path))[1])+1
 
     # Loop over audio recordings in the source path
     for i in range(1, num_folders):
@@ -68,7 +54,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             UT.loop_progress(i, num_folders-1)
 
         # Assign source temp
-        src_temp = os.path.join(source_path, f"{i:02d}")
+        src_temp = os.path.join(src_path, f"{i:02d}")
         filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
 
         # Loop over files in directory
@@ -126,7 +112,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     if (test_mode == False):
         UT.save_df_to_csv(df, csv_name="features_data.csv")
 
-def DataFinal(plot_mode: bool, print_mode: bool):
+def DataEngineering(plot_mode: bool, print_mode: bool):
     """
     Prepare final data for modelling
 
@@ -167,7 +153,7 @@ def DataFinal(plot_mode: bool, print_mode: bool):
     # Save data to CSV
     UT.save_df_to_csv(df, file_name="final_data.csv")
 
-def DataSplit(print_mode: bool) -> pd.DataFrame:
+def DataSplitting(print_mode: bool) -> pd.DataFrame:
     """
     Split the final data into training, validation, and test sets
 
@@ -196,27 +182,56 @@ def DataSplit(print_mode: bool) -> pd.DataFrame:
 
     return train_df, val_df, test_df
 
-def Modelling(plot_mode: bool, print_mode: bool, hyperparam_mode: bool):
+def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, hyperparam_mode: bool):
     """
     Hyperparameter tuning, model training, prediction and evaluation
 
     :param plot_mode: bool, a flag indicating whether to plot figures
     :param print_mode: bool, a flag indicating whether to print
+    :param print_acc_mode: bool, a flag indicating whether to print model accuracy
     :param model_hyperparam: bool, a flag indicating whether to perform hyperparameter tuning
     :return: None
     """
+    # Read results path
+    res_path = SU.res_path
+
+    # Load CSV file into dataframe
+    df = UT.csv_to_df(file_name="final_data.csv")
+
+    # Split datasets
+    train_df, val_df, test_df = DS.split(df, "label")
+
+    if (print_mode == True):
+        # Show size of datasets
+        train_size = UT.df_shape(train_df)
+        val_size = UT.df_shape(val_df)
+        test_size = UT.df_shape(test_df)
+        print(f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}")
+        print(f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
+        print(f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}")
+
+        # Show gender balance
+        gender_count = UT.column_value_counts(df, "label")
+        print(f"Number of female audio recordings: {gender_count[0]}")
+        print(f"Number of male audio recordings: {gender_count[1]}")
+
     # Prepare datasets
+    XM = XGBoostModel(train_df, val_df, test_df)
     X_train, y_train, X_val, y_val, X_test, y_test = XM.prepare_data()
 
     # Hyperparameters tuning
     if (hyperparam_mode == True):
-        XM.grid_search(X_train, y_train, X_val, y_val, result_path, file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
+        hyperparam_path = SU.hyperparam_path
+        model_hyperparam = UT.read_file(hyperparam_path)
+        XM.grid_search(X_train, y_train, X_val, y_val, res_path, file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
 
     # Set model parameters
+    param_path = SU.param_path
+    model_param = UT.read_file(param_path)
     XM.set_params(model_param)
 
     # Train model
-    XM.fit(X_train, y_train, X_val, y_val, result_path, file_name="model_results.yaml")
+    XM.fit(X_train, y_train, X_val, y_val, res_path, file_name="model_results.yaml")
 
     # Feature importance
     feature_importance = XM.feature_importance()
@@ -230,11 +245,11 @@ def Modelling(plot_mode: bool, print_mode: bool, hyperparam_mode: bool):
 
     # Evaluate model
     accuracy = XM.evaluate_predictions(y_test, y_pred)
-    if (print_mode == True):
+    if (print_acc_mode == True):
         print("Model Accuracy: %.2f%%" % (accuracy*100))
 
     # Read model results
-    model_results = UT.read_file(os.path.join(result_path,"model_results.yaml"))
+    model_results = UT.read_file(os.path.join(res_path,"model_results.yaml"))
 
     # Load results into pandas dataframe
     df = XM.create_log_df(model_results)
@@ -249,11 +264,7 @@ if __name__ == "__main__":
     DataPreparation(plot_mode=False, play_mode=False, print_mode=False, test_mode=True)
 
     # Prepare final data for modelling
-    DataFinal(plot_mode=False, print_mode=False)
-
-    # Split datasets for modelling
-    train_df, val_df, test_df = DataSplit(print_mode=False)
+    DataEngineering(plot_mode=False, print_mode=False)
 
     # Model training and prediction
-    XM = XGBoostModel(train_df, val_df, test_df)
-    Modelling(plot_mode=False, print_mode=True, hyperparam_mode=False)
+    Modelling(plot_mode=False, print_mode=False, print_acc_mode=True, hyperparam_mode=False)

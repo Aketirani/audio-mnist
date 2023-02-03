@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import unittest
-sys.path.append("../source")
+sys.path.append("../src")
 from data_processing import DataProcessing
 
 
