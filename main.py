@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 
 # Initialize classes
 SU = Setup(cfg_file="config.yaml")
-UT = Utilities(dst_path=SU.dst_path)
+UT = Utilities(data_path=SU.data_path)
 DP = DataProcessing(target_sr=8000)
 DV = DataVisualization(plot_path=SU.plot_path)
 FE = FeatureEngineering()
@@ -34,7 +34,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     :return: None
     """
     # Get path and read meta data file
-    src_path = SU.src_path
+    audio_path = SU.audio_path
     meta_path = SU.meta_path
     meta_data = UT.read_file(meta_path)
 
@@ -45,7 +45,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     if (test_mode == True):
         num_folders = 2
     elif (test_mode == False):
-        num_folders = len(next(os.walk(src_path))[1])+1
+        num_folders = len(next(os.walk(audio_path))[1])+1
 
     # Loop over audio recordings in the source path
     for i in range(1, num_folders):
@@ -54,7 +54,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             UT.loop_progress(i, num_folders-1)
 
         # Assign source temp
-        src_temp = os.path.join(src_path, f"{i:02d}")
+        src_temp = os.path.join(audio_path, f"{i:02d}")
         filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
 
         # Loop over files in directory
