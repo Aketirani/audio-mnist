@@ -153,35 +153,6 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Save data to CSV
     UT.save_df_to_csv(df, file_name="final_data.csv")
 
-def DataSplitting(print_mode: bool) -> pd.DataFrame:
-    """
-    Split the final data into training, validation, and test sets
-
-    :param print_mode: bool, a flag indicating whether to print
-    :return: pd.DataFrame, dataframe containing train_df, val_df, test_df
-    """
-    # Load CSV file into dataframe
-    df = UT.csv_to_df(file_name="final_data.csv")
-
-    # Split datasets
-    train_df, val_df, test_df = DS.split(df, "label")
-
-    if (print_mode == True):
-        # Show size of datasets
-        train_size = UT.df_shape(train_df)
-        val_size = UT.df_shape(val_df)
-        test_size = UT.df_shape(test_df)
-        print(f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}")
-        print(f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
-        print(f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}")
-
-        # Show gender balance
-        gender_count = UT.column_value_counts(df, "label")
-        print(f"Number of female audio recordings: {gender_count[0]}")
-        print(f"Number of male audio recordings: {gender_count[1]}")
-
-    return train_df, val_df, test_df
-
 def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, hyperparam_mode: bool):
     """
     Hyperparameter tuning, model training, prediction and evaluation
