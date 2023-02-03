@@ -5,23 +5,21 @@ While recognizing the characteristics of the speaker from the recording, identit
 
 Recognizing the speaker’s gender is one such use case. The model for the same can be trained to learn patterns and features specific to each gender and reproduce it for individuals who are not part of the training dataset too.
 
-It finds applications in automatic salutations, tagging audio recording, and helping digital assistants reproduce male or female generic results.
-
 In this repository, we will be using acoustic features extracted from a voice recording to predict the speaker’s gender.
 
 ## Structure
 ```
 ├── readme.md                   <-- You Are Here
 |
-├── config                      <-- Configuration Folder
-|   ├── config.yaml             <-- Project Paths
-|
-├── data                        <-- Data Folder
+├── audio                       <-- Audio Folder
 |   ├── recordings              <-- Recordings Folder
 |       ├── *.wav               <-- Audio Recordings
 |   ├── audioMNIST_meta.txt     <-- Meta Information
 |
-├── data_pre                    <-- Preprocced Data Folder
+├── config                      <-- Configuration Folder
+|   ├── config.yaml             <-- Project Paths
+|
+├── data                        <-- Data Folder
 |   ├── features_data.csv       <-- Features Dataset
 |   ├── final_data.csv          <-- Final Dataset
 |

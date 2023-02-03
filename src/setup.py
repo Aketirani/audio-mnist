@@ -12,9 +12,9 @@ class Setup:
 
         :param cfg_file: str, name to the config file
         :param cfg_setup: str, name to the config file
-        :param src_path: str, path to the source folder
+        :param src_path: str, path to the audio folder
         :param meta_path: str, path to the meta data folder
-        :param dst_path: str, path to the destination folder
+        :param data_path: str, path to the data folder
         :param plot_path: str, path to the plots folder
         :param res_path: str, path to the results folder
         :param model_path: str, path to the model parameters folder
@@ -23,9 +23,9 @@ class Setup:
         """
         self.cfg_file = cfg_file
         self.cfg_setup = self.read_config()
-        self.src_path = self.set_source_path()
+        self.audio_path = self.set_audio_path()
         self.meta_path = self.set_meta_data_path()
-        self.dst_path = self.set_destination_path()
+        self.data_path = self.set_data_path()
         self.plot_path = self.set_plot_path()
         self.res_path = self.set_result_path()
         self.model_path = self.set_model_path()
@@ -54,14 +54,14 @@ class Setup:
         # return the configuration data
         return cfg_setup
 
-    def set_source_path(self) -> str:
+    def set_audio_path(self) -> str:
         """
-        Get the path to the folder containing each participant's data
+        Get the path to the folder containing each participant's audio data
 
-        :return: str, path to the data folder
+        :return: str, path to the audio folder
         """
-        # Combine the project path and the data folder path
-        return os.path.join(self.cfg_setup['project_path'], "data")
+        # Combine the project path and the audio folder path
+        return os.path.join(self.cfg_setup['project_path'], "audio")
 
     def set_meta_data_path(self) -> str:
         """
@@ -69,17 +69,17 @@ class Setup:
 
         :return: str, path to the meta data file
         """
-        # Combine the project path and the data folder path to get the meta data file path
-        return os.path.join(self.cfg_setup['project_path'], "data", "audioMNIST_meta.txt")
+        # Combine the project path and the audio folder path to get the meta data file path
+        return os.path.join(self.cfg_setup['project_path'], "audio", "audioMNIST_meta.txt")
 
-    def set_destination_path(self) -> str:
+    def set_data_path(self) -> str:
         """
-        Get the path to the folder containing each participant's preprocessed data
+        Get the path to the folder containing each participant's processed data
 
-        :return: str, path to the preprocessed data_pre folder
+        :return: str, path to the processed data folder
         """
-        # Combine the project path and the data_pre folder path
-        return os.path.join(self.cfg_setup['project_path'], "data_pre")
+        # Combine the project path and the data folder path
+        return os.path.join(self.cfg_setup['project_path'], "data")
 
     def set_plot_path(self) -> str:
         """

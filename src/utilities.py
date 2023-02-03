@@ -9,13 +9,13 @@ class Utilities:
     """
     The Utilities class is used to read files, create dataframes, save csv files, and other basic functionalities
     """
-    def __init__(self, dst_path: str):
+    def __init__(self, data_path: str):
         """
         Initialize the Utilities class
 
-        :param dst_path: str, destination where the CSV file will be saved
+        :param data_path: str, data path where the CSV file will be saved
         """
-        self.dst = dst_path
+        self.data_path = data_path
 
     @staticmethod
     def read_audio(filepath: str) -> tuple:
@@ -138,7 +138,7 @@ class Utilities:
         :param file_name: str, name of the file to be saved
         """
         # save dataframe to csv file
-        dataframe.to_csv(os.path.join(self.dst, file_name), index=False)
+        dataframe.to_csv(os.path.join(self.data_path, file_name), index=False)
 
     def csv_to_df(self, file_name: str) -> pd.DataFrame:
         """
@@ -148,7 +148,7 @@ class Utilities:
         :return: pd.DataFrame, DataFrame created from the CSV file
         """
         # save csv file to dataframe
-        return pd.read_csv(os.path.join(self.dst, file_name))
+        return pd.read_csv(os.path.join(self.data_path, file_name))
 
     @staticmethod
     def reshape_data(data_list: list) -> np.ndarray:
