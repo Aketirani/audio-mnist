@@ -1,0 +1,28 @@
+@startuml Pipeline Flowchart
+|AudioMNIST|
+package "AudioMNIST" {
+    :start|
+    partition "main.sh" {
+        :set log path;
+        :run python script;
+    }
+    partition "main.py" {
+        :import packages;
+        :initialize classes;
+        :get paths;
+    }
+    package "temp" {
+    :run.py|
+        note: SOMETHING
+        :DESCRIPTION;
+        if (THIS) then (true)
+            :DO;
+        else (false)
+            :DO;
+            note right #red: EXIT
+        endif
+    }
+    :end|
+}
+stop
+@enduml

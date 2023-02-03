@@ -9,13 +9,13 @@ class Utilities:
     """
     The Utilities class is used to read files, create dataframes, save csv files, and other basic functionalities
     """
-    def __init__(self, dst: str):
+    def __init__(self, dst_path: str):
         """
         Initialize the Utilities class
 
-        :param dst: str, destination where the CSV file will be saved
+        :param dst_path: str, destination where the CSV file will be saved
         """
-        self.dst = dst
+        self.dst = dst_path
 
     @staticmethod
     def read_audio(filepath: str) -> tuple:

@@ -11,15 +11,24 @@ class Setup:
         Initialize the class with the config file, and set up the paths and files
 
         :param cfg_file: str, name to the config file
+        :param cfg_setup: str, name to the config file
+        :param src_path: str, path to the source folder
+        :param meta_path: str, path to the meta data folder
+        :param dst_path: str, path to the destination folder
+        :param plot_path: str, path to the plots folder
+        :param res_path: str, path to the results folder
+        :param model_path: str, path to the model parameters folder
+        :param param_path: str, path to the configurations folder
+        :param hyperparam_path: str, path to the configurations folder
         """
         self.cfg_file = cfg_file
         self.cfg_setup = self.read_config()
-        self.source_path = self.set_source_path()
+        self.src_path = self.set_source_path()
         self.meta_path = self.set_meta_data_path()
-        self.destination_path = self.set_destination_path()
+        self.dst_path = self.set_destination_path()
         self.plot_path = self.set_plot_path()
-        self.result_path = self.set_result_path()
-        self.model_folder_path = self.set_model_folder_path()
+        self.res_path = self.set_result_path()
+        self.model_path = self.set_model_path()
         self.param_path = self.set_model_param_path()
         self.hyperparam_path = self.set_model_hyperparam_path()
 
@@ -90,7 +99,7 @@ class Setup:
         # Combine the project path and the results folder path
         return os.path.join(self.cfg_setup['project_path'], "results")
 
-    def set_model_folder_path(self) -> str:
+    def set_model_path(self) -> str:
         """
         Get the path to the folder containing model parameters
 
@@ -106,7 +115,7 @@ class Setup:
         :return: str, path to the model parameters file
         """
         # Combine the project path and the parameters folder path to get the model parameters file path
-        return os.path.join(self.cfg_setup['project_path'], "parameters", "model_parameters.yaml")
+        return os.path.join(self.model_path, "model_parameters.yaml")
 
     def set_model_hyperparam_path(self) -> str:
         """
@@ -115,4 +124,4 @@ class Setup:
         :return: str, path to the model hyperparameters file
         """
         # Combine the project path and the parameters folder path to get the model hyperparameters file path
-        return os.path.join(self.cfg_setup['project_path'], "parameters", "model_hyperparameters.yaml")
+        return os.path.join(self.model_path, "model_hyperparameters.yaml")
