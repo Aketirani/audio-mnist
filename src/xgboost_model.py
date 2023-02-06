@@ -52,14 +52,12 @@ class XGBoostModel:
         self.model.set_params(learning_rate=model_param["learning_rate"],
                               max_depth=model_param["max_depth"],
                               n_estimators=model_param["n_estimators"],
-                              num_parallel_tree=model_param["num_parallel_tree"],
                               gamma=model_param["gamma"],
                               reg_lambda=model_param["lambda"],
                               scale_pos_weight=model_param["scale_pos_weight"],
                               min_child_weight=model_param["min_child_weight"],
                               objective=model_param["objective"],
-                              tree_method=model_param["tree_method"],
-                              verbosity=model_param["verbosity"])
+                              tree_method=model_param["tree_method"])
 
     def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path: str, file_name: str):
         """
@@ -88,6 +86,7 @@ class XGBoostModel:
             accuracy = accuracy_score(labels, np.round(preds))
             return 'accuracy', accuracy
 
+        # define save evaluation metrics function
         def save_eval_metrics(file_path: str, file_name: str, result):
             """
             Save the eval_metrics of a model in yaml format
@@ -101,8 +100,7 @@ class XGBoostModel:
                 json.dump(result.evals_result_, f)
 
         # fit the model on the training data and evaluate on validation data
-        result = self.model.fit(X_train, y_train, eval_set=[(
-            X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=0)
+        result = self.model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=0)
 
         # save evaluation metrics to file
         save_eval_metrics(file_path, file_name, result)
@@ -119,17 +117,7 @@ class XGBoostModel:
         :param file_name: str, name of the file to save the best results
         :param grid_params: str, dictionary containing the grid search parameters
         """
-        # create an instance of the XGBClassifier
-        self.model = XGBClassifier()
-
-        # create an instance of the GridSearchCV class
-        grid = GridSearchCV(self.model, grid_params, cv=3,
-                            scoring='accuracy', n_jobs=-1, verbose=1)
-
-        # fit the GridSearchCV object on the training data
-        grid = grid.fit(X_train, y_train, eval_set=[
-                        (X_val, y_val)], eval_metric='logloss')
-
+        # define save best parameters function
         def save_best_parameters(file_path: str, file_name: str, grid):
             """
             Save the best parameters and best score of a model in yaml format
@@ -141,6 +129,15 @@ class XGBoostModel:
             with open(os.path.join(file_path, file_name), 'w') as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(grid.best_params_, f)
+
+        # create an instance of the XGBClassifier
+        self.model = XGBClassifier()
+
+        # create an instance of the GridSearchCV class
+        grid = GridSearchCV(self.model, grid_params, cv=3, scoring='accuracy', n_jobs=-1, verbose=1)
+
+        # fit the GridSearchCV object on the training data
+        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric='logloss')
 
         # save evaluation metrics to file
         save_best_parameters(file_path, file_name, grid)
@@ -165,14 +162,13 @@ class XGBoostModel:
         """
         # extract data from log data
         train_loss = log_data['validation_0']['logloss']
-        train_acc = log_data['validation_1']['logloss']
-        val_loss = log_data['validation_0']['accuracy']
+        val_loss = log_data['validation_1']['logloss']
+        train_acc = log_data['validation_0']['accuracy']
         val_acc = log_data['validation_1']['accuracy']
         iteration = list(range(0, len(train_loss)))
 
         # define column names
-        columns = ['iteration', 'train_loss',
-                   'train_acc', 'val_loss', 'val_acc']
+        columns = ['iteration', 'train_loss', 'train_acc', 'val_loss', 'val_acc']
 
         # create DataFrame from extracted data and column names
         return pd.DataFrame(list(zip(iteration, train_loss, train_acc, val_loss, val_acc)), columns=columns)

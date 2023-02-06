@@ -43,7 +43,7 @@ class DataProcessing:
         if len(data) < padding_length:
             # if the data is shorter than the target length, pad the data with zeros
             embedded_data = np.zeros(padding_length)
-            offset = np.random.randint(low=0, high=padding_length - len(data))
+            offset = np.random.randint(low=0, high=padding_length-len(data))
             embedded_data[offset:offset+len(data)] = data
         elif len(data) == padding_length:
             # if the data is already of the target length, no padding is needed

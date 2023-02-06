@@ -82,14 +82,12 @@ The model uses the following key parameters:
 - `learning_rate`: The step size of the optimization algorithm
 - `max_depth`: The maximum depth of a tree
 - `n_estimators`: The number of of trees in the ensemble
-- `num_parallel_tree`: Number of parallel trees to be built
 - `gamma`: Minimum split loss
 - `lambda`: Regularization term
 - `scale_pos_weight`: The balance between positive and negative weights
 - `min_child_weight`: Minimum sum of weights of all observations in a child
 - `objective`: Loss function
 - `tree_method`: Method used to grow the tree
-- `verbosity`: Level of verbosity of printing messages
 
 By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
@@ -111,6 +109,9 @@ These features include:
 - `cent`: Frequency centroid of the FFT data
 
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
+
+## Model Performance
+Accuracy on test dataset: `83.27%`.
 
 ## Exectuion
 Run `main.sh` to execute whole pipeline.
