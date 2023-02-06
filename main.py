@@ -30,7 +30,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     :param plot_mode: bool, a flag indicating whether to plot figures
     :param play_mode: bool, a flag indicating whether to play the audio signals
     :param print_mode: bool, a flag indicating whether to print
-    :param test_mode: bool, a flag indicating whether to run the function in test mode
+    :param test_mode: bool, a flag indicating whether to write and save new data
     :return: None
     """
     # Get path and read meta data file
@@ -42,10 +42,7 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
     df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
 
     # Specify total number of folders in source path
-    if (test_mode == True):
-        num_folders = 2
-    elif (test_mode == False):
-        num_folders = len(next(os.walk(audio_path))[1])+1
+    num_folders = len(next(os.walk(audio_path))[1])+1
 
     # Loop over audio recordings in the source path
     for i in range(1, num_folders):
@@ -153,14 +150,14 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Save data to CSV
     UT.save_df_to_csv(df, file_name="final_data.csv")
 
-def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, hyperparam_mode: bool):
+def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mode: bool):
     """
     Hyperparameter tuning, model training, prediction and evaluation
 
     :param plot_mode: bool, a flag indicating whether to plot figures
     :param print_mode: bool, a flag indicating whether to print
     :param print_acc_mode: bool, a flag indicating whether to print model accuracy
-    :param model_hyperparam: bool, a flag indicating whether to perform hyperparameter tuning
+    :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
     :return: None
     """
     # Read results path
@@ -191,7 +188,7 @@ def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, hyperpara
     X_train, y_train, X_val, y_val, X_test, y_test = XM.prepare_data()
 
     # Hyperparameters tuning
-    if (hyperparam_mode == True):
+    if (tuning_mode == True):
         hyperparam_path = SU.hyperparam_path
         model_hyperparam = UT.read_file(hyperparam_path)
         XM.grid_search(X_train, y_train, X_val, y_val, res_path, file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
@@ -238,4 +235,4 @@ if __name__ == "__main__":
     DataEngineering(plot_mode=False, print_mode=False)
 
     # Model training and prediction
-    Modelling(plot_mode=False, print_mode=False, print_acc_mode=True, hyperparam_mode=False)
+    Modelling(plot_mode=False, print_mode=False, print_acc_mode=True, tuning_mode=False)

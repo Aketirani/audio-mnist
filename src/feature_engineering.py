@@ -24,8 +24,7 @@ class FeatureEngineering:
         df = df.loc[:, df.nunique() > 1]
 
         # list of columns to use for correlation calculation
-        columns_to_use = [
-            col for col in df.columns if col not in columns_to_leave_out]
+        columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
 
         # calculate correlation matrix for the columns
         return df[columns_to_use].corr(method='pearson')
@@ -39,8 +38,7 @@ class FeatureEngineering:
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
         # get the columns with constant values
-        constant_columns = [col for col in df.columns if df[col].nunique(
-        ) <= 1 and col not in columns_to_leave_out]
+        constant_columns = [col for col in df.columns if df[col].nunique() <= 1 and col not in columns_to_leave_out]
 
         # remove the constant value columns
         df = df.drop(constant_columns, axis=1)

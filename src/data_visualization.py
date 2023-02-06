@@ -58,8 +58,7 @@ class DataVisualization:
         stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
 
         # ise librosa to display the amplitude of the stft data in dB on the y-axis and time on the x-axis
-        librosa.display.specshow(
-            stft_magnitude_db, sr=sr, x_axis='time', y_axis='hz', cmap='inferno')
+        librosa.display.specshow(stft_magnitude_db, sr=sr, x_axis='time', y_axis='hz', cmap='inferno')
 
         # Add a colorbar with dB scale and labels
         plt.colorbar(format='%+2.0f dB')
@@ -164,8 +163,7 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         """
         # create subplots for each column of the dataframe
-        df.plot.hist(subplots=True, layout=(-1, 3),
-                     sharex=False, figsize=(10, 10))
+        df.plot.hist(subplots=True, layout=(-1, 3), sharex=False, figsize=(10, 10))
 
         # add a title to the plot
         plt.suptitle("Column Distribution")
