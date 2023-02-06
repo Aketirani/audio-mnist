@@ -17,6 +17,7 @@ class Setup:
         :param data_path: str, path to the data folder
         :param plot_path: str, path to the plots folder
         :param res_path: str, path to the results folder
+        :param test_path: str, path to the test folder
         :param model_path: str, path to the model parameters folder
         :param param_path: str, path to the configurations folder
         :param hyperparam_path: str, path to the configurations folder
@@ -28,6 +29,7 @@ class Setup:
         self.data_path = self.set_data_path()
         self.plot_path = self.set_plot_path()
         self.res_path = self.set_result_path()
+        self.test_path = self.set_test_path()
         self.model_path = self.set_model_path()
         self.param_path = self.set_model_param_path()
         self.hyperparam_path = self.set_model_hyperparam_path()
@@ -40,7 +42,8 @@ class Setup:
         """
         try:
             # change the directory to the configuration folder
-            os.chdir(os.path.join(os.getcwd(), "config"))
+            os.chdir(os.path.join("C:/GitProjects/AudioMNIST", "config"))
+            #os.chdir(os.path.join(os.getcwd(), "config"))
 
             # open the configuration folder
             with open(self.cfg_file, 'r') as file:
@@ -98,6 +101,15 @@ class Setup:
         """
         # Combine the project path and the results folder path
         return os.path.join(self.cfg_setup['project_path'], "results")
+
+    def set_test_path(self) -> str:
+        """
+        Get the path to the folder containing tests
+
+        :return: str, path to the test folder
+        """
+        # Combine the project path and the test folder path
+        return os.path.join(self.cfg_setup['project_path'], "test")
 
     def set_model_path(self) -> str:
         """

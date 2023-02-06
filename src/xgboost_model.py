@@ -95,7 +95,7 @@ class XGBoostModel:
             :param result: object, the result returned by the fit method of a model
             """
             # open the file in write mode
-            with open(os.path.join(file_path, file_name), 'w') as f:
+            with open(os.path.join(file_path, file_name), "w") as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(result.evals_result_, f)
 
@@ -126,7 +126,7 @@ class XGBoostModel:
             :param grid: object, the grid returned by the fit method of a model
             """
             # open the file in write mode
-            with open(os.path.join(file_path, file_name), 'w') as f:
+            with open(os.path.join(file_path, file_name), "w") as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(grid.best_params_, f)
 
@@ -134,10 +134,10 @@ class XGBoostModel:
         self.model = XGBClassifier()
 
         # create an instance of the GridSearchCV class
-        grid = GridSearchCV(self.model, grid_params, cv=3, scoring='accuracy', n_jobs=-1, verbose=1)
+        grid = GridSearchCV(self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1, verbose=1)
 
         # fit the GridSearchCV object on the training data
-        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric='logloss')
+        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric="logloss")
 
         # save evaluation metrics to file
         save_best_parameters(file_path, file_name, grid)
@@ -161,14 +161,14 @@ class XGBoostModel:
         :return: pd.DataFrame, DataFrame containing log data
         """
         # extract data from log data
-        train_loss = log_data['validation_0']['logloss']
-        val_loss = log_data['validation_1']['logloss']
-        train_acc = log_data['validation_0']['accuracy']
-        val_acc = log_data['validation_1']['accuracy']
+        train_loss = log_data["validation_0"]["logloss"]
+        val_loss = log_data["validation_1"]["logloss"]
+        train_acc = log_data["validation_0"]["accuracy"]
+        val_acc = log_data["validation_1"]["accuracy"]
         iteration = list(range(0, len(train_loss)))
 
         # define column names
-        columns = ['iteration', 'train_loss', 'train_acc', 'val_loss', 'val_acc']
+        columns = ["iteration", "train_loss", "train_acc", "val_loss", "val_acc"]
 
         # create DataFrame from extracted data and column names
         return pd.DataFrame(list(zip(iteration, train_loss, train_acc, val_loss, val_acc)), columns=columns)

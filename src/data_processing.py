@@ -25,7 +25,7 @@ class DataProcessing:
         :return: np.ndarray, resampled audio data
         """
         # convert data to floating-point
-        if not isinstance(data, float) or not (hasattr(data, 'dtype') and np.issubdtype(data.dtype, np.floating)):
+        if not isinstance(data, float) or not (hasattr(data, "dtype") and np.issubdtype(data.dtype, np.floating)):
             data = data.astype(np.float32)
 
         # resample the audio data
@@ -84,7 +84,7 @@ class DataProcessing:
         high_cutoff = high_threshold / self.target_sr
 
         # create bandpass filter
-        b, a = scipy.signal.butter(4, [low_cutoff, high_cutoff], btype='band', analog=False, output='ba')
+        b, a = scipy.signal.butter(4, [low_cutoff, high_cutoff], btype="band", analog=False, output="ba")
 
         # apply bandpass filter to the FFT data
         filtered_fft_data = scipy.signal.lfilter(b, a, fft_data)

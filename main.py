@@ -2,7 +2,6 @@
 import glob
 import os
 import warnings
-import pandas as pd
 from src.data_processing import DataProcessing
 from src.data_split import DataSplit
 from src.data_visualization import DataVisualization
@@ -20,7 +19,6 @@ UT = Utilities(data_path=SU.data_path)
 DP = DataProcessing(target_sr=8000)
 DV = DataVisualization(plot_path=SU.plot_path)
 FE = FeatureEngineering()
-DS = DataSplit()
 DS = DataSplit(test_size=0.1, val_size=0.1)
 
 def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mode: bool):
@@ -127,7 +125,7 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Remove digit column
     df = UT.remove_column(df, "digit")
 
-    # Create label column where 'female' is 0 and 'male' is 1
+    # Create label column where female is 0 and male is 1
     df = FE.create_label_column(df)
 
     if (plot_mode == True):
