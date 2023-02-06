@@ -44,7 +44,7 @@ class Utilities:
         """
         try:
             # open the file in read mode
-            with open(filepath, 'r') as file:
+            with open(filepath, "r") as file:
                 # use yaml.safe_load() to parse the file and return it as a dictionary
                 file_data = yaml.safe_load(file)
         except:
@@ -177,4 +177,4 @@ class Utilities:
         progress = (index) / (total)
 
         # print progress and elapsed time
-        print(f'Progress: {progress:.2%}')
+        print(f"Progress: {progress:.2%}")

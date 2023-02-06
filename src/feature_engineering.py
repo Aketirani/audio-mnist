@@ -27,11 +27,11 @@ class FeatureEngineering:
         columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
 
         # calculate correlation matrix for the columns
-        return df[columns_to_use].corr(method='pearson')
+        return df[columns_to_use].corr(method="pearson")
 
     def remove_constant_columns(self, df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
         """
-        Remove columns with constant values from the DataFrame, except for the ones specified in 'columns_to_leave_out'
+        Remove columns with constant values from the DataFrame, except for the ones specified in columns_to_leave_out
 
         :param df: pd.DataFrame, input DataFrame
         :param columns_to_leave_out: list, columns to exclude from removal
@@ -83,16 +83,16 @@ class FeatureEngineering:
     @staticmethod
     def create_label_column(df: pd.DataFrame) -> pd.DataFrame:
         """
-        Create a label column in the DataFrame where 'female' is 0 and 'male' is 1
+        Create a label column in the DataFrame where female is 0 and male is 1
 
         :param df: pd.DataFrame, input DataFrame
         :return: pd.DataFrame, DataFrame with label column
         """
         # Create label column
-        df['label'] = df['gender'].map({'female': 0, 'male': 1})
+        df["label"] = df["gender"].map({"female": 0, "male": 1})
 
-        # Drop the original 'gender' column
-        df = df.drop(['gender'], axis=1)
+        # Drop the original gender column
+        df = df.drop(["gender"], axis=1)
 
         # return dataframe
         return df

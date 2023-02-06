@@ -30,7 +30,8 @@ class DataVisualization:
         # plot the audio signal
         librosa.display.waveplot(audio_data, sr=sr)
 
-        # add labels to the x and y axis
+        # add labels
+        plt.title("Audio Signal")
         plt.xlabel("Time (s)")
         plt.ylabel("Amplitude")
 
@@ -42,29 +43,29 @@ class DataVisualization:
 
     def plot_stft(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:
         """
-        Plot the STFT signal and save it to the specified plot path
+        Plot the stft signal and save it to the specified plot path
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
         :param plot_name: str, name of the plot to be saved
         """
-        # compute the STFT of the audio signal
+        # compute the stft of the audio signal
         stft = librosa.stft(audio_data)
 
-        # get the magnitude of the STFT data
+        # get the magnitude of the stft data
         stft_magnitude = np.abs(stft)
 
         # convert the magnitude to dB scale
         stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
 
-        # ise librosa to display the amplitude of the stft data in dB on the y-axis and time on the x-axis
-        librosa.display.specshow(stft_magnitude_db, sr=sr, x_axis='time', y_axis='hz', cmap='inferno')
+        # display the amplitude of the stft data in dB
+        librosa.display.specshow(stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno")
 
-        # Add a colorbar with dB scale and labels
-        plt.colorbar(format='%+2.0f dB')
-        plt.title('STFT spectrogram')
-        plt.xlabel('Time (s)')
-        plt.ylabel('Frequency (Hz)')
+        # add a colorbar with dB scale and labels
+        plt.colorbar(format="%+2.0f dB")
+        plt.title("STFT Spectrogram")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Frequency (Hz)")
         plt.ylim(0, 1000)
 
         # save the plot to the specified filepath with the given file name
@@ -80,14 +81,11 @@ class DataVisualization:
         :param corr_matrix: pd.DataFrame, correlation matrix to plot
         :param plot_name: str, name of the plot to be saved
         """
-        # create a figure and axis object using matplotlib
-        fig, ax = plt.subplots(figsize=(10, 10))
-
         # use seaborn to create a heatmap of the correlation matrix
-        ax = sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", center=0)
+        sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", center=0)
 
         # set the title of the plot
-        ax.set_title("Correlation Matrix")
+        plt.title("Correlation Matrix")
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))
@@ -105,14 +103,14 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         """
         # plot y_train and y_val loss over iteration
-        plt.plot(x, y_train, label='Training')
-        plt.plot(x, y_val, label='Validation')
+        plt.plot(x, y_train, label="Training")
+        plt.plot(x, y_val, label="Validation")
 
         # add labels
-        plt.title('Log Loss')
+        plt.title("Log Loss")
         plt.xlabel("Iteration")
         plt.ylabel("Loss")
-        plt.legend(loc='upper right')
+        plt.legend(loc="upper right")
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))
@@ -130,14 +128,14 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         """
         # plot y_train and y_val accuracy over iteration
-        plt.plot(x, y_train, label='Training')
-        plt.plot(x, y_val, label='Validation')
+        plt.plot(x, y_train, label="Training")
+        plt.plot(x, y_val, label="Validation")
 
         # add labels
-        plt.title('Accuracy')
+        plt.title("Accuracy")
         plt.xlabel("Iteration")
         plt.ylabel("Accuracy")
-        plt.legend(loc='upper right')
+        plt.legend(loc="upper right")
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))
