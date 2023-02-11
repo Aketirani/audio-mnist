@@ -20,9 +20,6 @@ class FeatureEngineering:
         :param columns_to_leave_out: list, list of column names to exclude while calculating correlation
         :return: pd.DataFrame, DataFrame containing correlation coefficients
         """
-        # drop columns with only one unique value
-        df = df.loc[:, df.nunique() > 1]
-
         # list of columns to use for correlation calculation
         columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
 
