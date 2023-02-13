@@ -9,8 +9,6 @@ In this repository, we will be using acoustic features extracted from a voice re
 
 ## Structure
 ```
-├── readme.md                   <-- You Are Here
-|
 ├── audio                       <-- Audio Folder
 |   ├── recordings              <-- Recordings Folder
 |       ├── *.wav               <-- Audio Recordings
@@ -47,9 +45,15 @@ In this repository, we will be using acoustic features extracted from a voice re
 ├── test                        <-- Test Folder
 |   ├── *.py                    <-- Unit Tests
 |
+├── flowchart.wsd               <-- Pipeline Flowchart
+|
 ├── main.py                     <-- Main Python Script
 |
 ├── main.sh                     <-- Main Shell Script
+|
+├── pre-commit-config.yaml      <-- Pre-Commit Configuration
+|
+├── readme.md                   <-- You Are Here
 |
 ├── requirements.txt            <-- Package Requirements
 ```

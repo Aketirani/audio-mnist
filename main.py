@@ -21,14 +21,14 @@ DV = DataVisualization(plot_path=SU.plot_path)
 FE = FeatureEngineering()
 DS = DataSplit(test_size=0.1, val_size=0.1)
 
-def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mode: bool):
+def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, write_mode: bool):
     """
     Prepares audio data for analysis
 
     :param plot_mode: bool, a flag indicating whether to plot figures
     :param play_mode: bool, a flag indicating whether to play the audio signals
     :param print_mode: bool, a flag indicating whether to print
-    :param test_mode: bool, a flag indicating whether to write and save new data
+    :param write_mode: bool, a flag indicating whether to write and save new data
     :return: None
     """
     # Get path and read meta data file
@@ -83,9 +83,6 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             # FFT audio data
             fft_data = DP.fft_data(audio_data)
 
-            # Apply bandpass filter
-            bp_data = DP.bandpass_filter(fft_data, low_threshold=100, high_threshold=250)
-
             # Feature creation
             features = DP.feature_creation(fft_data)
 
@@ -100,12 +97,12 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, test_mod
             df = df.append(features, ignore_index=True)
 
             # Break
-            if (test_mode == True):
+            if (write_mode == False):
                 break
 
     # Save data to CSV
-    if (test_mode == False):
-        UT.save_df_to_csv(df, csv_name="features_data.csv")
+    if (write_mode == True):
+        UT.save_df_to_csv(df, file_name="features_data.csv")
 
 def DataEngineering(plot_mode: bool, print_mode: bool):
     """
@@ -226,11 +223,11 @@ def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mo
         DV.plot_accuracy(df["iteration"], df["train_acc"], df["val_acc"], plot_name="model_accuracy.png")
 
 if __name__ == "__main__":
-    # Prepare audio data for analysis
-    DataPreparation(plot_mode=False, play_mode=False, print_mode=False, test_mode=True)
+    # Prepare raw audio data for analysis
+    DataPreparation(plot_mode=False, play_mode=False, print_mode=True, write_mode=True)
 
-    # Prepare final data for modelling
-    DataEngineering(plot_mode=False, print_mode=False)
+    # Prepare final processed data for modelling
+    DataEngineering(plot_mode=True, print_mode=True)
 
-    # Model training and prediction
-    Modelling(plot_mode=False, print_mode=False, print_acc_mode=True, tuning_mode=False)
+    # Train model and make predictions
+    Modelling(plot_mode=True, print_mode=True, print_acc_mode=True, tuning_mode=False)
