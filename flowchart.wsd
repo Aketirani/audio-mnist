@@ -5,22 +5,14 @@ package "AudioMNIST" {
     partition "main.sh" {
         :set log path;
         :run python script;
-    }
-    partition "main.py" {
-        :import packages;
-        :initialize classes;
-        :get paths;
-    }
-    package "temp" {
-    :run.py|
-        note: SOMETHING
-        :DESCRIPTION;
-        if (THIS) then (true)
-            :DO;
-        else (false)
-            :DO;
-            note right #red: EXIT
-        endif
+        partition "main.py" {
+            :import packages;
+            :initialize classes;
+            :prepare raw audio data for analysis;
+            :prepare final processed data for modelling;
+            :train model and make predictions;
+        }
+        :write to log;
     }
     :end|
 }
