@@ -47,7 +47,7 @@ In this repository, we will be using acoustic features extracted from a voice re
 |
 ├── .gitignore                  <-- Configuring Ignored Files
 |
-├── .pre-commit-config.yaml      <-- Pre-Commit Configuration
+├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
