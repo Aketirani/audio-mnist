@@ -1,4 +1,5 @@
 import os
+
 import yaml
 
 
@@ -6,6 +7,7 @@ class Setup:
     """
     The Setup class is used to set up paths
     """
+
     def __init__(self, cfg_file: str) -> None:
         """
         Initialize the class with the config file, and set up the paths and files
@@ -43,16 +45,15 @@ class Setup:
         try:
             # change the directory to the configuration folder
             os.chdir(os.path.join("C:/GitProjects/AudioMNIST", "config"))
-            #os.chdir(os.path.join(os.getcwd(), "config"))
+            # os.chdir(os.path.join(os.getcwd(), "config"))
 
             # open the configuration folder
-            with open(self.cfg_file, 'r') as file:
+            with open(self.cfg_file, "r") as file:
                 # load the configuration file into a dictionary
                 cfg_setup = yaml.safe_load(file)
         except:
             # raise an error if the filename is not valid
-            raise FileNotFoundError(
-                f"{self.cfg_file} is not a valid config filepath!")
+            raise FileNotFoundError(f"{self.cfg_file} is not a valid config filepath!")
 
         # return the configuration data
         return cfg_setup
@@ -64,7 +65,7 @@ class Setup:
         :return: str, path to the audio folder
         """
         # Combine the project path and the audio folder path
-        return os.path.join(self.cfg_setup['project_path'], "audio")
+        return os.path.join(self.cfg_setup["project_path"], "audio")
 
     def set_meta_data_path(self) -> str:
         """
@@ -73,7 +74,9 @@ class Setup:
         :return: str, path to the meta data file
         """
         # Combine the project path and the audio folder path to get the meta data file path
-        return os.path.join(self.cfg_setup['project_path'], "audio", "audioMNIST_meta.txt")
+        return os.path.join(
+            self.cfg_setup["project_path"], "audio", "audioMNIST_meta.txt"
+        )
 
     def set_data_path(self) -> str:
         """
@@ -82,7 +85,7 @@ class Setup:
         :return: str, path to the processed data folder
         """
         # Combine the project path and the data folder path
-        return os.path.join(self.cfg_setup['project_path'], "data")
+        return os.path.join(self.cfg_setup["project_path"], "data")
 
     def set_plot_path(self) -> str:
         """
@@ -91,7 +94,7 @@ class Setup:
         :return: str, path to the plot folder
         """
         # Combine the project path and the plots folder path
-        return os.path.join(self.cfg_setup['project_path'], "plots")
+        return os.path.join(self.cfg_setup["project_path"], "plots")
 
     def set_result_path(self) -> str:
         """
@@ -100,7 +103,7 @@ class Setup:
         :return: str, path to the plot folder
         """
         # Combine the project path and the results folder path
-        return os.path.join(self.cfg_setup['project_path'], "results")
+        return os.path.join(self.cfg_setup["project_path"], "results")
 
     def set_test_path(self) -> str:
         """
@@ -109,7 +112,7 @@ class Setup:
         :return: str, path to the test folder
         """
         # Combine the project path and the test folder path
-        return os.path.join(self.cfg_setup['project_path'], "test")
+        return os.path.join(self.cfg_setup["project_path"], "test")
 
     def set_model_path(self) -> str:
         """
@@ -118,7 +121,7 @@ class Setup:
         :return: str, path to the model parameters parameters folder
         """
         # Combine the project path and the parameters folder path
-        return os.path.join(self.cfg_setup['project_path'], "parameters")
+        return os.path.join(self.cfg_setup["project_path"], "parameters")
 
     def set_model_param_path(self) -> str:
         """

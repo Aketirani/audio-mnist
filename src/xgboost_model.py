@@ -1,5 +1,6 @@
 import json
 import os
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
@@ -11,6 +12,7 @@ class XGBoostModel:
     """
     The XGBoostModel class is used to do hyperparameter tuning, model training, prediction and evaluation
     """
+
     def __init__(self, train_df, val_df, test_df):
         """
         Initialize the class with training, validation and test dataframes
@@ -49,17 +51,27 @@ class XGBoostModel:
         self.model = XGBClassifier()
 
         # set the model parameters using the provided dictionary
-        self.model.set_params(learning_rate=model_param["learning_rate"],
-                              max_depth=model_param["max_depth"],
-                              n_estimators=model_param["n_estimators"],
-                              gamma=model_param["gamma"],
-                              reg_lambda=model_param["lambda"],
-                              scale_pos_weight=model_param["scale_pos_weight"],
-                              min_child_weight=model_param["min_child_weight"],
-                              objective=model_param["objective"],
-                              tree_method=model_param["tree_method"])
+        self.model.set_params(
+            learning_rate=model_param["learning_rate"],
+            max_depth=model_param["max_depth"],
+            n_estimators=model_param["n_estimators"],
+            gamma=model_param["gamma"],
+            reg_lambda=model_param["lambda"],
+            scale_pos_weight=model_param["scale_pos_weight"],
+            min_child_weight=model_param["min_child_weight"],
+            objective=model_param["objective"],
+            tree_method=model_param["tree_method"],
+        )
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path: str, file_name: str):
+    def fit(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
+        file_path: str,
+        file_name: str,
+    ):
         """
         Fit the model on training data
 
@@ -84,7 +96,7 @@ class XGBoostModel:
 
             # calculate accuracy by comparing true labels to the rounded predictions
             accuracy = accuracy_score(labels, np.round(preds))
-            return 'accuracy', accuracy
+            return "accuracy", accuracy
 
         # define save evaluation metrics function
         def save_eval_metrics(file_path: str, file_name: str, result):
@@ -100,12 +112,27 @@ class XGBoostModel:
                 json.dump(result.evals_result_, f)
 
         # fit the model on the training data and evaluate on validation data
-        result = self.model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], eval_metric=accuracy, verbose=0)
+        result = self.model.fit(
+            X_train,
+            y_train,
+            eval_set=[(X_train, y_train), (X_val, y_val)],
+            eval_metric=accuracy,
+            verbose=0,
+        )
 
         # save evaluation metrics to file
         save_eval_metrics(file_path, file_name, result)
 
-    def grid_search(self, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray, y_val: np.ndarray, file_path: str, file_name: str, grid_params: dict):
+    def grid_search(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
+        file_path: str,
+        file_name: str,
+        grid_params: dict,
+    ):
         """
         Runs a grid search to tune the hyperparameters of the model
 
@@ -134,10 +161,14 @@ class XGBoostModel:
         self.model = XGBClassifier()
 
         # create an instance of the GridSearchCV class
-        grid = GridSearchCV(self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1, verbose=1)
+        grid = GridSearchCV(
+            self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1, verbose=1
+        )
 
         # fit the GridSearchCV object on the training data
-        grid = grid.fit(X_train, y_train, eval_set=[(X_val, y_val)], eval_metric="logloss")
+        grid = grid.fit(
+            X_train, y_train, eval_set=[(X_val, y_val)], eval_metric="logloss"
+        )
 
         # save evaluation metrics to file
         save_best_parameters(file_path, file_name, grid)
@@ -171,7 +202,10 @@ class XGBoostModel:
         columns = ["iteration", "train_loss", "train_acc", "val_loss", "val_acc"]
 
         # create DataFrame from extracted data and column names
-        return pd.DataFrame(list(zip(iteration, train_loss, train_acc, val_loss, val_acc)), columns=columns)
+        return pd.DataFrame(
+            list(zip(iteration, train_loss, train_acc, val_loss, val_acc)),
+            columns=columns,
+        )
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
         """

@@ -5,6 +5,7 @@ class FeatureEngineering:
     """
     The FeatureEngineering class is used to prepare final data for modelling
     """
+
     def __init__(self):
         """
         Initialize the FeatureEngineering class
@@ -12,7 +13,9 @@ class FeatureEngineering:
         pass
 
     @staticmethod
-    def pearson_correlation(df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
+    def pearson_correlation(
+        df: pd.DataFrame, columns_to_leave_out: list
+    ) -> pd.DataFrame:
         """
         Calculate the Pearson correlation coefficient on a DataFrame, excluding the specified columns
 
@@ -26,7 +29,9 @@ class FeatureEngineering:
         # calculate correlation matrix for the columns
         return df[columns_to_use].corr(method="pearson")
 
-    def remove_constant_columns(self, df: pd.DataFrame, columns_to_leave_out: list) -> pd.DataFrame:
+    def remove_constant_columns(
+        self, df: pd.DataFrame, columns_to_leave_out: list
+    ) -> pd.DataFrame:
         """
         Remove columns with constant values from the DataFrame, except for the ones specified in columns_to_leave_out
 
@@ -35,7 +40,11 @@ class FeatureEngineering:
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
         # get the columns with constant values
-        constant_columns = [col for col in df.columns if df[col].nunique() <= 1 and col not in columns_to_leave_out]
+        constant_columns = [
+            col
+            for col in df.columns
+            if df[col].nunique() <= 1 and col not in columns_to_leave_out
+        ]
 
         # remove the constant value columns
         df = df.drop(constant_columns, axis=1)
@@ -43,7 +52,9 @@ class FeatureEngineering:
         return df
 
     @staticmethod
-    def remove_correlated_columns(df: pd.DataFrame, threshold: float, columns_to_leave_out: list) -> pd.DataFrame:
+    def remove_correlated_columns(
+        df: pd.DataFrame, threshold: float, columns_to_leave_out: list
+    ) -> pd.DataFrame:
         """
         Remove correlated columns from the DataFrame that have a correlation above the given threshold
 

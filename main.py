@@ -2,6 +2,7 @@
 import glob
 import os
 import warnings
+
 from src.data_processing import DataProcessing
 from src.data_split import DataSplit
 from src.data_visualization import DataVisualization
@@ -21,7 +22,10 @@ DV = DataVisualization(plot_path=SU.plot_path)
 FE = FeatureEngineering()
 DS = DataSplit(test_size=0.1, val_size=0.1)
 
-def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, write_mode: bool):
+
+def DataPreparation(
+    plot_mode: bool, play_mode: bool, print_mode: bool, write_mode: bool
+):
     """
     Prepares audio data for analysis
 
@@ -40,13 +44,13 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, write_mo
     df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
 
     # Specify total number of folders in source path
-    num_folders = len(next(os.walk(audio_path))[1])+1
+    num_folders = len(next(os.walk(audio_path))[1]) + 1
 
     # Loop over audio recordings in the source path
     for i in range(1, num_folders):
         # Show progress
-        if (print_mode == True):
-            UT.loop_progress(i, num_folders-1)
+        if print_mode == True:
+            UT.loop_progress(i, num_folders - 1)
 
         # Assign source temp
         src_temp = os.path.join(audio_path, f"{i:02d}")
@@ -61,17 +65,17 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, write_mo
             fs, audio_data = UT.read_audio(file)
 
             # Plot audio signal
-            if (plot_mode == True):
+            if plot_mode == True:
                 audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
                 DV.plot_audio(fs, audio_data, audio_name)
 
             # Plot STFT of audio signal
-            if (plot_mode == True):
+            if plot_mode == True:
                 stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
                 DV.plot_stft(fs, audio_data, stft_name)
 
             # Play audio signal
-            if (play_mode == True):
+            if play_mode == True:
                 DV.play_audio(file)
 
             # Resample audio data
@@ -97,12 +101,13 @@ def DataPreparation(plot_mode: bool, play_mode: bool, print_mode: bool, write_mo
             df = df.append(features, ignore_index=True)
 
             # Break
-            if (write_mode == False):
+            if write_mode == False:
                 break
 
     # Save data to CSV
-    if (write_mode == True):
+    if write_mode == True:
         UT.save_df_to_csv(df, file_name="features_data.csv")
+
 
 def DataEngineering(plot_mode: bool, print_mode: bool):
     """
@@ -115,9 +120,11 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Load CSV file into dataframe
     df = UT.csv_to_df(file_name="features_data.csv")
 
-    if (print_mode == True):
+    if print_mode == True:
         # Show size of dataset
-        print(f"Size of data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}")
+        print(
+            f"Size of data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}"
+        )
 
     # Remove digit column
     df = UT.remove_column(df, "digit")
@@ -125,7 +132,7 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Create label column where female is 0 and male is 1
     df = FE.create_label_column(df)
 
-    if (plot_mode == True):
+    if plot_mode == True:
         # Plot column distribution
         DV.column_distribution(df, plot_name="column_distribution.png")
 
@@ -135,17 +142,22 @@ def DataEngineering(plot_mode: bool, print_mode: bool):
     # Calculate correlation matrix
     corr_matrix = FE.pearson_correlation(df, columns_to_leave_out=["label"])
 
-    if (plot_mode == True):
+    if plot_mode == True:
         # Plot correlation matrix
         DV.plot_corr_matrix(corr_matrix, plot_name="correlation_matrix.png")
 
     # Remove correlated columns
-    df = FE.remove_correlated_columns(df, threshold=0.95, columns_to_leave_out=["label"])
+    df = FE.remove_correlated_columns(
+        df, threshold=0.95, columns_to_leave_out=["label"]
+    )
 
     # Save data to CSV
     UT.save_df_to_csv(df, file_name="final_data.csv")
 
-def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mode: bool):
+
+def Modelling(
+    plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mode: bool
+):
     """
     Hyperparameter tuning, model training, prediction and evaluation
 
@@ -164,14 +176,18 @@ def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mo
     # Split datasets
     train_df, val_df, test_df = DS.split(df, "label")
 
-    if (print_mode == True):
+    if print_mode == True:
         # Show size of datasets
         train_size = UT.df_shape(train_df)
         val_size = UT.df_shape(val_df)
         test_size = UT.df_shape(test_df)
-        print(f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}")
+        print(
+            f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}"
+        )
         print(f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
-        print(f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}")
+        print(
+            f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}"
+        )
 
         # Show gender balance
         gender_count = UT.column_value_counts(df, "label")
@@ -183,10 +199,18 @@ def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mo
     X_train, y_train, X_val, y_val, X_test, y_test = XM.prepare_data()
 
     # Hyperparameters tuning
-    if (tuning_mode == True):
+    if tuning_mode == True:
         hyperparam_path = SU.hyperparam_path
         model_hyperparam = UT.read_file(hyperparam_path)
-        XM.grid_search(X_train, y_train, X_val, y_val, res_path, file_name="best_modeL_param.yaml", grid_params=model_hyperparam)
+        XM.grid_search(
+            X_train,
+            y_train,
+            X_val,
+            y_val,
+            res_path,
+            file_name="best_modeL_param.yaml",
+            grid_params=model_hyperparam,
+        )
 
     # Set model parameters
     param_path = SU.param_path
@@ -200,27 +224,42 @@ def Modelling(plot_mode: bool, print_mode: bool, print_acc_mode: bool, tuning_mo
     feature_importance = XM.feature_importance()
 
     # Plot feature importance
-    if (plot_mode == True):
-        DV.plot_feature_importance(feature_importance, test_df.iloc[:,:-1].columns, plot_name="feature_importance.png")
+    if plot_mode == True:
+        DV.plot_feature_importance(
+            feature_importance,
+            test_df.iloc[:, :-1].columns,
+            plot_name="feature_importance.png",
+        )
 
     # Make predictions
     y_pred = XM.predict(X_test)
 
     # Evaluate model
     accuracy = XM.evaluate_predictions(y_test, y_pred)
-    if (print_acc_mode == True):
-        print("Model Accuracy: %.2f%%" % (accuracy*100))
+    if print_acc_mode == True:
+        print("Model Accuracy: %.2f%%" % (accuracy * 100))
 
     # Read model results
-    model_results = UT.read_file(os.path.join(res_path,"model_results.yaml"))
+    model_results = UT.read_file(os.path.join(res_path, "model_results.yaml"))
 
     # Load results into pandas dataframe
     df = XM.create_log_df(model_results)
 
-    if (plot_mode == True):
+    if plot_mode == True:
         # Plot training and validation accuracy and loss
-        DV.plot_loss(df["iteration"], df["train_loss"], df["val_loss"], plot_name="model_loss.png")
-        DV.plot_accuracy(df["iteration"], df["train_acc"], df["val_acc"], plot_name="model_accuracy.png")
+        DV.plot_loss(
+            df["iteration"],
+            df["train_loss"],
+            df["val_loss"],
+            plot_name="model_loss.png",
+        )
+        DV.plot_accuracy(
+            df["iteration"],
+            df["train_acc"],
+            df["val_acc"],
+            plot_name="model_accuracy.png",
+        )
+
 
 if __name__ == "__main__":
     # Prepare raw audio data for analysis

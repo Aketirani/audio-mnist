@@ -1,4 +1,5 @@
 import os
+
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,6 +12,7 @@ class DataVisualization:
     """
     The DataVisualization class is used to visualize data
     """
+
     def __init__(self, plot_path: str):
         """
         Initialize the DataVisualization class
@@ -59,7 +61,9 @@ class DataVisualization:
         stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
 
         # display the amplitude of the stft data in dB
-        librosa.display.specshow(stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno")
+        librosa.display.specshow(
+            stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
+        )
 
         # add a colorbar with dB scale and labels
         plt.colorbar(format="%+2.0f dB")
@@ -93,7 +97,9 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_loss(self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str) -> None:
+    def plot_loss(
+        self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
+    ) -> None:
         """
         Save the loss plot with iteration on the x-axis and loss on the y-axis and save it to the specified plot path
 
@@ -118,7 +124,9 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_accuracy(self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str) -> None:
+    def plot_accuracy(
+        self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
+    ) -> None:
         """
         Save the accuracy plot with iteration on the x-axis and accuracy on the y-axis and save it to the specified plot path
 
@@ -172,7 +180,9 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_feature_importance(self, feature_importance: list, columns: list, plot_name: str) -> None:
+    def plot_feature_importance(
+        self, feature_importance: list, columns: list, plot_name: str
+    ) -> None:
         """
         Plot the feature importance of the dataset and save it to the specified plot path
 
