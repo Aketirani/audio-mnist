@@ -1,4 +1,5 @@
 import statistics
+
 import librosa
 import numpy as np
 import scipy.stats
@@ -8,6 +9,7 @@ class DataProcessing:
     """
     The DataProcessing class is used to prepare audio data for analysis
     """
+
     def __init__(self, target_sr: int) -> None:
         """
         Initialize the class with the destination path, and target sample rate
@@ -25,11 +27,15 @@ class DataProcessing:
         :return: np.ndarray, resampled audio data
         """
         # convert data to floating-point
-        if not isinstance(data, float) or not (hasattr(data, "dtype") and np.issubdtype(data.dtype, np.floating)):
+        if not isinstance(data, float) or not (
+            hasattr(data, "dtype") and np.issubdtype(data.dtype, np.floating)
+        ):
             data = data.astype(np.float32)
 
         # resample the audio data
-        return librosa.core.resample(y=data, orig_sr=fs, target_sr=self.target_sr, res_type="scipy")
+        return librosa.core.resample(
+            y=data, orig_sr=fs, target_sr=self.target_sr, res_type="scipy"
+        )
 
     def zero_pad(self, data: np.ndarray) -> np.ndarray:
         """
@@ -43,15 +49,16 @@ class DataProcessing:
         if len(data) < padding_length:
             # if the data is shorter than the target length, pad the data with zeros
             embedded_data = np.zeros(padding_length)
-            offset = np.random.randint(low=0, high=padding_length-len(data))
-            embedded_data[offset:offset+len(data)] = data
+            offset = np.random.randint(low=0, high=padding_length - len(data))
+            embedded_data[offset : offset + len(data)] = data
         elif len(data) == padding_length:
             # if the data is already of the target length, no padding is needed
             embedded_data = data
         elif len(data) > padding_length:
             # if the data is longer than the target length, raise an error
             raise ValueError(
-                f"Data length {len(data)} cannot exceed padding length {padding_length}!")
+                f"Data length {len(data)} cannot exceed padding length {padding_length}!"
+            )
 
         # return embedded data
         return embedded_data
@@ -70,7 +77,9 @@ class DataProcessing:
         # return FFT data
         return fft_data
 
-    def bandpass_filter(self, fft_data: np.ndarray, low_threshold: float, high_threshold: float) -> np.ndarray:
+    def bandpass_filter(
+        self, fft_data: np.ndarray, low_threshold: float, high_threshold: float
+    ) -> np.ndarray:
         """
         Apply bandpass filter to the given FFT data to keep frequencies between the lower and higher threshold
 
@@ -84,7 +93,9 @@ class DataProcessing:
         high_cutoff = high_threshold / self.target_sr
 
         # create bandpass filter
-        b, a = scipy.signal.butter(4, [low_cutoff, high_cutoff], btype="band", analog=False, output="ba")
+        b, a = scipy.signal.butter(
+            4, [low_cutoff, high_cutoff], btype="band", analog=False, output="ba"
+        )
 
         # apply bandpass filter to the FFT data
         filtered_fft_data = scipy.signal.lfilter(b, a, fft_data)
@@ -134,7 +145,7 @@ class DataProcessing:
         features["kurt"] = scipy.stats.kurtosis(fft_data)
 
         # spectral flatness
-        features["sfm"] = scipy.stats.gmean(fft_data)/np.mean(fft_data)
+        features["sfm"] = scipy.stats.gmean(fft_data) / np.mean(fft_data)
 
         # frequency centroid
         features["cent"] = scipy.stats.mstats.gmean(fft_data)
@@ -154,7 +165,9 @@ class DataProcessing:
         feature_keys = list(features.keys())
         for key in feature_keys:
             # normalize the feature by min-max normalization
-            features[key] = (features[key]-min(features.values()))/(max(features.values())-min(features.values()))
+            features[key] = (features[key] - min(features.values())) / (
+                max(features.values()) - min(features.values())
+            )
 
         # return normalized features
         return features

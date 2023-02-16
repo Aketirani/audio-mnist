@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 import pandas as pd
 import scipy.io.wavfile as wavf
@@ -9,6 +10,7 @@ class Utilities:
     """
     The Utilities class is used to read files, create dataframes, save csv files, and other basic functionalities
     """
+
     def __init__(self, data_path: str):
         """
         Initialize the Utilities class
@@ -167,7 +169,7 @@ class Utilities:
     @staticmethod
     def loop_progress(index: int, total: int):
         """
-        This function takes in the current index, total number of iterations and sleep time 
+        This function takes in the current index, total number of iterations and sleep time
         and displays the progress of the loop every iteration
 
         :param index: int, the current index of the loop
