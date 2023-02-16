@@ -45,6 +45,8 @@ In this repository, we will be using acoustic features extracted from a voice re
 ├── test                        <-- Test Folder
 |   ├── *.py                    <-- Unit Tests
 |
+├── .gitignore                  <-- Configuring Ignored Files
+|
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
 ├── main.py                     <-- Main Python Script
@@ -59,9 +61,8 @@ In this repository, we will be using acoustic features extracted from a voice re
 ```
 
 ## Dataset
-[Kaggle](https://www.kaggle.com/datasets/primaryobjects/voicegender)
 
-The dataset consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
+The [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
 
 There is one directory per speaker holding the audio recordings.
 
