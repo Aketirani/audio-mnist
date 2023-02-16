@@ -47,13 +47,13 @@ In this repository, we will be using acoustic features extracted from a voice re
 |
 ├── .gitignore                  <-- Configuring Ignored Files
 |
+├── .pre-commit-config.yaml      <-- Pre-Commit Configuration
+|
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
 ├── main.py                     <-- Main Python Script
 |
 ├── main.sh                     <-- Main Shell Script
-|
-├── pre-commit-config.yaml      <-- Pre-Commit Configuration
 |
 ├── readme.md                   <-- You Are Here
 |
