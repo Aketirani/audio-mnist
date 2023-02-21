@@ -83,7 +83,7 @@ class TestDataSplit(unittest.TestCase):
 
         # check if the size of each split dataframe are 80/10/10
         self.assertEqual(
-            train_df.shape[0], int(len(self.df) * (1 - self.val_size - self.test_size))
+            train_df.shape[1], int(len(self.df) * (1 - self.val_size - self.test_size))
         )
         self.assertEqual(val_df.shape[0], int(len(self.df) * self.val_size))
         self.assertEqual(test_df.shape[0], int(len(self.df) * self.test_size))
