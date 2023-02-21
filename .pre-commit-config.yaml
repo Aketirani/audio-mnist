@@ -11,3 +11,12 @@ repos:
     - id: isort
       args: ["--profile", "black"]
       exclude: docs
+-   repo: local
+    hooks:
+    - id: test
+      name: Check test pass/fail
+      types: [python]
+      entry: python -m unittest/
+      language: system
+      pass_filenames: false
+      always_run: true
