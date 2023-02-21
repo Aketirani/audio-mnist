@@ -13,10 +13,10 @@ repos:
       exclude: docs
 -   repo: local
     hooks:
-    - id: test
-      name: Check test pass/fail
+    - id: unittest
+      name: unittest
       types: [python]
-      entry: python -m unittest/
+      entry: python -m unittest discover -s . -p "*_test.py"
       language: system
       pass_filenames: false
       always_run: true
