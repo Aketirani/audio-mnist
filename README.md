@@ -49,13 +49,13 @@ In this repository, we will be using acoustic features extracted from a voice re
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
+├── readme.md                   <-- You Are Here
+|
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
 ├── main.py                     <-- Main Python Script
 |
 ├── main.sh                     <-- Main Shell Script
-|
-├── readme.md                   <-- You Are Here
 |
 ├── requirements.txt            <-- Package Requirements
 ```
