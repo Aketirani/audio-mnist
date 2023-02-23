@@ -61,7 +61,6 @@ In this repository, we will be using acoustic features extracted from a voice re
 ```
 
 ## Dataset
-
 The [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
 
 There is one directory per speaker holding the audio recordings.
