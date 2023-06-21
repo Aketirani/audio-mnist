@@ -1,1 +1,17 @@
-project_path: "C:/GitProjects/AudioMNIST" # project path
+project_path: "C:/GitProjects/AudioMNIST"
+meta_data: "audioMNIST_meta.txt"
+parameters:
+  model_parameters: "model_parameters.yaml"
+  model_hyperparameters: "model_hyperparameters.yaml"
+data:
+  features_data: "features_data.csv"
+  final_data: "final_data.csv"
+plot_names:
+  column_distribution: "column_distribution.png"
+  correlation_matrix: "correlation_matrix.png"
+  feature_importance: "feature_importance.png"
+  model_loss: "model_loss.png"
+  model_accuracy: "model_accuracy.png"
+results:
+  best_modeL_param: "best_modeL_param.yaml"
+  model_results: "model_results.yaml"

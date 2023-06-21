@@ -13,7 +13,7 @@ class Setup:
         Initialize the class with the config file, and set up the paths and files
 
         :param cfg_file: str, name to the config file
-        :param cfg_setup: str, name to the config file
+        :param cfg_setup: dict, read the config file
         :param src_path: str, path to the audio folder
         :param meta_path: str, path to the meta data folder
         :param data_path: str, path to the data folder
@@ -45,7 +45,6 @@ class Setup:
         try:
             # change the directory to the configuration folder
             os.chdir(os.path.join("C:/GitProjects/AudioMNIST", "config"))
-            # os.chdir(os.path.join(os.getcwd(), "config"))
 
             # open the configuration folder
             with open(self.cfg_file, "r") as file:
@@ -64,7 +63,7 @@ class Setup:
 
         :return: str, path to the audio folder
         """
-        # Combine the project path and the audio folder path
+        # combine the project path and the audio folder path
         return os.path.join(self.cfg_setup["project_path"], "audio")
 
     def set_meta_data_path(self) -> str:
@@ -73,9 +72,9 @@ class Setup:
 
         :return: str, path to the meta data file
         """
-        # Combine the project path and the audio folder path to get the meta data file path
+        # combine the project path and the audio folder path to get the meta data file path
         return os.path.join(
-            self.cfg_setup["project_path"], "audio", "audioMNIST_meta.txt"
+            self.cfg_setup["project_path"], "audio", self.cfg_setup["meta_data"]
         )
 
     def set_data_path(self) -> str:
@@ -84,7 +83,7 @@ class Setup:
 
         :return: str, path to the processed data folder
         """
-        # Combine the project path and the data folder path
+        # combine the project path and the data folder path
         return os.path.join(self.cfg_setup["project_path"], "data")
 
     def set_plot_path(self) -> str:
@@ -93,7 +92,7 @@ class Setup:
 
         :return: str, path to the plot folder
         """
-        # Combine the project path and the plots folder path
+        # combine the project path and the plots folder path
         return os.path.join(self.cfg_setup["project_path"], "plots")
 
     def set_result_path(self) -> str:
@@ -102,7 +101,7 @@ class Setup:
 
         :return: str, path to the plot folder
         """
-        # Combine the project path and the results folder path
+        # combine the project path and the results folder path
         return os.path.join(self.cfg_setup["project_path"], "results")
 
     def set_test_path(self) -> str:
@@ -111,7 +110,7 @@ class Setup:
 
         :return: str, path to the test folder
         """
-        # Combine the project path and the test folder path
+        # combine the project path and the test folder path
         return os.path.join(self.cfg_setup["project_path"], "test")
 
     def set_model_path(self) -> str:
@@ -120,7 +119,7 @@ class Setup:
 
         :return: str, path to the model parameters parameters folder
         """
-        # Combine the project path and the parameters folder path
+        # combine the project path and the parameters folder path
         return os.path.join(self.cfg_setup["project_path"], "parameters")
 
     def set_model_param_path(self) -> str:
@@ -129,8 +128,10 @@ class Setup:
 
         :return: str, path to the model parameters file
         """
-        # Combine the project path and the parameters folder path to get the model parameters file path
-        return os.path.join(self.model_path, "model_parameters.yaml")
+        # combine the project path and the parameters folder path to get the model parameters file path
+        return os.path.join(
+            self.model_path, self.cfg_setup["parameters"]["model_parameters"]
+        )
 
     def set_model_hyperparam_path(self) -> str:
         """
@@ -138,5 +139,7 @@ class Setup:
 
         :return: str, path to the model hyperparameters file
         """
-        # Combine the project path and the parameters folder path to get the model hyperparameters file path
-        return os.path.join(self.model_path, "model_hyperparameters.yaml")
+        # combine the project path and the parameters folder path to get the model hyperparameters file path
+        return os.path.join(
+            self.model_path, self.cfg_setup["parameters"]["model_hyperparameters"]
+        )
