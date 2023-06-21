@@ -15,11 +15,20 @@ from src.xgboost_model import XGBoostModel
 # Ignore warnings
 warnings.filterwarnings("ignore")
 
+
 class AudioMNIST:
-    def __init__(self, plot_mode: bool, play_mode: bool, print_mode: bool, write_mode: bool, print_acc_mode: bool, tuning_mode: bool):
+    def __init__(
+        self,
+        plot_mode: bool,
+        play_mode: bool,
+        print_mode: bool,
+        write_mode: bool,
+        print_acc_mode: bool,
+        tuning_mode: bool,
+    ):
         """
         Initialize the class with the config file, and set up the paths and files
-        
+
         :param config_file: dict, read the config file
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
@@ -113,7 +122,6 @@ class AudioMNIST:
         if self.write_mode == True:
             UT.save_df_to_csv(df, file_name=self.config_file["data"]["features_data"])
 
-
     def DataEngineering(self):
         """
         Prepare final data for modelling
@@ -135,7 +143,9 @@ class AudioMNIST:
 
         if self.plot_mode == True:
             # Plot column distribution
-            DV.column_distribution(df, self.config_file["plot_names"]["column_distribution"])
+            DV.column_distribution(
+                df, self.config_file["plot_names"]["column_distribution"]
+            )
 
         # Remove constant columns
         df = FE.remove_constant_columns(df, columns_to_leave_out=["label"])
@@ -145,7 +155,9 @@ class AudioMNIST:
 
         if self.plot_mode == True:
             # Plot correlation matrix
-            DV.plot_corr_matrix(corr_matrix, self.config_file["plot_names"]["correlation_matrix"])
+            DV.plot_corr_matrix(
+                corr_matrix, self.config_file["plot_names"]["correlation_matrix"]
+            )
 
         # Remove correlated columns
         df = FE.remove_correlated_columns(
@@ -154,7 +166,6 @@ class AudioMNIST:
 
         # Save data to CSV
         UT.save_df_to_csv(df, file_name=self.config_file["data"]["final_data"])
-
 
     def Modelling(self):
         """
@@ -177,7 +188,9 @@ class AudioMNIST:
             print(
                 f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}"
             )
-            print(f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}")
+            print(
+                f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}"
+            )
             print(
                 f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}"
             )
@@ -211,7 +224,14 @@ class AudioMNIST:
         XM.set_params(model_param)
 
         # Train model
-        XM.fit(X_train, y_train, X_val, y_val, res_path, self.config_file["results"]["model_results"])
+        XM.fit(
+            X_train,
+            y_train,
+            X_val,
+            y_val,
+            res_path,
+            self.config_file["results"]["model_results"],
+        )
 
         # Feature importance
         feature_importance = XM.feature_importance()
@@ -233,7 +253,9 @@ class AudioMNIST:
             print("Model Accuracy: %.2f%%" % (accuracy * 100))
 
         # Read model results
-        model_results = UT.read_file(os.path.join(res_path, self.config_file["results"]["model_results"]))
+        model_results = UT.read_file(
+            os.path.join(res_path, self.config_file["results"]["model_results"])
+        )
 
         # Load results into pandas dataframe
         df = XM.create_log_df(model_results)
@@ -317,7 +339,14 @@ if __name__ == "__main__":
     DS = DataSplit()
 
     # Call main class
-    AM = AudioMNIST(args.plot_mode, args.play_mode, args.print_mode, args.write_mode, args.print_acc_mode, args.tuning_mode)
+    AM = AudioMNIST(
+        args.plot_mode,
+        args.play_mode,
+        args.print_mode,
+        args.write_mode,
+        args.print_acc_mode,
+        args.tuning_mode,
+    )
 
     # Prepare raw audio data for analysis
     AM.DataPreparation()
