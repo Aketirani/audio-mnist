@@ -15,7 +15,7 @@ In this repository, we will be using acoustic features extracted from a voice re
 |   ├── audioMNIST_meta.txt     <-- Meta Information
 |
 ├── config                      <-- Configuration Folder
-|   ├── config.yaml             <-- Project Paths
+|   ├── config.yaml             <-- Configuration File
 |
 ├── data                        <-- Data Folder
 |   ├── features_data.csv       <-- Features Dataset
