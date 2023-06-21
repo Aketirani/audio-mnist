@@ -20,7 +20,7 @@ class AudioMNIST:
         """
         Initialize the class with the config file, and set up the paths and files
         
-        :param cfg_setup: dict, read the config file
+        :param config_file: dict, read the config file
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
         :param print_mode: bool, a flag indicating whether to print
@@ -28,7 +28,7 @@ class AudioMNIST:
         :param print_acc_mode: bool, a flag indicating whether to print model accuracy
         :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
         """
-        self.config_file = SU.read_config()
+        self.config_file = SU.cfg_setup
         self.plot_mode = plot_mode
         self.play_mode = play_mode
         self.print_mode = print_mode
@@ -111,7 +111,7 @@ class AudioMNIST:
 
         # Save data to CSV
         if self.write_mode == True:
-            UT.save_df_to_csv(df, filename=self.config_file["data"]["features_data"])
+            UT.save_df_to_csv(df, file_name=self.config_file["data"]["features_data"])
 
 
     def DataEngineering(self):
@@ -119,7 +119,7 @@ class AudioMNIST:
         Prepare final data for modelling
         """
         # Load CSV file into dataframe
-        df = UT.csv_to_df(filename=self.config_file["data"]["features_data"])
+        df = UT.csv_to_df(file_name=self.config_file["data"]["features_data"])
 
         if self.print_mode == True:
             # Show size of dataset
@@ -153,7 +153,7 @@ class AudioMNIST:
         )
 
         # Save data to CSV
-        UT.save_df_to_csv(df, filename=self.config_file["data"]["final_data"])
+        UT.save_df_to_csv(df, file_name=self.config_file["data"]["final_data"])
 
 
     def Modelling(self):
@@ -164,7 +164,7 @@ class AudioMNIST:
         res_path = SU.res_path
 
         # Load CSV file into dataframe
-        df = UT.csv_to_df(filename=self.config_file["data"]["final_data"])
+        df = UT.csv_to_df(file_name=self.config_file["data"]["final_data"])
 
         # Split datasets
         train_df, val_df, test_df = DS.split(df, "label")
