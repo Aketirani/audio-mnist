@@ -83,7 +83,7 @@ class XGBoostModel:
         :param file_name: str, name of the file to be saved
         """
         # define accuracy metric function
-        def accuracy(preds, dtrain):
+        def _accuracy(preds, dtrain):
             """
             Calculates the accuracy of predictions made by a model
 
@@ -99,7 +99,7 @@ class XGBoostModel:
             return "accuracy", accuracy
 
         # define save evaluation metrics function
-        def save_eval_metrics(file_path: str, file_name: str, result):
+        def _save_eval_metrics(file_path: str, file_name: str, result):
             """
             Save the eval_metrics of a model in yaml format
 
@@ -116,12 +116,12 @@ class XGBoostModel:
             X_train,
             y_train,
             eval_set=[(X_train, y_train), (X_val, y_val)],
-            eval_metric=accuracy,
+            eval_metric=_accuracy,
             verbose=0,
         )
 
         # save evaluation metrics to file
-        save_eval_metrics(file_path, file_name, result)
+        _save_eval_metrics(file_path, file_name, result)
 
     def grid_search(
         self,
@@ -145,7 +145,7 @@ class XGBoostModel:
         :param grid_params: str, dictionary containing the grid search parameters
         """
         # define save best parameters function
-        def save_best_parameters(file_path: str, file_name: str, grid):
+        def _save_best_parameters(file_path: str, file_name: str, grid):
             """
             Save the best parameters and best score of a model in yaml format
 
@@ -171,7 +171,7 @@ class XGBoostModel:
         )
 
         # save evaluation metrics to file
-        save_best_parameters(file_path, file_name, grid)
+        _save_best_parameters(file_path, file_name, grid)
 
     def feature_importance(self):
         """

@@ -143,7 +143,7 @@ class AudioMNIST:
 
         if self.plot_mode == True:
             # Plot column distribution
-            DV.column_distribution(
+            DV.plot_column_dist(
                 df, self.config_file["plot_names"]["column_distribution"]
             )
 
