@@ -161,7 +161,7 @@ class DataVisualization:
         # play audio data sound
         playsound.playsound(filepath)
 
-    def column_distribution(self, df: pd.DataFrame, plot_name: str) -> None:
+    def plot_column_dist(self, df: pd.DataFrame, plot_name: str) -> None:
         """
         Plot the column distribution of the dataframe and save it to the specified plot path
 

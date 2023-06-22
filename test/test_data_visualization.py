@@ -84,12 +84,12 @@ class TestDataVisualization(unittest.TestCase):
         # delete the plot file after the test
         os.remove(os.path.join(self.setup.test_path, self.plot_name))
 
-    def test_column_distribution(self):
+    def test_plot_column_dist(self):
         """
-        Test the column_distribution method
+        Test the plot_column_dist method
         """
         # plot columns distribution
-        self.data_visualization.column_distribution(self.matrix, self.plot_name)
+        self.data_visualization.plot_column_dist(self.matrix, self.plot_name)
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
