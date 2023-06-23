@@ -121,4 +121,4 @@ Accuracy on test dataset: `83.27%`.
 Run `main.sh` to execute whole pipeline.
 
 ## Unit Test
-Run `python -m unittest` to run all unit tests.
+Change directory to `test` and run `python -m unittest` to run all unit tests.
