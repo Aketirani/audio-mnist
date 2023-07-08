@@ -19,10 +19,10 @@ warnings.filterwarnings("ignore")
 class AudioMNIST:
     def __init__(
         self,
+        write_mode: bool,
         plot_mode: bool,
         play_mode: bool,
         print_mode: bool,
-        write_mode: bool,
         print_acc_mode: bool,
         tuning_mode: bool,
     ):
@@ -30,18 +30,18 @@ class AudioMNIST:
         Initialize the class with the config file, and set up the paths and files
 
         :param config_file: dict, read the config file
+        :param write_mode: bool, a flag indicating whether to write and save new data
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
         :param print_mode: bool, a flag indicating whether to print
-        :param write_mode: bool, a flag indicating whether to write and save new data
         :param print_acc_mode: bool, a flag indicating whether to print model accuracy
         :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
         """
         self.config_file = SU.cfg_setup
+        self.write_mode = write_mode
         self.plot_mode = plot_mode
         self.play_mode = play_mode
         self.print_mode = print_mode
-        self.write_mode = write_mode
         self.print_acc_mode = print_acc_mode
         self.tuning_mode = tuning_mode
 
@@ -49,77 +49,75 @@ class AudioMNIST:
         """
         Prepares audio data for analysis
         """
-        # Get paths and read meta data file
-        audio_path = SU.audio_path
-        meta_path = SU.meta_path
-        meta_data = UT.read_file(meta_path)
 
-        # Create empty dataframe
-        df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
-
-        # Specify total number of folders in source path
-        num_folders = len(next(os.walk(audio_path))[1]) + 1
-
-        # Loop over audio recordings in the source path
-        for i in range(1, num_folders):
-            # Show progress
-            if self.print_mode == True:
-                UT.loop_progress(i, num_folders - 1)
-
-            # Assign source temp
-            src_temp = os.path.join(audio_path, f"{i:02d}")
-            filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
-
-            # Loop over files in directory
-            for file in filepath_filename:
-                # Split file string
-                dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
-
-                # Read audio data
-                fs, audio_data = UT.read_audio(file)
-
-                # Plot audio signal
-                if self.plot_mode == True:
-                    audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-                    DV.plot_audio(fs, audio_data, audio_name)
-
-                # Plot STFT of audio signal
-                if self.plot_mode == True:
-                    stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-                    DV.plot_stft(fs, audio_data, stft_name)
-
-                # Play audio signal
-                if self.play_mode == True:
-                    DV.play_audio(file)
-
-                # Resample audio data
-                audio_data = DP.resample_data(fs, audio_data)
-
-                # Zero padding audio data
-                audio_data = DP.zero_pad(audio_data)
-
-                # FFT audio data
-                fft_data = DP.fft_data(audio_data)
-
-                # Feature creation
-                features = DP.feature_creation(fft_data)
-
-                # Normalize features
-                n_features = DP.normalize_features(features)
-
-                # Add gender and digit label
-                features = UT.add_column(n_features, "gender", meta_data[vp]["gender"])
-                features = UT.add_column(n_features, "digit", dig[-1])
-
-                # Append new dict values to the DataFrame
-                df = df.append(features, ignore_index=True)
-
-                # Break
-                if self.write_mode == False:
-                    break
-
-        # Save data to CSV
+        # Break
         if self.write_mode == True:
+            # Get paths and read meta data file
+            audio_path = SU.audio_path
+            meta_path = SU.meta_path
+            meta_data = UT.read_file(meta_path)
+
+            # Create empty dataframe
+            df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
+
+            # Specify total number of folders in source path
+            num_folders = len(next(os.walk(audio_path))[1]) + 1
+
+            # Loop over audio recordings in the source path
+            for i in range(1, num_folders):
+                # Show progress
+                if self.print_mode == True:
+                    UT.loop_progress(i, num_folders - 1)
+
+                # Assign source temp
+                src_temp = os.path.join(audio_path, f"{i:02d}")
+                filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
+
+                # Loop over files in directory
+                for file in filepath_filename:
+                    # Split file string
+                    dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
+
+                    # Read audio data
+                    fs, audio_data = UT.read_audio(file)
+
+                    # Plot audio signal
+                    if self.plot_mode == True:
+                        audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
+                        DV.plot_audio(fs, audio_data, audio_name)
+
+                    # Plot STFT of audio signal
+                    if self.plot_mode == True:
+                        stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
+                        DV.plot_stft(fs, audio_data, stft_name)
+
+                    # Play audio signal
+                    if self.play_mode == True:
+                        DV.play_audio(file)
+
+                    # Resample audio data
+                    audio_data = DP.resample_data(fs, audio_data)
+
+                    # Zero padding audio data
+                    audio_data = DP.zero_pad(audio_data)
+
+                    # FFT audio data
+                    fft_data = DP.fft_data(audio_data)
+
+                    # Feature creation
+                    features = DP.feature_creation(fft_data)
+
+                    # Normalize features
+                    n_features = DP.normalize_features(features)
+
+                    # Add gender and digit label
+                    features = UT.add_column(n_features, "gender", meta_data[vp]["gender"])
+                    features = UT.add_column(n_features, "digit", dig[-1])
+
+                    # Append new dict values to the DataFrame
+                    df = df.append(features, ignore_index=True)
+
+            # Save data to CSV
             UT.save_df_to_csv(df, file_name=self.config_file["data"]["features_data"])
 
     def DataEngineering(self):
@@ -287,6 +285,13 @@ if __name__ == "__main__":
         help="Configuration file",
     )
     parser.add_argument(
+        "-w",
+        "--write_mode",
+        type=str,
+        default=True,
+        help="Write new data",
+    )
+    parser.add_argument(
         "-o",
         "--plot_mode",
         type=str,
@@ -306,13 +311,6 @@ if __name__ == "__main__":
         type=str,
         default=True,
         help="Print statements",
-    )
-    parser.add_argument(
-        "-w",
-        "--write_mode",
-        type=str,
-        default=True,
-        help="Write new data",
     )
     parser.add_argument(
         "-a",
@@ -340,10 +338,10 @@ if __name__ == "__main__":
 
     # Call main class
     AM = AudioMNIST(
+        args.write_mode,
         args.plot_mode,
         args.play_mode,
         args.print_mode,
-        args.write_mode,
         args.print_acc_mode,
         args.tuning_mode,
     )
