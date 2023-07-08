@@ -50,7 +50,7 @@ class AudioMNIST:
         Prepares audio data for analysis
         """
 
-        # Break
+        # Writes and saves new data
         if self.write_mode == True:
             # Get paths and read meta data file
             audio_path = SU.audio_path
