@@ -14,7 +14,7 @@ class Setup:
 
         :param cfg_file: str, name to the config file
         :param cfg_setup: dict, read the config file
-        :param src_path: str, path to the audio folder
+        :param audio_path: str, path to the audio folder
         :param meta_path: str, path to the meta data folder
         :param data_path: str, path to the data folder
         :param plot_path: str, path to the plots folder
