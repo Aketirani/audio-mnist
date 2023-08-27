@@ -52,16 +52,14 @@ class AudioMNIST:
 
         # Writes and saves new data
         if self.write_mode == True:
-            # Get paths and read meta data file
-            audio_path = SU.audio_path
-            meta_path = SU.meta_path
-            meta_data = UT.read_file(meta_path)
+            # Read meta data file
+            meta_data = UT.read_file(SU.meta_path)
 
             # Create empty dataframe
             df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
 
             # Specify total number of folders in source path
-            num_folders = len(next(os.walk(audio_path))[1]) + 1
+            num_folders = len(next(os.walk(SU.audio_path))[1]) + 1
 
             # Loop over audio recordings in the source path
             for i in range(1, num_folders):
@@ -70,7 +68,7 @@ class AudioMNIST:
                     UT.loop_progress(i, num_folders - 1)
 
                 # Assign source temp
-                src_temp = os.path.join(audio_path, f"{i:02d}")
+                src_temp = os.path.join(SU.audio_path, f"{i:02d}")
                 filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
 
                 # Loop over files in directory
@@ -169,9 +167,6 @@ class AudioMNIST:
         """
         Hyperparameter tuning, model training, prediction and evaluation
         """
-        # Read results path
-        res_path = SU.res_path
-
         # Load CSV file into dataframe
         df = UT.csv_to_df(file_name=self.config_file["data"]["final_data"])
 
@@ -211,15 +206,13 @@ class AudioMNIST:
                 y_train,
                 X_val,
                 y_val,
-                res_path,
+                SU.res_path,
                 file_name=self.config_file["results"]["best_modeL_param"],
                 grid_params=model_hyperparam,
             )
 
         # Set model parameters
-        param_path = SU.param_path
-        model_param = UT.read_file(param_path)
-        XM.set_params(model_param)
+        XM.set_params(UT.read_file(SU.param_path))
 
         # Train model
         XM.fit(
@@ -227,7 +220,7 @@ class AudioMNIST:
             y_train,
             X_val,
             y_val,
-            res_path,
+            SU.res_path,
             self.config_file["results"]["model_results"],
         )
 
@@ -252,7 +245,7 @@ class AudioMNIST:
 
         # Read model results
         model_results = UT.read_file(
-            os.path.join(res_path, self.config_file["results"]["model_results"])
+            os.path.join(SU.res_path, self.config_file["results"]["model_results"])
         )
 
         # Load results into pandas dataframe
