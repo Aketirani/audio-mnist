@@ -56,7 +56,7 @@ class AudioMNIST:
             meta_data = UT.read_file(SU.meta_path)
 
             # Create empty dataframe
-            df = UT.create_dataframe(data=None, column_names=["gender", "digit"])
+            df = UT.create_dataframe(None, ["gender", "digit"])
 
             # Specify total number of folders in source path
             num_folders = len(next(os.walk(SU.audio_path))[1]) + 1
@@ -123,7 +123,7 @@ class AudioMNIST:
         Prepare final data for modelling
         """
         # Load CSV file into dataframe
-        df = UT.csv_to_df(file_name=self.config_file["data"]["features_data"])
+        df = UT.csv_to_df(self.config_file["data"]["features_data"])
 
         if self.print_mode == True:
             # Show size of dataset
@@ -144,10 +144,10 @@ class AudioMNIST:
             )
 
         # Remove constant columns
-        df = FE.remove_constant_columns(df, columns_to_leave_out=["label"])
+        df = FE.remove_constant_columns(df, ["label"])
 
         # Calculate correlation matrix
-        corr_matrix = FE.pearson_correlation(df, columns_to_leave_out=["label"])
+        corr_matrix = FE.pearson_correlation(df, ["label"])
 
         if self.plot_mode == True:
             # Plot correlation matrix
@@ -156,19 +156,17 @@ class AudioMNIST:
             )
 
         # Remove correlated columns
-        df = FE.remove_correlated_columns(
-            df, threshold=0.95, columns_to_leave_out=["label"]
-        )
+        df = FE.remove_correlated_columns(df, 0.95, ["label"])
 
         # Save data to CSV
-        UT.save_df_to_csv(df, file_name=self.config_file["data"]["final_data"])
+        UT.save_df_to_csv(df, self.config_file["data"]["final_data"])
 
     def Modelling(self):
         """
         Hyperparameter tuning, model training, prediction and evaluation
         """
         # Load CSV file into dataframe
-        df = UT.csv_to_df(file_name=self.config_file["data"]["final_data"])
+        df = UT.csv_to_df(self.config_file["data"]["final_data"])
 
         # Split datasets
         train_df, val_df, test_df = DS.split(df, "label")
@@ -207,8 +205,8 @@ class AudioMNIST:
                 X_val,
                 y_val,
                 SU.res_path,
-                file_name=self.config_file["results"]["best_modeL_param"],
-                grid_params=model_hyperparam,
+                self.config_file["results"]["best_modeL_param"],
+                model_hyperparam,
             )
 
         # Set model parameters
@@ -232,7 +230,7 @@ class AudioMNIST:
             DV.plot_feature_importance(
                 feature_importance,
                 test_df.iloc[:, :-1].columns,
-                plot_name=self.config_file["plot_names"]["feature_importance"],
+                self.config_file["plot_names"]["feature_importance"],
             )
 
         # Make predictions
@@ -257,13 +255,13 @@ class AudioMNIST:
                 df["iteration"],
                 df["train_loss"],
                 df["val_loss"],
-                plot_name=self.config_file["results"]["model_loss"],
+                self.config_file["results"]["model_loss"],
             )
             DV.plot_accuracy(
                 df["iteration"],
                 df["train_acc"],
                 df["val_acc"],
-                plot_name=self.config_file["results"]["model_accuracy"],
+                self.config_file["results"]["model_accuracy"],
             )
 
 
@@ -323,9 +321,9 @@ if __name__ == "__main__":
 
     # Initialize classes
     SU = Setup(args.cfg_file)
-    UT = Utilities(data_path=SU.data_path)
+    UT = Utilities(SU.data_path)
     DP = DataProcessing()
-    DV = DataVisualization(plot_path=SU.plot_path)
+    DV = DataVisualization(SU.plot_path)
     FE = FeatureEngineering()
     DS = DataSplit()
 
