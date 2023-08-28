@@ -37,7 +37,8 @@ class Utilities:
         # return a tuple containing the sample rate and audio data
         return audio
 
-    def read_file(self, filepath) -> dict:
+    @staticmethod
+    def read_file(filepath: str) -> dict:
         """
         Read the file and return the it as a dictionary
 
