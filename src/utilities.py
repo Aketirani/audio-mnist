@@ -40,7 +40,7 @@ class Utilities:
     @staticmethod
     def read_file(filepath: str) -> dict:
         """
-        Read the file and return the it as a dictionary
+        Read the file and return it as a dictionary
 
         :param filepath: str, path to the file to be read
         :return: dict, containing the file data

@@ -183,7 +183,7 @@ class AudioMNIST:
                 f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}"
             )
             print(
-                f"Size of validation set, columns: {test_size[1]} and rows: {test_size[0]}"
+                f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}"
             )
 
             # Show gender balance
