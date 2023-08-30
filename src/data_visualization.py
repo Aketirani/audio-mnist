@@ -23,7 +23,7 @@ class DataVisualization:
 
     def plot_audio(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:
         """
-        Save the audio signal plot with seconds on the x-axis and save it to the specified plot path
+        Plots the audio signal with seconds on the x-axis and saves it
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
@@ -45,7 +45,7 @@ class DataVisualization:
 
     def plot_stft(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:
         """
-        Plot the stft signal and save it to the specified plot path
+        Plots the stft signal and saves it
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
@@ -80,7 +80,7 @@ class DataVisualization:
 
     def plot_corr_matrix(self, corr_matrix: pd.DataFrame, plot_name: str) -> None:
         """
-        Plots a correlation matrix and saves the figure to a specified path
+        Plots the correlation matrix and saves it
 
         :param corr_matrix: pd.DataFrame, correlation matrix to plot
         :param plot_name: str, name of the plot to be saved
@@ -101,7 +101,7 @@ class DataVisualization:
         self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
     ) -> None:
         """
-        Save the loss plot with iteration on the x-axis and loss on the y-axis and save it to the specified plot path
+        Plots iteration on the x-axis and loss on the y-axis and saves it
 
         :param x: np.ndarray, iteration data to be plotted on x-axis
         :param y_train: np.ndarray, training loss data to be plotted on y-axis
@@ -128,7 +128,7 @@ class DataVisualization:
         self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
     ) -> None:
         """
-        Save the accuracy plot with iteration on the x-axis and accuracy on the y-axis and save it to the specified plot path
+        Plots iteration on the x-axis and accuracy on the y-axis and saves it
 
         :param x: np.ndarray, iteration data to be plotted on x-axis
         :param y_train: np.ndarray, training accuracy data to be plotted on y-axis
@@ -163,7 +163,7 @@ class DataVisualization:
 
     def plot_column_dist(self, df: pd.DataFrame, plot_name: str) -> None:
         """
-        Plot the column distribution of the dataframe and save it to the specified plot path
+        Plots the column distribution of the dataframe and saves it
 
         :param df: pd.DataFrame, dataframe to be plotted
         :param plot_name: str, name of the plot to be saved
@@ -184,7 +184,7 @@ class DataVisualization:
         self, feature_importance: list, columns: list, plot_name: str
     ) -> None:
         """
-        Plot the feature importance of the dataset and save it to the specified plot path
+        Plots the feature importance of the dataset and saves it
 
         :param feature_importance: list[float], feature importance values
         :param columns: list[str], column names to be used as x-axis labels
