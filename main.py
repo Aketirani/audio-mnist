@@ -255,13 +255,13 @@ class AudioMNIST:
                 df["iteration"],
                 df["train_loss"],
                 df["val_loss"],
-                self.config_file["results"]["model_loss"],
+                self.config_file["plot_names"]["model_loss"],
             )
             DV.plot_accuracy(
                 df["iteration"],
                 df["train_acc"],
                 df["val_acc"],
-                self.config_file["results"]["model_accuracy"],
+                self.config_file["plot_names"]["model_accuracy"],
             )
 
 
