@@ -1,5 +1,6 @@
 import os
 
+import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,8 +30,11 @@ class DataVisualization:
         :param audio_data: np.ndarray, audio data to be plotted
         :param plot_name: str, name of the plot to be saved
         """
+        # convert audio data to floating-point format
+        audio_data = audio_data.astype(float)
+
         # plot the audio signal
-        librosa.display.waveplot(audio_data, sr=sr)
+        librosa.display.waveshow(audio_data, sr=sr)
 
         # add labels
         plt.title("Audio Signal")
@@ -51,6 +55,9 @@ class DataVisualization:
         :param audio_data: np.ndarray, audio data to be plotted
         :param plot_name: str, name of the plot to be saved
         """
+        # convert audio data to floating-point format
+        audio_data = audio_data.astype(float)
+
         # compute the stft of the audio signal
         stft = librosa.stft(audio_data)
 

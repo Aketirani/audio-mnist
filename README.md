@@ -115,7 +115,7 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Model Performance
-Accuracy on test dataset: `83.27%`.
+Accuracy on test dataset: `83.30%`.
 
 ## Exectuion
 Run `main.sh` to execute whole pipeline.
