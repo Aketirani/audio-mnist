@@ -15,3 +15,4 @@ plot_names:
 results:
   best_modeL_param: "best_modeL_param.yaml"
   model_results: "model_results.yaml"
+threshold: 0.95

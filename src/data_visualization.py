@@ -168,8 +168,31 @@ class DataVisualization:
         :param df: pd.DataFrame, dataframe to be plotted
         :param plot_name: str, name of the plot to be saved
         """
-        # create subplots for each column of the dataframe
-        df.plot.hist(subplots=True, layout=(-1, 3), sharex=False, figsize=(10, 10))
+        # Select numeric columns
+        numeric_columns = df.select_dtypes(include=np.number).columns
+
+        # Calculate the number of columns and rows for subplot layout
+        num_columns = len(numeric_columns)
+        num_rows = (num_columns + 2) // 3  # 3 columns per row
+
+        # Create a grid of subplots with custom layout
+        fig, axes = plt.subplots(num_rows, 3, figsize=(15, 5 * num_rows))
+        axes = axes.flatten()
+
+        # Loop through columns and plot histograms
+        for i, col in enumerate(numeric_columns):
+            ax = axes[i]
+            df[col].plot.hist(ax=ax, bins=20)  # Adjust the number of bins as needed
+            ax.set_title(col)
+            ax.set_xlabel("")  # Remove x-axis label for better spacing
+            ax.set_ylabel("Frequency")
+        
+        # Hide any empty subplots
+        for i in range(num_columns, num_rows * 3):
+            fig.delaxes(axes[i])
+
+        # Adjust layout and spacing
+        plt.tight_layout()
 
         # add a title to the plot
         plt.suptitle("Column Distribution")

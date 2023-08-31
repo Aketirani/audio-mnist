@@ -156,7 +156,7 @@ class AudioMNIST:
             )
 
         # Remove correlated columns
-        df = FE.remove_correlated_columns(df, 0.95, ["label"])
+        df = FE.remove_correlated_columns(df, self.config_file["threshold"], ["label"])
 
         # Save data to CSV
         UT.save_df_to_csv(df, self.config_file["data"]["final_data"])
@@ -273,49 +273,49 @@ if __name__ == "__main__":
         "--cfg_file",
         type=str,
         default="config.yaml",
-        help="Configuration file",
+        help="Configuration File",
     )
     parser.add_argument(
         "-w",
         "--write_mode",
         type=str,
         default=True,
-        help="Write new data",
+        help="Write New Data",
     )
     parser.add_argument(
         "-o",
         "--plot_mode",
         type=str,
         default=False,
-        help="Plot figures",
+        help="Plot Figures",
     )
     parser.add_argument(
         "-y",
         "--play_mode",
         type=str,
         default=False,
-        help="Play audio",
+        help="Play Audio",
     )
     parser.add_argument(
         "-i",
         "--print_mode",
         type=str,
         default=True,
-        help="Print statements",
+        help="Print Statements",
     )
     parser.add_argument(
         "-a",
         "--print_acc_mode",
         type=str,
         default=True,
-        help="Print accuracy",
+        help="Print Accuracy",
     )
     parser.add_argument(
         "-t",
         "--tuning_mode",
         type=str,
         default=False,
-        help="Hyperparameter tuning",
+        help="Hyperparameter Tuning",
     )
     args = parser.parse_args()
 
