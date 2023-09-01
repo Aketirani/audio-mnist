@@ -45,7 +45,14 @@ class TestXGBoostModel(unittest.TestCase):
                 "label": [0, 1, 0, 1, 0, 1],
             }
         )
-        self.xgboost_model = XGBoostModel(self.train_df.iloc[:, :2], self.train_df.iloc[:, :-1], self.val_df.iloc[:, :2], self.val_df.iloc[:, :-1], self.test_df.iloc[:, :2], self.test_df.iloc[:, :-1])
+        self.xgboost_model = XGBoostModel(
+            self.train_df.iloc[:, :2],
+            self.train_df.iloc[:, :-1],
+            self.val_df.iloc[:, :2],
+            self.val_df.iloc[:, :-1],
+            self.test_df.iloc[:, :2],
+            self.test_df.iloc[:, :-1],
+        )
         self.model_param = {
             "learning_rate": 0.05,
             "max_depth": 5,

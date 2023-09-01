@@ -43,7 +43,12 @@ class DataSplit:
         return train_df, val_df, test_df
 
     @staticmethod
-    def prepare_data(train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd.DataFrame, target_column: str) -> tuple:
+    def prepare_data(
+        train_df: pd.DataFrame,
+        val_df: pd.DataFrame,
+        test_df: pd.DataFrame,
+        target_column: str,
+    ) -> tuple:
         """
         Prepare datasets for training, validation, and test
 

@@ -6,6 +6,7 @@ import pandas as pd
 sys.path.append("../src")
 from data_split import DataSplit
 
+
 class TestDataSplit(unittest.TestCase):
     """
     Test class for the DataSplit class
@@ -82,21 +83,31 @@ class TestDataSplit(unittest.TestCase):
         )
 
         # Check if the shapes of X and y match the expected shapes
-        self.assertEqual(X_train.shape, (len(self.train_df), len(self.train_df.columns) - 1))
+        self.assertEqual(
+            X_train.shape, (len(self.train_df), len(self.train_df.columns) - 1)
+        )
         self.assertEqual(y_train.shape, (len(self.train_df),))
 
         self.assertEqual(X_val.shape, (len(self.val_df), len(self.val_df.columns) - 1))
         self.assertEqual(y_val.shape, (len(self.val_df),))
 
-        self.assertEqual(X_test.shape, (len(self.test_df), len(self.test_df.columns) - 1))
+        self.assertEqual(
+            X_test.shape, (len(self.test_df), len(self.test_df.columns) - 1)
+        )
         self.assertEqual(y_test.shape, (len(self.test_df),))
 
         # Check if the values in X and y match the original dataframes
-        pd.testing.assert_frame_equal(X_train, self.train_df.drop(columns=[self.target_column]))
+        pd.testing.assert_frame_equal(
+            X_train, self.train_df.drop(columns=[self.target_column])
+        )
         pd.testing.assert_series_equal(y_train, self.train_df[self.target_column])
 
-        pd.testing.assert_frame_equal(X_val, self.val_df.drop(columns=[self.target_column]))
+        pd.testing.assert_frame_equal(
+            X_val, self.val_df.drop(columns=[self.target_column])
+        )
         pd.testing.assert_series_equal(y_val, self.val_df[self.target_column])
 
-        pd.testing.assert_frame_equal(X_test, self.test_df.drop(columns=[self.target_column]))
+        pd.testing.assert_frame_equal(
+            X_test, self.test_df.drop(columns=[self.target_column])
+        )
         pd.testing.assert_series_equal(y_test, self.test_df[self.target_column])

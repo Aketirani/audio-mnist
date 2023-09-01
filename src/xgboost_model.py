@@ -14,22 +14,22 @@ class XGBoostModel:
     """
 
     def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test):
-            """
-            Initialize the class with training, validation, and test data
+        """
+        Initialize the class with training, validation, and test data
 
-            :param X_train: numpy.ndarray, features for training
-            :param y_train: numpy.ndarray, labels for training
-            :param X_val: numpy.ndarray, features for validation
-            :param y_val: numpy.ndarray, labels for validation
-            :param X_test: numpy.ndarray, features for test
-            :param y_test: numpy.ndarray, labels for test
-            """
-            self.X_train = X_train
-            self.y_train = y_train
-            self.X_val = X_val
-            self.y_val = y_val
-            self.X_test = X_test
-            self.y_test = y_test
+        :param X_train: numpy.ndarray, features for training
+        :param y_train: numpy.ndarray, labels for training
+        :param X_val: numpy.ndarray, features for validation
+        :param y_val: numpy.ndarray, labels for validation
+        :param X_test: numpy.ndarray, features for test
+        :param y_test: numpy.ndarray, labels for test
+        """
+        self.X_train = X_train
+        self.y_train = y_train
+        self.X_val = X_val
+        self.y_val = y_val
+        self.X_test = X_test
+        self.y_test = y_test
 
     def set_params(self, model_param: dict):
         """
@@ -141,7 +141,10 @@ class XGBoostModel:
 
         # fit the GridSearchCV object on the training data
         grid = grid.fit(
-            self.X_train, self.y_train, eval_set=[(self.X_val, self.y_val)], eval_metric="logloss"
+            self.X_train,
+            self.y_train,
+            eval_set=[(self.X_val, self.y_val)],
+            eval_metric="logloss",
         )
 
         # save evaluation metrics to file

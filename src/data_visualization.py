@@ -194,7 +194,7 @@ class DataVisualization:
             ax.set_title(col)
             ax.set_xlabel("")  # Remove x-axis label for better spacing
             ax.set_ylabel("Frequency")
-        
+
         # Hide any empty subplots
         for i in range(num_columns, num_rows * 3):
             fig.delaxes(axes[i])
@@ -233,7 +233,9 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_confusion_matrix(self, y_test: list, y_pred: list, labels: list, plot_name: str) -> None:
+    def plot_confusion_matrix(
+        self, y_test: list, y_pred: list, labels: list, plot_name: str
+    ) -> None:
         """
         Plots the confusion matrix for binary classification and displays the values.
 
@@ -244,23 +246,62 @@ class DataVisualization:
         """
         # compute the confusion matrix
         cm = confusion_matrix(y_test, y_pred)
-        
+
         # extract TP, FP, FN, TN from the confusion matrix
         TP, FP, FN, TN = cm.ravel()
 
         # use seaborn to create a heatmap of the confusion matrix
-        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels)
+        sns.heatmap(
+            cm,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            xticklabels=labels,
+            yticklabels=labels,
+        )
 
         # add labels
-        plt.title('Confusion Matrix')
-        plt.xlabel('Predicted')
-        plt.ylabel('True')
-        
+        plt.title("Confusion Matrix")
+        plt.xlabel("Predicted")
+        plt.ylabel("True")
+
         # display TP, FP, FN, TN values as text
-        plt.text(0, 0, f'TN = {TN}', horizontalalignment='center', verticalalignment='center', fontsize=12, color='white')
-        plt.text(1, 0, f'FP = {FP}', horizontalalignment='center', verticalalignment='center', fontsize=12, color='white')
-        plt.text(0, 1, f'FN = {FN}', horizontalalignment='center', verticalalignment='center', fontsize=12, color='white')
-        plt.text(1, 1, f'TP = {TP}', horizontalalignment='center', verticalalignment='center', fontsize=12, color='white')
+        plt.text(
+            0,
+            0,
+            f"TN = {TN}",
+            horizontalalignment="center",
+            verticalalignment="center",
+            fontsize=12,
+            color="white",
+        )
+        plt.text(
+            1,
+            0,
+            f"FP = {FP}",
+            horizontalalignment="center",
+            verticalalignment="center",
+            fontsize=12,
+            color="white",
+        )
+        plt.text(
+            0,
+            1,
+            f"FN = {FN}",
+            horizontalalignment="center",
+            verticalalignment="center",
+            fontsize=12,
+            color="white",
+        )
+        plt.text(
+            1,
+            1,
+            f"TP = {TP}",
+            horizontalalignment="center",
+            verticalalignment="center",
+            fontsize=12,
+            color="white",
+        )
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))

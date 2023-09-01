@@ -84,8 +84,7 @@ class TestFeatureEngineering(unittest.TestCase):
                 [
                     col
                     for col in self.df.columns
-                    if self.df[col].nunique() <= 1
-                    and col not in self.gender_column
+                    if self.df[col].nunique() <= 1 and col not in self.gender_column
                 ]
             ),
         )
@@ -99,7 +98,11 @@ class TestFeatureEngineering(unittest.TestCase):
         """
         # call the remove_correlated_columns method on the dataframe, threshold, and a single column to leave out
         df_result = self.feature_engineering.remove_correlated_columns(
-            self.df, self.threshold, self.gender_column[0]  # Use the first element of the list as a single column name
+            self.df,
+            self.threshold,
+            self.gender_column[
+                0
+            ],  # Use the first element of the list as a single column name
         )
 
         # check that the returned value is a pandas DataFrame
@@ -124,7 +127,9 @@ class TestFeatureEngineering(unittest.TestCase):
         Test the binarize_column method of the FeatureEngineering class
         """
         # call the binarize_column method
-        result = self.feature_engineering.binarize_column(self.df, self.gender_column[0])  # Use the first element of the list
+        result = self.feature_engineering.binarize_column(
+            self.df, self.gender_column[0]
+        )  # Use the first element of the list
 
         # check if the gender column has been created with the correct values
         self.assertIn(self.gender_column[0], result.columns)

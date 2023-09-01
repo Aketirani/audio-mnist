@@ -106,8 +106,14 @@ class AudioMNIST:
                     n_features = DP.normalize_features(features)
 
                     # Add gender and digit column
-                    features = UT.add_column_dict(n_features, self.config_file["targets"][0], meta_data[vp][self.config_file["targets"][0]])
-                    features = UT.add_column_dict(n_features, self.config_file["targets"][1], dig[-1])
+                    features = UT.add_column_dict(
+                        n_features,
+                        self.config_file["targets"][0],
+                        meta_data[vp][self.config_file["targets"][0]],
+                    )
+                    features = UT.add_column_dict(
+                        n_features, self.config_file["targets"][1], dig[-1]
+                    )
 
                     # Append new dict values to the DataFrame
                     df = df.append(features, ignore_index=True)
@@ -136,9 +142,7 @@ class AudioMNIST:
 
         if self.plot_mode == True:
             # Plot column distribution
-            DV.plot_column_dist(
-                df, self.config_file["plots"]["column_distribution"]
-            )
+            DV.plot_column_dist(df, self.config_file["plots"]["column_distribution"])
 
         # Remove constant columns
         df = FE.remove_constant_columns(df, self.config_file["targets"][0])
@@ -153,7 +157,9 @@ class AudioMNIST:
             )
 
         # Remove correlated columns
-        df = FE.remove_correlated_columns(df, self.config_file["threshold"], self.config_file["targets"][0])
+        df = FE.remove_correlated_columns(
+            df, self.config_file["threshold"], self.config_file["targets"][0]
+        )
 
         # Save data to CSV
         UT.save_df_to_csv(df, self.config_file["data"]["data_engineered"])
@@ -179,9 +185,7 @@ class AudioMNIST:
             print(
                 f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}"
             )
-            print(
-                f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}"
-            )
+            print(f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}")
 
             # Show gender balance
             gender_count = UT.column_value_counts(df, self.config_file["targets"][0])
@@ -189,11 +193,13 @@ class AudioMNIST:
             print(f"Number of male audio recordings: {gender_count[1]}")
 
         # Prepare datasets
-        X_train, y_train, X_val, y_val, X_test, y_test = DS.prepare_data(train_df, val_df, test_df, self.config_file["targets"][0])
+        X_train, y_train, X_val, y_val, X_test, y_test = DS.prepare_data(
+            train_df, val_df, test_df, self.config_file["targets"][0]
+        )
 
         # Initialize
         XM = XGBoostModel(X_train, y_train, X_val, y_val, X_test, y_test)
-        
+
         # Hyperparameters tuning
         if self.tuning_mode == True:
             hyperparam_path = SU.hyperparam_path
@@ -239,9 +245,10 @@ class AudioMNIST:
         # Plot confusion matrix
         if self.plot_mode == True:
             DV.plot_confusion_matrix(
-                y_test, y_pred,
+                y_test,
+                y_pred,
                 self.config_file["labels"],
-                self.config_file["plots"]["confusion_matrix"]
+                self.config_file["plots"]["confusion_matrix"],
             )
 
         # Evaluate model
