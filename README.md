@@ -18,8 +18,7 @@ In this repository, we will be using acoustic features extracted from a voice re
 |   ├── config.yaml             <-- Configuration File
 |
 ├── data                        <-- Data Folder
-|   ├── features_data.csv       <-- Features Dataset
-|   ├── final_data.csv          <-- Final Dataset
+|   ├── data*.csv               <-- Data Files
 |
 ├── logs                        <-- Log Folder
 |   ├── *.log                   <-- Log Files
@@ -115,7 +114,7 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Model Performance
-Accuracy on test dataset: `83.30%`.
+Accuracy on test dataset: `82.07%`.
 
 ## Exectuion
 Run `main.sh` to execute whole pipeline.

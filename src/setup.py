@@ -130,7 +130,7 @@ class Setup:
         """
         # combine the project path and the parameters folder path to get the model parameters file path
         return os.path.join(
-            self.model_path, self.cfg_setup["parameters"]["model_parameters"]
+            self.model_path, self.cfg_setup["parameters"]["model_static"]
         )
 
     def set_model_hyperparam_path(self) -> str:
@@ -141,5 +141,5 @@ class Setup:
         """
         # combine the project path and the parameters folder path to get the model hyperparameters file path
         return os.path.join(
-            self.model_path, self.cfg_setup["parameters"]["model_hyperparameters"]
+            self.model_path, self.cfg_setup["parameters"]["model_dynamic"]
         )

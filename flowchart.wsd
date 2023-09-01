@@ -9,7 +9,7 @@ package "AudioMNIST" {
             :import packages;
             :initialize classes;
             :prepare raw audio data for analysis;
-            :prepare final processed data for modelling;
+            :prepare processed data for modelling;
             :train model and make predictions;
         }
         :write to log;

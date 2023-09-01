@@ -23,7 +23,6 @@ class AudioMNIST:
         plot_mode: bool,
         play_mode: bool,
         print_mode: bool,
-        print_acc_mode: bool,
         tuning_mode: bool,
     ):
         """
@@ -34,7 +33,6 @@ class AudioMNIST:
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
         :param print_mode: bool, a flag indicating whether to print
-        :param print_acc_mode: bool, a flag indicating whether to print model accuracy
         :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
         """
         self.config_file = SU.cfg_setup
@@ -42,7 +40,6 @@ class AudioMNIST:
         self.plot_mode = plot_mode
         self.play_mode = play_mode
         self.print_mode = print_mode
-        self.print_acc_mode = print_acc_mode
         self.tuning_mode = tuning_mode
 
     def DataPreparation(self):
@@ -56,7 +53,7 @@ class AudioMNIST:
             meta_data = UT.read_file(SU.meta_path)
 
             # Create empty dataframe
-            df = UT.create_dataframe(None, ["gender", "digit"])
+            df = UT.create_dataframe(None, self.config_file["targets"])
 
             # Specify total number of folders in source path
             num_folders = len(next(os.walk(SU.audio_path))[1]) + 1
@@ -108,22 +105,28 @@ class AudioMNIST:
                     # Normalize features
                     n_features = DP.normalize_features(features)
 
-                    # Add gender and digit label
-                    features = UT.add_column(n_features, "gender", meta_data[vp]["gender"])
-                    features = UT.add_column(n_features, "digit", dig[-1])
+                    # Add gender and digit column
+                    features = UT.add_column_dict(
+                        n_features,
+                        self.config_file["targets"][0],
+                        meta_data[vp][self.config_file["targets"][0]],
+                    )
+                    features = UT.add_column_dict(
+                        n_features, self.config_file["targets"][1], dig[-1]
+                    )
 
                     # Append new dict values to the DataFrame
                     df = df.append(features, ignore_index=True)
 
             # Save data to CSV
-            UT.save_df_to_csv(df, file_name=self.config_file["data"]["features_data"])
+            UT.save_df_to_csv(df, file_name=self.config_file["data"]["data_prepared"])
 
     def DataEngineering(self):
         """
         Prepare final data for modelling
         """
         # Load CSV file into dataframe
-        df = UT.csv_to_df(self.config_file["data"]["features_data"])
+        df = UT.csv_to_df(self.config_file["data"]["data_prepared"])
 
         if self.print_mode == True:
             # Show size of dataset
@@ -132,44 +135,44 @@ class AudioMNIST:
             )
 
         # Remove digit column
-        df = UT.remove_column(df, "digit")
+        df = UT.remove_column(df, self.config_file["targets"][1])
 
-        # Create label column where female is 0 and male is 1
-        df = FE.create_label_column(df)
+        # Binarize target column where female is 0 and male is 1
+        df = FE.binarize_column(df, self.config_file["targets"][0])
 
         if self.plot_mode == True:
             # Plot column distribution
-            DV.plot_column_dist(
-                df, self.config_file["plot_names"]["column_distribution"]
-            )
+            DV.plot_column_dist(df, self.config_file["plots"]["column_distribution"])
 
         # Remove constant columns
-        df = FE.remove_constant_columns(df, ["label"])
+        df = FE.remove_constant_columns(df, self.config_file["targets"][0])
 
         # Calculate correlation matrix
-        corr_matrix = FE.pearson_correlation(df, ["label"])
+        corr_matrix = FE.pearson_correlation(df, self.config_file["targets"][0])
 
         if self.plot_mode == True:
             # Plot correlation matrix
             DV.plot_corr_matrix(
-                corr_matrix, self.config_file["plot_names"]["correlation_matrix"]
+                corr_matrix, self.config_file["plots"]["correlation_matrix"]
             )
 
         # Remove correlated columns
-        df = FE.remove_correlated_columns(df, self.config_file["threshold"], ["label"])
+        df = FE.remove_correlated_columns(
+            df, self.config_file["threshold"], self.config_file["targets"][0]
+        )
 
         # Save data to CSV
-        UT.save_df_to_csv(df, self.config_file["data"]["final_data"])
+        UT.save_df_to_csv(df, self.config_file["data"]["data_engineered"])
 
     def Modelling(self):
         """
         Hyperparameter tuning, model training, prediction and evaluation
         """
         # Load CSV file into dataframe
-        df = UT.csv_to_df(self.config_file["data"]["final_data"])
+        df = UT.csv_to_df(self.config_file["data"]["data_engineered"])
 
         # Split datasets
-        train_df, val_df, test_df = DS.split(df, "label")
+        train_df, val_df, test_df = DS.split(df, self.config_file["targets"][0])
 
         if self.print_mode == True:
             # Show size of datasets
@@ -182,30 +185,28 @@ class AudioMNIST:
             print(
                 f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}"
             )
-            print(
-                f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}"
-            )
+            print(f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}")
 
             # Show gender balance
-            gender_count = UT.column_value_counts(df, "label")
+            gender_count = UT.column_value_counts(df, self.config_file["targets"][0])
             print(f"Number of female audio recordings: {gender_count[0]}")
             print(f"Number of male audio recordings: {gender_count[1]}")
 
         # Prepare datasets
-        XM = XGBoostModel(train_df, val_df, test_df)
-        X_train, y_train, X_val, y_val, X_test, y_test = XM.prepare_data()
+        X_train, y_train, X_val, y_val, X_test, y_test = DS.prepare_data(
+            train_df, val_df, test_df, self.config_file["targets"][0]
+        )
+
+        # Initialize
+        XM = XGBoostModel(X_train, y_train, X_val, y_val, X_test, y_test)
 
         # Hyperparameters tuning
         if self.tuning_mode == True:
             hyperparam_path = SU.hyperparam_path
             model_hyperparam = UT.read_file(hyperparam_path)
             XM.grid_search(
-                X_train,
-                y_train,
-                X_val,
-                y_val,
                 SU.res_path,
-                self.config_file["results"]["best_modeL_param"],
+                self.config_file["results"]["best_model_param"],
                 model_hyperparam,
             )
 
@@ -214,10 +215,6 @@ class AudioMNIST:
 
         # Train model
         XM.fit(
-            X_train,
-            y_train,
-            X_val,
-            y_val,
             SU.res_path,
             self.config_file["results"]["model_results"],
         )
@@ -230,15 +227,33 @@ class AudioMNIST:
             DV.plot_feature_importance(
                 feature_importance,
                 test_df.iloc[:, :-1].columns,
-                self.config_file["plot_names"]["feature_importance"],
+                self.config_file["plots"]["feature_importance"],
             )
 
         # Make predictions
-        y_pred = XM.predict(X_test)
+        y_pred = XM.predict()
+
+        # Create final dataframe from test set and reset index
+        df = test_df.reset_index(drop=True)
+
+        # Add predicted values column to final dataframe
+        df = UT.add_column_df(df, self.config_file["predicted"], y_pred)
+
+        # Save data to CSV
+        UT.save_df_to_csv(df, self.config_file["data"]["data_final"])
+
+        # Plot confusion matrix
+        if self.plot_mode == True:
+            DV.plot_confusion_matrix(
+                y_test,
+                y_pred,
+                self.config_file["labels"],
+                self.config_file["plots"]["confusion_matrix"],
+            )
 
         # Evaluate model
-        accuracy = XM.evaluate_predictions(y_test, y_pred)
-        if self.print_acc_mode == True:
+        accuracy = XM.evaluate_predictions(y_pred)
+        if self.print_mode == True:
             print("Model Accuracy: %.2f%%" % (accuracy * 100))
 
         # Read model results
@@ -255,13 +270,13 @@ class AudioMNIST:
                 df["iteration"],
                 df["train_loss"],
                 df["val_loss"],
-                self.config_file["plot_names"]["model_loss"],
+                self.config_file["plots"]["model_loss"],
             )
             DV.plot_accuracy(
                 df["iteration"],
                 df["train_acc"],
                 df["val_acc"],
-                self.config_file["plot_names"]["model_accuracy"],
+                self.config_file["plots"]["model_accuracy"],
             )
 
 
@@ -304,13 +319,6 @@ if __name__ == "__main__":
         help="Print Statements",
     )
     parser.add_argument(
-        "-a",
-        "--print_acc_mode",
-        type=str,
-        default=True,
-        help="Print Accuracy",
-    )
-    parser.add_argument(
         "-t",
         "--tuning_mode",
         type=str,
@@ -333,14 +341,13 @@ if __name__ == "__main__":
         args.plot_mode,
         args.play_mode,
         args.print_mode,
-        args.print_acc_mode,
         args.tuning_mode,
     )
 
     # Prepare raw audio data for analysis
     AM.DataPreparation()
 
-    # Prepare final processed data for modelling
+    # Prepare processed data for modelling
     AM.DataEngineering()
 
     # Train model and make predictions
