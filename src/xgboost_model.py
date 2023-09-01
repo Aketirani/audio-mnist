@@ -13,33 +13,23 @@ class XGBoostModel:
     The XGBoostModel class is used to do hyperparameter tuning, model training, prediction and evaluation
     """
 
-    def __init__(self, train_df, val_df, test_df):
-        """
-        Initialize the class with training, validation and test dataframes
+    def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test):
+            """
+            Initialize the class with training, validation, and test data
 
-        :param train_df: pandas.DataFrame, dataframe containing the training data
-        :param val_df: pandas.DataFrame, dataframe containing the validation data
-        :param test_df: pandas.DataFrame, dataframe containing the test data
-        """
-        self.train_df = train_df
-        self.val_df = val_df
-        self.test_df = test_df
-
-    def prepare_data(self):
-        """
-        Prepare datasets for training, validation and test
-        """
-        # extract features for datasets
-        X_train = self.train_df.iloc[:, :-1]
-        X_val = self.val_df.iloc[:, :-1]
-        X_test = self.test_df.iloc[:, :-1]
-
-        # extract labels for datasets
-        y_train = self.train_df.iloc[:, -1]
-        y_val = self.val_df.iloc[:, -1]
-        y_test = self.test_df.iloc[:, -1]
-
-        return X_train, y_train, X_val, y_val, X_test, y_test
+            :param X_train: numpy.ndarray, features for training
+            :param y_train: numpy.ndarray, labels for training
+            :param X_val: numpy.ndarray, features for validation
+            :param y_val: numpy.ndarray, labels for validation
+            :param X_test: numpy.ndarray, features for test
+            :param y_test: numpy.ndarray, labels for test
+            """
+            self.X_train = X_train
+            self.y_train = y_train
+            self.X_val = X_val
+            self.y_val = y_val
+            self.X_test = X_test
+            self.y_test = y_test
 
     def set_params(self, model_param: dict):
         """
@@ -65,20 +55,12 @@ class XGBoostModel:
 
     def fit(
         self,
-        X_train: np.ndarray,
-        y_train: np.ndarray,
-        X_val: np.ndarray,
-        y_val: np.ndarray,
         file_path: str,
         file_name: str,
     ):
         """
         Fit the model on training data
 
-        :param X_train: numpy.ndarray, features for training
-        :param y_train: numpy.ndarray, labels for training
-        :param X_val: numpy.ndarray, features for validation
-        :param y_val: numpy.ndarray, labels for validation
         :param file_path: str, path where the eval_metrics should be saved
         :param file_name: str, name of the file to be saved
         """
@@ -113,9 +95,9 @@ class XGBoostModel:
 
         # fit the model on the training data and evaluate on validation data
         result = self.model.fit(
-            X_train,
-            y_train,
-            eval_set=[(X_train, y_train), (X_val, y_val)],
+            self.X_train,
+            self.y_train,
+            eval_set=[(self.X_train, self.y_train), (self.X_val, self.y_val)],
             eval_metric=_accuracy,
             verbose=0,
         )
@@ -125,10 +107,6 @@ class XGBoostModel:
 
     def grid_search(
         self,
-        X_train: np.ndarray,
-        y_train: np.ndarray,
-        X_val: np.ndarray,
-        y_val: np.ndarray,
         file_path: str,
         file_name: str,
         grid_params: dict,
@@ -136,10 +114,6 @@ class XGBoostModel:
         """
         Runs a grid search to tune the hyperparameters of the model
 
-        :param X_train: numpy.ndarray, features for training
-        :param y_train: numpy.ndarray, labels for training
-        :param X_val: numpy.ndarray, features for validation
-        :param y_val: numpy.ndarray, labels for validation
         :param file_path: str, path to save the best results
         :param file_name: str, name of the file to save the best results
         :param grid_params: str, dictionary containing the grid search parameters
@@ -167,7 +141,7 @@ class XGBoostModel:
 
         # fit the GridSearchCV object on the training data
         grid = grid.fit(
-            X_train, y_train, eval_set=[(X_val, y_val)], eval_metric="logloss"
+            self.X_train, self.y_train, eval_set=[(self.X_val, self.y_val)], eval_metric="logloss"
         )
 
         # save evaluation metrics to file
@@ -207,26 +181,24 @@ class XGBoostModel:
             columns=columns,
         )
 
-    def predict(self, X_test: np.ndarray) -> np.ndarray:
+    def predict(self) -> np.ndarray:
         """
-        Make predictions for test data
+        Make predictions on test data
 
-        :param X_test: numpy.ndarray, features for test
-        :return: numpy.ndarray, array containing the predicted labels for test data
+        :return: numpy.ndarray, array containing the predicted labels on test data
         """
         # make predictions on the test data using the trained model
-        return self.model.predict(X_test)
+        return self.model.predict(self.X_test)
 
-    def evaluate_predictions(self, y_test: np.ndarray, y_pred: np.ndarray) -> float:
+    def evaluate_predictions(self, y_pred: np.ndarray) -> float:
         """
         Evaluate predictions and return accuracy
 
-        :param y_test: numpy.ndarray, true labels for test data
-        :param y_pred: numpy.ndarray, predicted labels for test data
+        :param y_pred: numpy.ndarray, predicted labels on test data
         :return: float, accuracy score
         """
         # round the predictions to the nearest integer
         predictions = [round(value) for value in y_pred]
 
         # return accuracy
-        return accuracy_score(y_test, predictions)
+        return accuracy_score(self.y_test, predictions)

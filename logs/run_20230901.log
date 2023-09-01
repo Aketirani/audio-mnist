@@ -66,5 +66,5 @@ Size of validation set, columns: 9 and rows: 3000
 Size of test set, columns: 9 and rows: 3000
 Number of female audio recordings: 6000
 Number of male audio recordings: 24000
-Model Accuracy: 82.87%
+Model Accuracy: 82.07%
 Run Finished!

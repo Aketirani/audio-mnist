@@ -4,7 +4,6 @@ import unittest
 import pandas as pd
 
 sys.path.append("../src")
-from setup import Setup
 from xgboost_model import XGBoostModel
 
 
@@ -17,7 +16,6 @@ class TestXGBoostModel(unittest.TestCase):
         """
         Set up the class with test fixtures.
 
-        :param setup: class, create an instance of the Setup class
         :param train_df: pd.DataFrame, DataFrame for training data
         :param val_df: pd.DataFrame, DataFrame for validation data
         :param test_df: pd.DataFrame, DataFrame for test data
@@ -26,7 +24,6 @@ class TestXGBoostModel(unittest.TestCase):
         :param log_data: dict, dictionary containing log data for the model
         :param expected_df: pd.DataFrame, expected result dataframe
         """
-        self.setup = Setup(cfg_file="config.yaml")
         self.train_df = pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5, 6],
@@ -48,7 +45,7 @@ class TestXGBoostModel(unittest.TestCase):
                 "label": [0, 1, 0, 1, 0, 1],
             }
         )
-        self.xgboost_model = XGBoostModel(self.train_df, self.val_df, self.test_df)
+        self.xgboost_model = XGBoostModel(self.train_df.iloc[:, :2], self.train_df.iloc[:, :-1], self.val_df.iloc[:, :2], self.val_df.iloc[:, :-1], self.test_df.iloc[:, :2], self.test_df.iloc[:, :-1])
         self.model_param = {
             "learning_rate": 0.05,
             "max_depth": 5,
@@ -73,30 +70,6 @@ class TestXGBoostModel(unittest.TestCase):
                 "val_acc": [0.2, 0.3, 0.4],
             }
         )
-
-    def test_prepare_data(self):
-        """
-        Test the prepare_data method
-        """
-        # call the prepare_data method
-        (
-            X_train,
-            y_train,
-            X_val,
-            y_val,
-            X_test,
-            y_test,
-        ) = self.xgboost_model.prepare_data()
-
-        # Assert that X_train, X_val and X_test contain the expected features
-        pd.testing.assert_frame_equal(X_train, self.xgboost_model.train_df.iloc[:, :-1])
-        pd.testing.assert_frame_equal(X_val, self.xgboost_model.val_df.iloc[:, :-1])
-        pd.testing.assert_frame_equal(X_test, self.xgboost_model.test_df.iloc[:, :-1])
-
-        # Assert that y_train, y_val and y_test contain the expected labels
-        pd.testing.assert_series_equal(y_train, self.xgboost_model.train_df.iloc[:, -1])
-        pd.testing.assert_series_equal(y_val, self.xgboost_model.val_df.iloc[:, -1])
-        pd.testing.assert_series_equal(y_test, self.xgboost_model.test_df.iloc[:, -1])
 
     def test_set_params(self):
         """
@@ -143,15 +116,3 @@ class TestXGBoostModel(unittest.TestCase):
 
         # check if the resulting DataFrame match the expected one
         pd.testing.assert_frame_equal(result_df, self.expected_df)
-
-    def test_evaluate_predictions(self):
-        """
-        Test the evaluate_predictions method
-        """
-        # calculate the result by calling the evaluate_predictions method
-        result = self.xgboost_model.evaluate_predictions(
-            self.val_df["label"].values, self.test_df["label"].values
-        )
-
-        # check that the result is equal to 1
-        self.assertEqual(result, 1)

@@ -23,7 +23,6 @@ class AudioMNIST:
         plot_mode: bool,
         play_mode: bool,
         print_mode: bool,
-        print_acc_mode: bool,
         tuning_mode: bool,
     ):
         """
@@ -34,7 +33,6 @@ class AudioMNIST:
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
         :param print_mode: bool, a flag indicating whether to print
-        :param print_acc_mode: bool, a flag indicating whether to print model accuracy
         :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
         """
         self.config_file = SU.cfg_setup
@@ -42,7 +40,6 @@ class AudioMNIST:
         self.plot_mode = plot_mode
         self.play_mode = play_mode
         self.print_mode = print_mode
-        self.print_acc_mode = print_acc_mode
         self.tuning_mode = tuning_mode
 
     def DataPreparation(self):
@@ -82,12 +79,12 @@ class AudioMNIST:
                     # Plot audio signal
                     if self.plot_mode == True:
                         audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-                        DV.plot_audio(fs, audio_data, audio_name)
+                        # DV.plot_audio(fs, audio_data, audio_name)
 
                     # Plot STFT of audio signal
                     if self.plot_mode == True:
                         stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-                        DV.plot_stft(fs, audio_data, stft_name)
+                        # DV.plot_stft(fs, audio_data, stft_name)
 
                     # Play audio signal
                     if self.play_mode == True:
@@ -192,18 +189,16 @@ class AudioMNIST:
             print(f"Number of male audio recordings: {gender_count[1]}")
 
         # Prepare datasets
-        XM = XGBoostModel(train_df, val_df, test_df)
-        X_train, y_train, X_val, y_val, X_test, y_test = XM.prepare_data()
+        X_train, y_train, X_val, y_val, X_test, y_test = DS.prepare_data(train_df, val_df, test_df, self.config_file["targets"][0])
 
+        # Initialize
+        XM = XGBoostModel(X_train, y_train, X_val, y_val, X_test, y_test)
+        
         # Hyperparameters tuning
         if self.tuning_mode == True:
             hyperparam_path = SU.hyperparam_path
             model_hyperparam = UT.read_file(hyperparam_path)
             XM.grid_search(
-                X_train,
-                y_train,
-                X_val,
-                y_val,
                 SU.res_path,
                 self.config_file["results"]["best_model_param"],
                 model_hyperparam,
@@ -214,10 +209,6 @@ class AudioMNIST:
 
         # Train model
         XM.fit(
-            X_train,
-            y_train,
-            X_val,
-            y_val,
             SU.res_path,
             self.config_file["results"]["model_results"],
         )
@@ -234,7 +225,7 @@ class AudioMNIST:
             )
 
         # Make predictions
-        y_pred = XM.predict(X_test)
+        y_pred = XM.predict()
 
         # Create final dataframe from test set and reset index
         df = test_df.reset_index(drop=True)
@@ -242,7 +233,7 @@ class AudioMNIST:
         # Add predicted values column to final dataframe
         df = UT.add_column_df(df, self.config_file["predicted"], y_pred)
 
-        # Save data to XLSX
+        # Save data to CSV
         UT.save_df_to_csv(df, self.config_file["data"]["data_final"])
 
         # Plot confusion matrix
@@ -254,8 +245,8 @@ class AudioMNIST:
             )
 
         # Evaluate model
-        accuracy = XM.evaluate_predictions(y_test, y_pred)
-        if self.print_acc_mode == True:
+        accuracy = XM.evaluate_predictions(y_pred)
+        if self.print_mode == True:
             print("Model Accuracy: %.2f%%" % (accuracy * 100))
 
         # Read model results
@@ -303,7 +294,7 @@ if __name__ == "__main__":
         "-o",
         "--plot_mode",
         type=str,
-        default=False,
+        default=True,
         help="Plot Figures",
     )
     parser.add_argument(
@@ -319,13 +310,6 @@ if __name__ == "__main__":
         type=str,
         default=True,
         help="Print Statements",
-    )
-    parser.add_argument(
-        "-a",
-        "--print_acc_mode",
-        type=str,
-        default=True,
-        help="Print Accuracy",
     )
     parser.add_argument(
         "-t",
@@ -350,7 +334,6 @@ if __name__ == "__main__":
         args.plot_mode,
         args.play_mode,
         args.print_mode,
-        args.print_acc_mode,
         args.tuning_mode,
     )
 

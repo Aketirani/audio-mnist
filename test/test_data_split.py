@@ -6,7 +6,6 @@ import pandas as pd
 sys.path.append("../src")
 from data_split import DataSplit
 
-
 class TestDataSplit(unittest.TestCase):
     """
     Test class for the DataSplit class
@@ -19,85 +18,85 @@ class TestDataSplit(unittest.TestCase):
         :param test_size: float, proportion of data to be used for the test set
         :param val_size: float, proportion of data to be used for the validation set
         :param data_split: class, create an instance of the DataSplit class
-        :param df: pd.DataFrame, dataset
+        :param train_df: pd.DataFrame, DataFrame for training data
+        :param val_df: pd.DataFrame, DataFrame for validation data
+        :param test_df: pd.DataFrame, DataFrame for test data
+        :param target_column: str, the name of the target column
         """
         self.test_size = 0.1
         self.val_size = 0.1
         self.data_split = DataSplit(self.test_size, self.val_size)
-        self.df = pd.DataFrame(
+        self.train_df = pd.DataFrame(
             {
-                "col1": [
-                    0.1,
-                    0.2,
-                    0.3,
-                    0.4,
-                    0.5,
-                    0.6,
-                    0.7,
-                    0.8,
-                    0.9,
-                    1,
-                    1,
-                    0.9,
-                    0.8,
-                    0.7,
-                    0.6,
-                    0.5,
-                    0.4,
-                    0.3,
-                    0.2,
-                    0.1,
-                ],
-                "col2": [
-                    0.1,
-                    0.2,
-                    0.3,
-                    0.4,
-                    0.5,
-                    0.6,
-                    0.7,
-                    0.8,
-                    0.9,
-                    1,
-                    1,
-                    0.9,
-                    0.8,
-                    0.7,
-                    0.6,
-                    0.5,
-                    0.4,
-                    0.3,
-                    0.2,
-                    0.1,
-                ],
-                "col3": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+                "col1": [1, 2, 3, 4, 5, 6],
+                "col2": [1, 2, 3, 4, 5, 6],
+                "label": [0, 1, 0, 1, 0, 1],
             }
         )
+        self.val_df = pd.DataFrame(
+            {
+                "col1": [7, 8, 9, 10, 11, 12],
+                "col2": [7, 8, 9, 10, 11, 12],
+                "label": [0, 1, 0, 1, 0, 1],
+            }
+        )
+        self.test_df = pd.DataFrame(
+            {
+                "col1": [13, 14, 15, 16, 17, 18],
+                "col2": [13, 14, 15, 16, 17, 18],
+                "label": [0, 1, 0, 1, 0, 1],
+            }
+        )
+        self.target_column = "label"
 
     def test_split(self):
         """
         Test the split method
         """
-        # Split the dataframe
-        train_df, val_df, test_df = self.data_split.split(self.df, "col3")
+        # concatenate the dataframes
+        combined_df = pd.concat([self.train_df, self.val_df, self.test_df])
 
-        # check if the size of each split dataframe are 80/10/10
-        self.assertEqual(
-            train_df.shape[0], int(len(self.df) * (1 - self.val_size - self.test_size))
-        )
-        self.assertEqual(val_df.shape[0], int(len(self.df) * self.val_size))
-        self.assertEqual(test_df.shape[0], int(len(self.df) * self.test_size))
+        # split the dataframe
+        train_df, val_df, test_df = self.data_split.split(combined_df, "label")
 
         # check if the ratio of target variable match in each split
         self.assertEqual(
-            train_df["col3"].value_counts(normalize=True).values.tolist(),
-            self.df["col3"].value_counts(normalize=True).values.tolist(),
+            train_df["label"].value_counts(normalize=True).values.tolist(),
+            combined_df["label"].value_counts(normalize=True).values.tolist(),
         )
         self.assertEqual(
-            val_df["col3"].value_counts(normalize=True).values.tolist(),
-            self.df["col3"].value_counts(normalize=True).values.tolist(),
+            val_df["label"].value_counts(normalize=True).values.tolist(),
+            combined_df["label"].value_counts(normalize=True).values.tolist(),
         )
         self.assertEqual(
-            test_df["col3"].value_counts(normalize=True).values.tolist(),
-            self.df["col3"].value_counts(normalize=True).values.tolist(),
+            test_df["label"].value_counts(normalize=True).values.tolist(),
+            combined_df["label"].value_counts(normalize=True).values.tolist(),
         )
+
+    def test_prepare_data(self):
+        """
+        Test the prepare_data method
+        """
+        X_train, y_train, X_val, y_val, X_test, y_test = self.data_split.prepare_data(
+            self.train_df, self.val_df, self.test_df, self.target_column
+        )
+
+        # Check if the shapes of X and y match the expected shapes
+        self.assertEqual(X_train.shape, (len(self.train_df), len(self.train_df.columns) - 1))
+        self.assertEqual(y_train.shape, (len(self.train_df),))
+
+        self.assertEqual(X_val.shape, (len(self.val_df), len(self.val_df.columns) - 1))
+        self.assertEqual(y_val.shape, (len(self.val_df),))
+
+        self.assertEqual(X_test.shape, (len(self.test_df), len(self.test_df.columns) - 1))
+        self.assertEqual(y_test.shape, (len(self.test_df),))
+
+        # Check if the values in X and y match the original dataframes
+        pd.testing.assert_frame_equal(X_train, self.train_df.drop(columns=[self.target_column]))
+        pd.testing.assert_series_equal(y_train, self.train_df[self.target_column])
+
+        pd.testing.assert_frame_equal(X_val, self.val_df.drop(columns=[self.target_column]))
+        pd.testing.assert_series_equal(y_val, self.val_df[self.target_column])
+
+        pd.testing.assert_frame_equal(X_test, self.test_df.drop(columns=[self.target_column]))
+        pd.testing.assert_series_equal(y_test, self.test_df[self.target_column])
