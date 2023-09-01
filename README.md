@@ -18,8 +18,7 @@ In this repository, we will be using acoustic features extracted from a voice re
 |   ├── config.yaml             <-- Configuration File
 |
 ├── data                        <-- Data Folder
-|   ├── features_data.csv       <-- Features Dataset
-|   ├── final_data.csv          <-- Final Dataset
+|   ├── data*.csv               <-- Data Files
 |
 ├── logs                        <-- Log Folder
 |   ├── *.log                   <-- Log Files

@@ -112,26 +112,42 @@ class Utilities:
             df = df.drop([column], axis=1)
         else:
             # if column does not exist, print message
-            print(f"{column} not found in DataFrame.")
+            print(f"{column} not found in DataFrame")
 
         # return dataframe
         return df
 
     @staticmethod
-    def add_column(features: dict, column_name: str, value: str) -> dict:
+    def add_column_dict(data: dict, column_name: str, value: str) -> dict:
         """
-        Add column and value to the feature dict
+        Add column and value to the dictionary
 
-        :param features: dict, input dictionary
-        :param column_name: str, column name to add to the dict
-        :param value: str, value to add to the dict
-        :return: dict, dictionary with column added
+        :param data: dict, input data
+        :param column_name: str, column name to add
+        :param value: str, value to add
+        :return: dict, data with column added
         """
         # add the column to the dictionary
-        features[column_name] = value
+        data[column_name] = value
 
-        # return the updated feature dictionary
-        return features
+        # return dictionary
+        return data
+
+    @staticmethod
+    def add_column_df(data: pd.DataFrame, column_name: str, value: str) -> pd.DataFrame:
+        """
+        Add column and value to the DataFrame
+
+        :param data: DataFrame, input data
+        :param column_name: str, column name to add
+        :param value: str, value to add
+        :return: DataFrame, data with column added
+        """
+        # add the column to the dataframe
+        data[column_name] = value
+
+        # return dataframe
+        return data
 
     def save_df_to_csv(self, dataframe: pd.DataFrame, file_name: str) -> None:
         """

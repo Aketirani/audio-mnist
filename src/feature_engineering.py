@@ -81,7 +81,7 @@ class FeatureEngineering:
         df = df.drop(correlated_columns, axis=1)
 
         # add back the columns that were left out
-        for col in columns_to_leave_out:
+        for col in [columns_to_leave_out]:
             if col not in df.columns:
                 df[col] = df_original[col]
 
@@ -89,18 +89,16 @@ class FeatureEngineering:
         return df
 
     @staticmethod
-    def create_label_column(df: pd.DataFrame) -> pd.DataFrame:
+    def binarize_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
         """
-        Create a label column in the DataFrame where female is 0 and male is 1
+        Binarize the column and move it to the last position in the DataFrame
 
         :param df: pd.DataFrame, input DataFrame
-        :return: pd.DataFrame, DataFrame with label column
+        :param column_name: str, column name to be binarized and moved
+        :return: pd.DataFrame, DataFrame with the binarized column moved to the last position
         """
-        # Create label column
-        df["label"] = df["gender"].map({"female": 0, "male": 1})
+        # binarize the specified column
+        df[column_name] = df[column_name].map({"female": 0, "male": 1})
 
-        # Drop the original gender column
-        df = df.drop(["gender"], axis=1)
-
-        # return dataframe
-        return df
+        # move the specified column to the last position
+        return df[[col for col in df if col != column_name] + [column_name]]
