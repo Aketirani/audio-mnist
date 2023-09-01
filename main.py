@@ -82,12 +82,12 @@ class AudioMNIST:
                     # Plot audio signal
                     if self.plot_mode == True:
                         audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-                        # DV.plot_audio(fs, audio_data, audio_name)
+                        DV.plot_audio(fs, audio_data, audio_name)
 
                     # Plot STFT of audio signal
                     if self.plot_mode == True:
                         stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-                        # DV.plot_stft(fs, audio_data, stft_name)
+                        DV.plot_stft(fs, audio_data, stft_name)
 
                     # Play audio signal
                     if self.play_mode == True:
@@ -303,7 +303,7 @@ if __name__ == "__main__":
         "-o",
         "--plot_mode",
         type=str,
-        default=True,
+        default=False,
         help="Plot Figures",
     )
     parser.add_argument(
