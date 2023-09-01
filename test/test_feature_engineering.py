@@ -18,7 +18,7 @@ class TestFeatureEngineering(unittest.TestCase):
 
         :param feature_engineering: class, an instance of the FeatureEngineering class
         :param df: pd.DataFrame, sample data with gender column
-        :param columns_to_leave_out: list, list of column names to be excluded from correlation calculation but kept in the final output
+        :param gender_column: list, gender column
         :param threshold: float, correlation threshold above which columns will be removed
         """
         self.feature_engineering = FeatureEngineering()
@@ -31,7 +31,7 @@ class TestFeatureEngineering(unittest.TestCase):
                 "gender": ["male", "female", "male", "female", "male", "female"],
             }
         )
-        self.columns_to_leave_out = ["gender"]
+        self.gender_column = ["gender"]
         self.threshold = 0.95
 
     def test_pearson_correlation(self):
@@ -40,7 +40,7 @@ class TestFeatureEngineering(unittest.TestCase):
         """
         # call the pearson_correlation method on the dataframe and columns to leave out
         corr_matrix = self.feature_engineering.pearson_correlation(
-            self.df, self.columns_to_leave_out
+            self.df, self.gender_column
         )
 
         # check that the returned value is a pandas DataFrame
@@ -50,8 +50,8 @@ class TestFeatureEngineering(unittest.TestCase):
         self.assertEqual(
             corr_matrix.shape,
             (
-                self.df.shape[1] - len(self.columns_to_leave_out),
-                self.df.shape[1] - len(self.columns_to_leave_out),
+                self.df.shape[1] - len(self.gender_column),
+                self.df.shape[1] - len(self.gender_column),
             ),
         )
 
@@ -60,7 +60,7 @@ class TestFeatureEngineering(unittest.TestCase):
             all(
                 col in corr_matrix.columns
                 for col in self.df.columns
-                if col not in self.columns_to_leave_out
+                if col not in self.gender_column
             )
         )
 
@@ -70,7 +70,7 @@ class TestFeatureEngineering(unittest.TestCase):
         """
         # call the remove_constant_columns method on the dataframe and columns to leave out
         df = self.feature_engineering.remove_constant_columns(
-            self.df, self.columns_to_leave_out
+            self.df, self.gender_column
         )
 
         # check that the returned value is a pandas DataFrame
@@ -85,33 +85,31 @@ class TestFeatureEngineering(unittest.TestCase):
                     col
                     for col in self.df.columns
                     if self.df[col].nunique() <= 1
-                    and col not in self.columns_to_leave_out
+                    and col not in self.gender_column
                 ]
             ),
         )
 
-        # check that all of the columns specified in columns_to_leave_out are present in the returned DataFrame
-        self.assertTrue(all(col in df.columns for col in self.columns_to_leave_out))
+        # check that all of the columns specified in gender_column are present in the returned DataFrame
+        self.assertTrue(all(col in df.columns for col in self.gender_column))
 
     def test_remove_correlated_columns(self):
         """
         Test the remove_correlated_columns method
         """
-        # call the remove_correlated_columns method on the dataframe, threshold and columns to leave out
+        # call the remove_correlated_columns method on the dataframe, threshold, and a single column to leave out
         df_result = self.feature_engineering.remove_correlated_columns(
-            self.df, self.threshold, self.columns_to_leave_out
+            self.df, self.threshold, self.gender_column[0]  # Use the first element of the list as a single column name
         )
 
         # check that the returned value is a pandas DataFrame
         self.assertIsInstance(df_result, pd.DataFrame)
 
-        # check that the columns that should be left out are still present in the returned dataframe
-        self.assertTrue(
-            all(col in df_result.columns for col in self.columns_to_leave_out)
-        )
+        # check that the specified column is still present in the returned dataframe
+        self.assertTrue(self.gender_column[0] in df_result.columns)
 
         # check that the correlated columns have been removed and that the number of columns in the returned dataframe is less than the original dataframe
-        corr_matrix = df_result.drop(self.columns_to_leave_out, axis=1).corr()
+        corr_matrix = df_result.drop(self.gender_column[0], axis=1).corr()
         correlated_columns = set()
         for i in range(len(corr_matrix.columns)):
             for j in range(i):
@@ -121,16 +119,13 @@ class TestFeatureEngineering(unittest.TestCase):
         self.assertEqual(len(correlated_columns), 0)
         self.assertTrue(df_result.shape[1] < self.df.shape[1])
 
-    def test_create_label_column(self):
+    def test_binarize_column(self):
         """
-        Test the create_label_column method of the FeatureEngineering class
+        Test the binarize_column method of the FeatureEngineering class
         """
-        # call the create_label_column method
-        result = self.feature_engineering.create_label_column(self.df)
+        # call the binarize_column method
+        result = self.feature_engineering.binarize_column(self.df, self.gender_column[0])  # Use the first element of the list
 
-        # check if the label column has been created with the correct values
-        self.assertIn("label", result.columns)
-        self.assertEqual(result["label"].tolist(), [1, 0, 1, 0, 1, 0])
-
-        # check if the original gender column has been dropped
-        self.assertNotIn("gender", result.columns)
+        # check if the gender column has been created with the correct values
+        self.assertIn(self.gender_column[0], result.columns)
+        self.assertEqual(result[self.gender_column[0]].tolist(), [1, 0, 1, 0, 1, 0])
