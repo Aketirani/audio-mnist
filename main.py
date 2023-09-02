@@ -199,8 +199,8 @@ class AudioMNIST:
             train_df, val_df, test_df, self.config_file["targets"][0]
         )
 
-        # Initialize
-        XM = XGBoostModel(X_train, y_train, X_val, y_val, X_test, y_test)
+        # Initialize class
+        XM = XGBoostModel(X_train, y_train, X_val, y_val, X_test, y_test, 42)
 
         # Hyperparameters tuning
         if self.tuning_mode == True:

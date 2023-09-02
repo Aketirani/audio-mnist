@@ -14,7 +14,7 @@ class XGBoostModel:
     The XGBoostModel class is used to do hyperparameter tuning, model training, prediction and evaluation
     """
 
-    def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test):
+    def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test, random_state):
         """
         Initialize the class with training, validation, and test data
 
@@ -24,6 +24,7 @@ class XGBoostModel:
         :param y_val: numpy.ndarray, labels for validation
         :param X_test: numpy.ndarray, features for test
         :param y_test: numpy.ndarray, labels for test
+        :param random_state: int, random state for model reproducibility
         """
         self.X_train = X_train
         self.y_train = y_train
@@ -31,6 +32,14 @@ class XGBoostModel:
         self.y_val = y_val
         self.X_test = X_test
         self.y_test = y_test
+        self.random_state = random_state
+        self.initialize_model()
+
+    def initialize_model(self):
+        """
+        Initialize the model based on the specified model type
+        """
+        self.model = XGBClassifier(random_state=self.random_state)
 
     def set_params(self, model_param: dict):
         """
@@ -38,9 +47,6 @@ class XGBoostModel:
 
         :param model_param: dict, dictionary containing the parameters for the model
         """
-        # create an instance of the XGBClassifier
-        self.model = XGBClassifier()
-
         # set the model parameters using the provided dictionary
         self.model.set_params(
             learning_rate=model_param["learning_rate"],
@@ -137,9 +143,6 @@ class XGBoostModel:
             with open(os.path.join(file_path, file_name), "w") as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(grid.best_params_, f)
-
-        # create an instance of the XGBClassifier
-        self.model = XGBClassifier()
 
         # create an instance of the GridSearchCV class
         grid = GridSearchCV(
