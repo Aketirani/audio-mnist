@@ -29,7 +29,6 @@ class AudioMNIST:
         """
         Initialize the class with the config file, and set up the paths and files
 
-        :param config_file: dict, read the config file
         :param write_mode: bool, a flag indicating whether to write and save new data
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
