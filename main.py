@@ -202,12 +202,10 @@ class AudioMNIST:
 
         # Hyperparameters tuning
         if self.tuning_mode == True:
-            hyperparam_path = SU.hyperparam_path
-            model_hyperparam = UT.read_file(hyperparam_path)
             XM.grid_search(
                 SU.res_path,
                 self.config_file["results"]["best_model_param"],
-                model_hyperparam,
+                UT.read_file(SU.hyperparam_path),
             )
 
         # Set model parameters
