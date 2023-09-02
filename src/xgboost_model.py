@@ -216,7 +216,8 @@ class XGBoostModel:
         # return accuracy
         return accuracy_score(self.y_test, predictions)
 
-    def load_model(self, filepath, filename):
+    @staticmethod
+    def load_model(filepath: str, filename: str) -> None:
         """
         Load a pre-trained machine learning model object from a file
 
