@@ -27,7 +27,7 @@ class AudioMNIST:
         tuning_mode: bool,
     ):
         """
-        Initialize the class with the config file, and set up the paths and files
+        Initialize the class with the config file and set the modes
 
         :param write_mode: bool, a flag indicating whether to write and save new data
         :param plot_mode: bool, a flag indicating whether to plot figures
