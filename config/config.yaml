@@ -15,8 +15,9 @@ plots:
   model_loss: "model_loss.png"
   model_accuracy: "model_accuracy.png"
 results:
-  best_model_param: "best_model_param.yaml"
+  model_param_best: "model_param_best.yaml"
   model_results: "model_results.yaml"
+  model_object: "model_object.pkl"
 threshold: 0.95
 targets: ["gender", "digit"]
 labels: ["Female", "Male"]

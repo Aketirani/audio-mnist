@@ -23,6 +23,7 @@ class AudioMNIST:
         plot_mode: bool,
         play_mode: bool,
         print_mode: bool,
+        train_mode: bool,
         tuning_mode: bool,
     ):
         """
@@ -33,6 +34,7 @@ class AudioMNIST:
         :param plot_mode: bool, a flag indicating whether to plot figures
         :param play_mode: bool, a flag indicating whether to play the audio signals
         :param print_mode: bool, a flag indicating whether to print
+        :param train_mode, bool, a flag indicating wether to train model or load pre-trained model object
         :param tuning_mode: bool, a flag indicating whether to perform hyperparameter tuning
         """
         self.config_file = SU.cfg_setup
@@ -40,6 +42,7 @@ class AudioMNIST:
         self.plot_mode = plot_mode
         self.play_mode = play_mode
         self.print_mode = print_mode
+        self.train_mode = train_mode
         self.tuning_mode = tuning_mode
 
     def DataPreparation(self):
@@ -204,18 +207,27 @@ class AudioMNIST:
         if self.tuning_mode == True:
             XM.grid_search(
                 SU.res_path,
-                self.config_file["results"]["best_model_param"],
+                self.config_file["results"]["model_param_best"],
                 UT.read_file(SU.hyperparam_path),
             )
 
         # Set model parameters
         XM.set_params(UT.read_file(SU.param_path))
 
-        # Train model
-        XM.fit(
-            SU.res_path,
-            self.config_file["results"]["model_results"],
-        )
+        # Model training
+        if self.train_mode == True:
+            # Set model parameters
+            XM.set_params(UT.read_file(SU.param_path))
+
+            # Train model
+            XM.fit(
+                SU.res_path,
+                self.config_file["results"]["model_results"],
+                self.config_file["results"]["model_object"],
+            )
+        else:
+            # Load the pre-trained model object
+            XM.model = XM.load_model(SU.res_path, self.config_file["results"]["model_object"])
 
         # Feature importance
         feature_importance = XM.feature_importance()
@@ -292,7 +304,7 @@ if __name__ == "__main__":
         "-w",
         "--write_mode",
         type=str,
-        default=True,
+        default=False,
         help="Write New Data",
     )
     parser.add_argument(
@@ -318,8 +330,15 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-t",
+        "--train_mode",
+        type=bool,
+        default=False,
+        help="Model Training",
+    )
+    parser.add_argument(
+        "-u",
         "--tuning_mode",
-        type=str,
+        type=bool,
         default=False,
         help="Hyperparameter Tuning",
     )
@@ -339,6 +358,7 @@ if __name__ == "__main__":
         args.plot_mode,
         args.play_mode,
         args.print_mode,
+        args.train_mode,
         args.tuning_mode,
     )
 
