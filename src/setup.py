@@ -15,7 +15,6 @@ class Setup:
         :param cfg_file: str, name to the config file
         :param cfg_setup: dict, read the config file
         :param audio_path: str, path to the audio folder
-        :param meta_path: str, path to the meta data folder
         :param data_path: str, path to the data folder
         :param plot_path: str, path to the plots folder
         :param res_path: str, path to the results folder
@@ -25,7 +24,6 @@ class Setup:
         self.cfg_file = cfg_file
         self.cfg_setup = self.read_config()
         self.audio_path = self.set_audio_path()
-        self.meta_path = self.set_meta_data_path()
         self.data_path = self.set_data_path()
         self.plot_path = self.set_plot_path()
         self.res_path = self.set_result_path()
@@ -61,17 +59,6 @@ class Setup:
         """
         # combine the project path and the audio folder path
         return os.path.join(self.cfg_setup["project_path"], "audio")
-
-    def set_meta_data_path(self) -> str:
-        """
-        Get the path to the file containing meta data information
-
-        :return: str, path to the meta data file
-        """
-        # combine the project path and the audio folder path to get the meta data file path
-        return os.path.join(
-            self.cfg_setup["project_path"], "audio", self.cfg_setup["meta_data"]
-        )
 
     def set_data_path(self) -> str:
         """

@@ -52,7 +52,7 @@ class AudioMNIST:
         # Writes and saves new data
         if self.write_mode == True:
             # Read meta data file
-            meta_data = UT.read_file(SU.meta_path)
+            meta_data = UT.read_file(SU.audio_path, self.config_file["meta_data"])
 
             # Create empty dataframe
             df = UT.create_dataframe(None, self.config_file["targets"])
@@ -207,13 +207,12 @@ class AudioMNIST:
             XM.grid_search(
                 SU.res_path,
                 self.config_file["results"]["model_param_best"],
-                UT.read_file(os.path.join(SU.model_path, self.config_file["parameters"]["model_dynamic"])),
-            )
+                UT.read_file(SU.model_path, self.config_file["parameters"]["model_dynamic"]))
 
         # Model training
         if self.train_mode == True:
             # Set model parameters
-            XM.set_params(UT.read_file(os.path.join(SU.model_path, self.config_file["parameters"]["model_static"])))
+            XM.set_params(UT.read_file(SU.model_path, self.config_file["parameters"]["model_static"]))
 
             # Train model
             XM.fit(
@@ -263,9 +262,7 @@ class AudioMNIST:
             print("Model Accuracy: %.2f%%" % (accuracy * 100))
 
         # Read model results
-        model_results = UT.read_file(
-            os.path.join(SU.res_path, self.config_file["results"]["model_results"])
-        )
+        model_results = UT.read_file(SU.res_path, self.config_file["results"]["model_results"])
 
         # Load results into pandas dataframe
         df = XM.create_log_df(model_results)

@@ -38,21 +38,24 @@ class Utilities:
         return audio
 
     @staticmethod
-    def read_file(filepath: str) -> dict:
+    def read_file(filepath: str, filename: str) -> dict:
         """
         Read the file and return it as a dictionary
 
         :param filepath: str, path to the file to be read
+        :param filepath: str, filename to be read
         :return: dict, containing the file data
         """
+        # join filepath and filename
+        path_file = os.path.join(filepath, filename)
         try:
             # open the file in read mode
-            with open(filepath, "r") as file:
+            with open(path_file, "r") as file:
                 # use yaml.safe_load() to parse the file and return it as a dictionary
                 file_data = yaml.safe_load(file)
         except:
             # raise a FileNotFoundError if the filepath is not valid
-            raise FileNotFoundError(f"{filepath} is not a valid filepath!")
+            raise FileNotFoundError(f"{path_file} is not a valid filepath!")
 
         # return file data
         return file_data
