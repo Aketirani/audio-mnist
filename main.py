@@ -133,7 +133,7 @@ class AudioMNIST:
         if self.print_mode == True:
             # Show size of dataset
             print(
-                f"Size of data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}"
+                f"Data set, columns: {UT.df_shape(df)[1]} and rows: {UT.df_shape(df)[0]}"
             )
 
         # Remove digit column
@@ -181,18 +181,14 @@ class AudioMNIST:
             train_size = UT.df_shape(train_df)
             val_size = UT.df_shape(val_df)
             test_size = UT.df_shape(test_df)
-            print(
-                f"Size of training set, columns: {train_size[1]} and rows: {train_size[0]}"
-            )
-            print(
-                f"Size of validation set, columns: {val_size[1]} and rows: {val_size[0]}"
-            )
-            print(f"Size of test set, columns: {test_size[1]} and rows: {test_size[0]}")
+            print(f"Training set, columns: {train_size[1]} and rows: {train_size[0]}")
+            print(f"Validation set, columns: {val_size[1]} and rows: {val_size[0]}")
+            print(f"Test set, columns: {test_size[1]} and rows: {test_size[0]}")
 
             # Show gender balance
             gender_count = UT.column_value_counts(df, self.config_file["targets"][0])
-            print(f"Number of female audio recordings: {gender_count[0]}")
-            print(f"Number of male audio recordings: {gender_count[1]}")
+            print(f"Female audio recordings: {gender_count[0]}")
+            print(f"Male audio recordings: {gender_count[1]}")
 
         # Prepare datasets
         X_train, y_train, X_val, y_val, X_test, y_test = DS.prepare_data(
@@ -204,6 +200,7 @@ class AudioMNIST:
 
         # Hyperparameters tuning
         if self.tuning_mode == True:
+            # Grid search
             XM.grid_search(
                 SU.res_path,
                 self.config_file["results"]["model_param_best"],
