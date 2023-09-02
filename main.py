@@ -207,16 +207,13 @@ class AudioMNIST:
             XM.grid_search(
                 SU.res_path,
                 self.config_file["results"]["model_param_best"],
-                UT.read_file(SU.hyperparam_path),
+                UT.read_file(os.path.join(SU.model_path, self.config_file["parameters"]["model_dynamic"])),
             )
-
-        # Set model parameters
-        XM.set_params(UT.read_file(SU.param_path))
 
         # Model training
         if self.train_mode == True:
             # Set model parameters
-            XM.set_params(UT.read_file(SU.param_path))
+            XM.set_params(UT.read_file(os.path.join(SU.model_path, self.config_file["parameters"]["model_static"])))
 
             # Train model
             XM.fit(

@@ -21,8 +21,6 @@ class Setup:
         :param res_path: str, path to the results folder
         :param test_path: str, path to the test folder
         :param model_path: str, path to the model parameters folder
-        :param param_path: str, path to the configurations folder
-        :param hyperparam_path: str, path to the configurations folder
         """
         self.cfg_file = cfg_file
         self.cfg_setup = self.read_config()
@@ -33,8 +31,6 @@ class Setup:
         self.res_path = self.set_result_path()
         self.test_path = self.set_test_path()
         self.model_path = self.set_model_path()
-        self.param_path = self.set_model_param_path()
-        self.hyperparam_path = self.set_model_hyperparam_path()
 
     def read_config(self) -> dict:
         """
@@ -121,25 +117,3 @@ class Setup:
         """
         # combine the project path and the parameters folder path
         return os.path.join(self.cfg_setup["project_path"], "parameters")
-
-    def set_model_param_path(self) -> str:
-        """
-        Get the path to the file containing model parameters information
-
-        :return: str, path to the model parameters file
-        """
-        # combine the project path and the parameters folder path to get the model parameters file path
-        return os.path.join(
-            self.model_path, self.cfg_setup["parameters"]["model_static"]
-        )
-
-    def set_model_hyperparam_path(self) -> str:
-        """
-        Get the path to the file containing model hyperparameters information
-
-        :return: str, path to the model hyperparameters file
-        """
-        # combine the project path and the parameters folder path to get the model hyperparameters file path
-        return os.path.join(
-            self.model_path, self.cfg_setup["parameters"]["model_dynamic"]
-        )
