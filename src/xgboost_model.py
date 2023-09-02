@@ -1,6 +1,7 @@
 import json
 import os
 
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
@@ -56,13 +57,15 @@ class XGBoostModel:
     def fit(
         self,
         file_path: str,
-        file_name: str,
+        file_name_results: str,
+        file_name_object: str,
     ):
         """
         Fit the model on training data
 
         :param file_path: str, path where the eval_metrics should be saved
-        :param file_name: str, name of the file to be saved
+        :param file_name_results: str, name of the model results file to be saved
+        :param file_name_object: str, name of the model object file to be saved
         """
         # define accuracy metric function
         def _accuracy(preds, dtrain):
@@ -81,7 +84,7 @@ class XGBoostModel:
             return "accuracy", accuracy
 
         # define save evaluation metrics function
-        def _save_eval_metrics(file_path: str, file_name: str, result):
+        def _save_eval_metrics(file_path: str, file_name_results: str, result):
             """
             Save the eval_metrics of a model in yaml format
 
@@ -89,7 +92,7 @@ class XGBoostModel:
             :param result: object, the result returned by the fit method of a model
             """
             # open the file in write mode
-            with open(os.path.join(file_path, file_name), "w") as f:
+            with open(os.path.join(file_path, file_name_results), "w") as f:
                 # dump the eval_result_ attribute of the result object into the file
                 json.dump(result.evals_result_, f)
 
@@ -102,8 +105,12 @@ class XGBoostModel:
             verbose=0,
         )
 
+        # save the trained model to a file
+        joblib.dump(self.model, os.path.join(file_path, file_name_object))
+
+
         # save evaluation metrics to file
-        _save_eval_metrics(file_path, file_name, result)
+        _save_eval_metrics(file_path, file_name_results, result)
 
     def grid_search(
         self,
@@ -205,3 +212,17 @@ class XGBoostModel:
 
         # return accuracy
         return accuracy_score(self.y_test, predictions)
+
+    def load_model(self, filepath, filename):
+        """
+        Load a pre-trained machine learning model object from a file
+
+        :param filepath: str, the path to the directory containing the model object file
+        :param filename: str, the name of the model object file
+        :return: object, the loaded machine learning model
+        """
+        # Load the model object
+        try:
+            return joblib.load(os.path.join(filepath, filename))
+        except Exception as e:
+            raise Exception(f"Error loading the model: {str(e)}")
