@@ -114,7 +114,6 @@ class XGBoostModel:
         # save the trained model to a file
         joblib.dump(self.model, os.path.join(file_path, file_name_object))
 
-
         # save evaluation metrics to file
         _save_eval_metrics(file_path, file_name_results, result)
 
