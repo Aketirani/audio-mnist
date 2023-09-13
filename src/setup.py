@@ -38,7 +38,9 @@ class Setup:
         """
         try:
             # change the directory to the configuration folder
-            os.chdir(os.path.join("C:/GitProjects/AudioMNIST", "config"))
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            config_folder = os.path.join(script_dir, "../config")
+            os.chdir(config_folder)
 
             # open the configuration folder
             with open(self.cfg_file, "r") as file:
