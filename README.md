@@ -1,13 +1,13 @@
 # Gender Recognition By Voice & Speech Analysis
-A voice recording is analyzed for many inferences like the content spoken, the emotion, gender, and identity of the speaker, and many more.
 
-While recognizing the characteristics of the speaker from the recording, identity recognition requires a reference dataset and is limited to identifying the people in the dataset. In many cases, this level of specificity may not be needed.
+This repository is dedicated to a project that leverages acoustic features derived from voice recordings to predict the gender of the speaker. The analysis is based on a collection of 30,000 audio samples and utilizes the XGBoost machine learning library to achieve this objective. 
 
-Recognizing the speaker’s gender is one such use case. The model for the same can be trained to learn patterns and features specific to each gender and reproduce it for individuals who are not part of the training dataset too.
+## Project Overview
 
-In this repository, we will be using acoustic features extracted from a voice recording to predict the speaker’s gender.
+Voice recordings can be analyzed to infer a myriad of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
 
 ## Structure
+
 ```
 ├── audio                       <-- Audio Folder
 |   ├── recordings              <-- Recordings Folder
@@ -48,37 +48,28 @@ In this repository, we will be using acoustic features extracted from a voice re
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
-├── readme.md                   <-- You Are Here
-|
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
 ├── main.py                     <-- Main Python Script
 |
 ├── main.sh                     <-- Main Shell Script
 |
+├── readme.md                   <-- You Are Here
+|
 ├── requirements.txt            <-- Package Requirements
 ```
 
 ## Dataset
-The [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) consists of 30.000 audio samples of spoken digits (0-9) of 60 different speakers.
 
-There is one directory per speaker holding the audio recordings.
-
-Additionally "audioMNIST_meta.txt" provides meta information such as gender or age of each speaker.
+This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) encompassing 30,000 spoken digits (0-9) audio samples from 60 distinct speakers. The dataset includes a directory for each speaker containing their respective audio recordings and a meta-information file detailing the gender and age of each speaker.
 
 ## Model Selection
-XGBoost (eXtreme Gradient Boosting) is a powerful and popular machine learning library for gradient boosting. It is designed to be efficient and scalable, and is particularly useful for large datasets and complex models.
 
-One of the key advantages of XGBoost is its ability to handle missing values and categorical variables, which makes it a great choice for datasets like ours that may have missing or categorical data. Additionally, XGBoost is known for its ability to handle high dimensional data, which is useful for our audio classification task as we are using a large number of features extracted from the audio recordings.
-
-XGBoost also includes a number of regularization techniques, such as L1 and L2 regularization, which can help prevent overfitting and improve the generalizability of the model.
-
-Another important advantage of XGBoost is its ability to handle non-linear relationships between the features and the target variable, which is useful for our task as the relationship between the audio features and the speaker's gender may not be linear.
-
-In summary, XGBoost is a powerful and versatile tool that is well-suited for our audio classification task due to its ability to handle high dimensional data, missing values, categorical variables, and non-linear relationships.
+The choice of XGBoost (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
 
 ## Model Architecture
-The XGBoost model used in this project is a gradient boosting tree ensemble model. The architecture of this model is composed of several decision trees, each of which is trained to make a prediction for the target variable (speaker's gender). The final prediction is made by combining the predictions of all the individual trees.
+
+The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters, including learning rate, maximum tree depth, and number of trees in the ensemble, govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
 
 The model uses the following key parameters:
 
@@ -95,7 +86,8 @@ The model uses the following key parameters:
 By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
 ## Model Features
-The features are calculates by various statistical features of the given FFT data.
+
+The model relies on various statistical features calculated from the FFT (Fast Fourier Transform) data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
 
 These features include:
 
@@ -114,10 +106,17 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ## Model Performance
-Best accuracy on test dataset: `85.03%`.
+
+With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.03%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ## Exectuion
-Run `main.sh` to execute whole pipeline.
+
+Execute the `main.sh` script to initiate the entire pipeline, streamlining the process from data preparation to model training and evaluation.
 
 ## Unit Test
-Change directory to `test` and run `python -m unittest` to run all unit tests.
+
+Navigate to the `test` directory and execute `python -m unittest` to run all unit tests, ensuring the reliability and stability of the code base.
+
+## Conclusion
+
+This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features. Please explore this repository, delve into the code, and even extend it to foster further advancements in this field. 
