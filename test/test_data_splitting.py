@@ -4,12 +4,12 @@ import unittest
 import pandas as pd
 
 sys.path.append("../src")
-from data_split import DataSplit
+from data_splitting import DataSplitting
 
 
-class TestDataSplit(unittest.TestCase):
+class TestDataSplitting(unittest.TestCase):
     """
-    Test class for the DataSplit class
+    Test class for the DataSplitting class
     """
 
     def setUp(self):
@@ -18,15 +18,15 @@ class TestDataSplit(unittest.TestCase):
 
         :param test_size: float, proportion of data to be used for the test set
         :param val_size: float, proportion of data to be used for the validation set
-        :param data_split: class, create an instance of the DataSplit class
-        :param train_df: pd.DataFrame, DataFrame for training data
-        :param val_df: pd.DataFrame, DataFrame for validation data
-        :param test_df: pd.DataFrame, DataFrame for test data
+        :param data_split: class, create an instance of the DataSplitting class
+        :param train_df: pd.DataFrame, dataframe for training data
+        :param val_df: pd.DataFrame, dataframe for validation data
+        :param test_df: pd.DataFrame, dataframe for test data
         :param target_column: str, the name of the target column
         """
         self.test_size = 0.1
         self.val_size = 0.1
-        self.data_split = DataSplit(self.test_size, self.val_size)
+        self.data_split = DataSplitting(self.test_size, self.val_size)
         self.train_df = pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5, 6],

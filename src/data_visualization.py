@@ -45,7 +45,7 @@ class DataVisualization:
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
-        # Clear the current figure
+        # clear the current figure
         plt.clf()
 
     def plot_stft(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:

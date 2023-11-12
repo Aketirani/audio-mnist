@@ -6,7 +6,7 @@ import warnings
 import pandas as pd
 
 from src.data_preparation import DataPreparation
-from src.data_splitting import DataSplit
+from src.data_splitting import DataSplitting
 from src.data_visualization import DataVisualization
 from src.feature_engineering import FeatureEngineering
 from src.model_prediction import ModelPrediction
@@ -329,7 +329,7 @@ if __name__ == "__main__":
         "-u",
         "--model_tune",
         type=str,
-        default="false",
+        default="true",
         help="Model Tuning",
     )
     parser.add_argument(
@@ -353,7 +353,7 @@ if __name__ == "__main__":
     DP = DataPreparation()
     DV = DataVisualization(SU.set_plot_path())
     FE = FeatureEngineering()
-    DS = DataSplit()
+    DS = DataSplitting()
     MT = ModelTraining()
     MP = ModelPrediction()
     AM = AudioMNIST()

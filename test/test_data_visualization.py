@@ -27,7 +27,9 @@ class TestDataVisualization(unittest.TestCase):
         :param matrix: pd.DataFrame, data matrix
         """
         self.setup = Setup(cfg_file="config.yaml")
-        self.data_visualization = DataVisualization(plot_path=self.setup.test_path)
+        self.data_visualization = DataVisualization(
+            plot_path=self.setup.set_test_path()
+        )
         self.data = np.array([0.1, 0.2, 0.3, 0.4])
         self.columns = ["col1", "col2", "col3", "col4"]
         self.plot_name = "test_plot.png"
@@ -44,11 +46,11 @@ class TestDataVisualization(unittest.TestCase):
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
-            os.path.exists(os.path.join(self.setup.test_path, self.plot_name))
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
 
         # delete the plot file after the test
-        os.remove(os.path.join(self.setup.test_path, self.plot_name))
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_loss(self):
         """
@@ -61,11 +63,11 @@ class TestDataVisualization(unittest.TestCase):
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
-            os.path.exists(os.path.join(self.setup.test_path, self.plot_name))
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
 
         # delete the plot file after the test
-        os.remove(os.path.join(self.setup.test_path, self.plot_name))
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_accuracy(self):
         """
@@ -78,11 +80,11 @@ class TestDataVisualization(unittest.TestCase):
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
-            os.path.exists(os.path.join(self.setup.test_path, self.plot_name))
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
 
         # delete the plot file after the test
-        os.remove(os.path.join(self.setup.test_path, self.plot_name))
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_column_dist(self):
         """
@@ -93,11 +95,11 @@ class TestDataVisualization(unittest.TestCase):
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
-            os.path.exists(os.path.join(self.setup.test_path, self.plot_name))
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
 
         # delete the plot file after the test
-        os.remove(os.path.join(self.setup.test_path, self.plot_name))
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_feature_importance(self):
         """
@@ -110,8 +112,8 @@ class TestDataVisualization(unittest.TestCase):
 
         # check if the plot has been saved at the specified location
         self.assertTrue(
-            os.path.exists(os.path.join(self.setup.test_path, self.plot_name))
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
 
         # delete the plot file after the test
-        os.remove(os.path.join(self.setup.test_path, self.plot_name))
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))

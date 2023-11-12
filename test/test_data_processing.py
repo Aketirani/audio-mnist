@@ -4,12 +4,12 @@ import unittest
 import numpy as np
 
 sys.path.append("../src")
-from data_processing import DataProcessing
+from data_preparation import DataPreparation
 
 
-class TestDataProcessing(unittest.TestCase):
+class TestDataPreparation(unittest.TestCase):
     """
-    Test class for the DataProcessing class
+    Test class for the DataPreparation class
     """
 
     def setUp(self):
@@ -17,14 +17,14 @@ class TestDataProcessing(unittest.TestCase):
         Set up the class with test fixtures
 
         :param target_sr: int, target sample rate
-        :param data_processing: class, create an instance of the DataProcessing class
+        :param data_preparation: class, create an instance of the DataPreparation class
         :param fs: int, audio sample rate
         :param audio_data: np.ndarray, audio data
         :param fft_data: np.ndarray, fft data
         :param feature_dict: dict, features
         """
         self.target_sr = 2
-        self.data_processing = DataProcessing(self.target_sr)
+        self.data_preparation = DataPreparation(self.target_sr)
         self.fs = 4
         self.audio_data = np.array([0.1, 0.2, 0.3, 0.4])
         self.fft_data = np.array([1 + 0.0j, -0.2 + 0.2j, -0.2 + 0.0j, -0.2 - 0.2j])
@@ -47,7 +47,7 @@ class TestDataProcessing(unittest.TestCase):
         Test the resample_data method
         """
         # call resample_data method to get resampled data
-        resampled_data = self.data_processing.resample_data(self.fs, self.audio_data)
+        resampled_data = self.data_preparation.resample_data(self.fs, self.audio_data)
 
         # check if the number of samples in the resampled data is equal to the target sample rate
         self.assertEqual(resampled_data.shape[0], self.target_sr)
@@ -60,10 +60,10 @@ class TestDataProcessing(unittest.TestCase):
         Test the zero_pad method
         """
         # call resample_data method to get resampled data
-        resampled_data = self.data_processing.resample_data(self.fs, self.audio_data)
+        resampled_data = self.data_preparation.resample_data(self.fs, self.audio_data)
 
         # call zero_pad method to get zero padded data
-        zero_padded_data = self.data_processing.zero_pad(resampled_data)
+        zero_padded_data = self.data_preparation.zero_pad(resampled_data)
 
         # check if the length of zero padded data is equal to the target sample rate
         self.assertEqual(zero_padded_data.shape[0], self.target_sr)
@@ -73,7 +73,7 @@ class TestDataProcessing(unittest.TestCase):
         Test the fft_data method
         """
         # call fft_data method to get FFT of the audio data
-        fft_of_data = self.data_processing.fft_data(self.audio_data)
+        fft_of_data = self.data_preparation.fft_data(self.audio_data)
 
         # check if the FFT of the audio data is equal to the expected FFT
         self.assertTrue(np.allclose(fft_of_data, self.fft_data))
@@ -87,7 +87,7 @@ class TestDataProcessing(unittest.TestCase):
         high_threshold = 0.02
 
         # call the bandpass_filter method to get the filtered FFT data
-        filtered_fft_data = self.data_processing.bandpass_filter(
+        filtered_fft_data = self.data_preparation.bandpass_filter(
             self.fft_data, low_threshold, high_threshold
         )
 
@@ -102,7 +102,7 @@ class TestDataProcessing(unittest.TestCase):
         Test the feature_creation method
         """
         # call the feature_creation method to create the features
-        features = self.data_processing.feature_creation(self.fft_data)
+        features = self.data_preparation.feature_creation(self.fft_data)
 
         # check if the created feature columns are equal to the expected feature columns
         self.assertEqual(set(features.keys()), self.feature_dict.keys())
@@ -112,7 +112,9 @@ class TestDataProcessing(unittest.TestCase):
         Test the normalize_features method
         """
         # call the normalized_features method to normalize the features
-        normalized_features = self.data_processing.normalize_features(self.feature_dict)
+        normalized_features = self.data_preparation.normalize_features(
+            self.feature_dict
+        )
 
         # check if the normalized features are between 0 and 1
         self.assertEqual(min(normalized_features.values()), 0)

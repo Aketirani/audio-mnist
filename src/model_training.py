@@ -45,6 +45,33 @@ class ModelTraining:
             tree_method=model_param["tree_method"],
         )
 
+    def _accuracy(self, preds, dtrain):
+        """
+        Calculates the accuracy of predictions made by a model
+
+        :param preds: np.array, an array of predictions made by the model
+        :param dtrain: object, the training data that is used to evaluate the accuracy of the model
+        :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
+        """
+        # retrieve true labels from the training data
+        labels = dtrain.get_label()
+
+        # calculate accuracy by comparing true labels to the rounded predictions
+        accuracy = accuracy_score(labels, np.round(preds))
+        return "accuracy", accuracy
+
+    def _save_eval_metrics(self, file_path: str, file_name_results: str, result):
+        """
+        Save the eval_metrics of a model in yaml format
+
+        :param file_path: str, path where the eval_metrics should be saved
+        :param result: object, the result returned by the fit method of a model
+        """
+        # open the file in write mode
+        with open(os.path.join(file_path, file_name_results), "w") as f:
+            # dump the eval_result_ attribute of the result object into the file
+            json.dump(result.evals_result_, f)
+
     def fit(
         self,
         X_train: np.ndarray,
@@ -66,41 +93,12 @@ class ModelTraining:
         :param file_name_results: str, name of the model results file to be saved
         :param file_name_object: str, name of the model object file to be saved
         """
-        # define accuracy metric function
-        def _accuracy(preds, dtrain):
-            """
-            Calculates the accuracy of predictions made by a model
-
-            :param preds: np.array, an array of predictions made by the model
-            :param dtrain: object, the training data that is used to evaluate the accuracy of the model
-            :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
-            """
-            # retrieve true labels from the training data
-            labels = dtrain.get_label()
-
-            # calculate accuracy by comparing true labels to the rounded predictions
-            accuracy = accuracy_score(labels, np.round(preds))
-            return "accuracy", accuracy
-
-        # define save evaluation metrics function
-        def _save_eval_metrics(file_path: str, file_name_results: str, result):
-            """
-            Save the eval_metrics of a model in yaml format
-
-            :param file_path: str, path where the eval_metrics should be saved
-            :param result: object, the result returned by the fit method of a model
-            """
-            # open the file in write mode
-            with open(os.path.join(file_path, file_name_results), "w") as f:
-                # dump the eval_result_ attribute of the result object into the file
-                json.dump(result.evals_result_, f)
-
         # fit the model on the training data and evaluate on validation data
         result = self.model.fit(
             X_train,
             y_train,
             eval_set=[(X_train, y_train), (X_val, y_val)],
-            eval_metric=_accuracy,
+            eval_metric=self._accuracy,
             verbose=0,
         )
 
@@ -108,7 +106,19 @@ class ModelTraining:
         joblib.dump(self.model, os.path.join(file_path, file_name_object))
 
         # save evaluation metrics to file
-        _save_eval_metrics(file_path, file_name_results, result)
+        self._save_eval_metrics(file_path, file_name_results, result)
+
+    def _save_best_parameters(self, file_path: str, file_name: str, grid):
+        """
+        Save the best parameters and best score of a model in yaml format
+
+        :param file_path: str, path where the best parameters and best score should be saved
+        :param grid: object, the grid returned by the fit method of a model
+        """
+        # open the file in write mode
+        with open(os.path.join(file_path, file_name), "w") as f:
+            # dump the eval_result_ attribute of the result object into the file
+            json.dump(grid.best_params_, f)
 
     def grid_search(
         self,
@@ -131,19 +141,6 @@ class ModelTraining:
         :param file_name: str, name of the file to save the best results
         :param grid_params: str, dictionary containing the grid search parameters
         """
-        # define save best parameters function
-        def _save_best_parameters(file_path: str, file_name: str, grid):
-            """
-            Save the best parameters and best score of a model in yaml format
-
-            :param file_path: str, path where the best parameters and best score should be saved
-            :param grid: object, the grid returned by the fit method of a model
-            """
-            # open the file in write mode
-            with open(os.path.join(file_path, file_name), "w") as f:
-                # dump the eval_result_ attribute of the result object into the file
-                json.dump(grid.best_params_, f)
-
         # create an instance of the GridSearchCV class
         grid = GridSearchCV(
             self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1
@@ -159,7 +156,7 @@ class ModelTraining:
         )
 
         # save evaluation metrics to file
-        _save_best_parameters(file_path, file_name, grid)
+        self._save_best_parameters(file_path, file_name, grid)
 
     def feature_importance(self) -> None:
         """
