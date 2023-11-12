@@ -4,12 +4,12 @@ from sklearn.model_selection import train_test_split
 
 class DataSplit:
     """
-    The DataSplit class is used to split a dataframe into training, validation, and test sets
+    This class is used to split a dataframe into training, validation, and test sets
     """
 
     def __init__(self, test_size: float = 0.1, val_size: float = 0.1):
         """
-        Initialize the DataSplit class
+        Initialize the class
 
         :param test_size: float, proportion of data to be used for the test set (default=0.1)
         :param val_size: float, proportion of data to be used for the validation set (default=0.1)

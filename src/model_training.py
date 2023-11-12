@@ -9,37 +9,22 @@ from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
 
 
-class XGBoostModel:
+class ModelTraining:
     """
-    The XGBoostModel class is used to do hyperparameter tuning, model training, prediction and evaluation
+    This class is used to do hyperparameter tuning and model training
     """
 
-    def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test, random_state):
+    def __init__(self):
         """
-        Initialize the class with training, validation, and test data
-
-        :param X_train: numpy.ndarray, features for training
-        :param y_train: numpy.ndarray, labels for training
-        :param X_val: numpy.ndarray, features for validation
-        :param y_val: numpy.ndarray, labels for validation
-        :param X_test: numpy.ndarray, features for test
-        :param y_test: numpy.ndarray, labels for test
-        :param random_state: int, random state for model reproducibility
+        Initialize the class
         """
-        self.X_train = X_train
-        self.y_train = y_train
-        self.X_val = X_val
-        self.y_val = y_val
-        self.X_test = X_test
-        self.y_test = y_test
-        self.random_state = random_state
-        self.initialize_model()
+        self._initialize_model()
 
-    def initialize_model(self):
+    def _initialize_model(self):
         """
         Initialize the model based on the specified model type
         """
-        self.model = XGBClassifier(random_state=self.random_state)
+        self.model = XGBClassifier()
 
     def set_params(self, model_param: dict):
         """
@@ -62,6 +47,10 @@ class XGBoostModel:
 
     def fit(
         self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
         file_path: str,
         file_name_results: str,
         file_name_object: str,
@@ -69,6 +58,10 @@ class XGBoostModel:
         """
         Fit the model on training data
 
+        :param X_train: np.ndarray, features for training
+        :param y_train: np.ndarray, labels for training
+        :param X_val: np.ndarray, features for validation
+        :param y_val: np.ndarray, labels for validation
         :param file_path: str, path where the eval_metrics should be saved
         :param file_name_results: str, name of the model results file to be saved
         :param file_name_object: str, name of the model object file to be saved
@@ -104,9 +97,9 @@ class XGBoostModel:
 
         # fit the model on the training data and evaluate on validation data
         result = self.model.fit(
-            self.X_train,
-            self.y_train,
-            eval_set=[(self.X_train, self.y_train), (self.X_val, self.y_val)],
+            X_train,
+            y_train,
+            eval_set=[(X_train, y_train), (X_val, y_val)],
             eval_metric=_accuracy,
             verbose=0,
         )
@@ -119,6 +112,10 @@ class XGBoostModel:
 
     def grid_search(
         self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
         file_path: str,
         file_name: str,
         grid_params: dict,
@@ -126,6 +123,10 @@ class XGBoostModel:
         """
         Runs a grid search to tune the hyperparameters of the model
 
+        :param X_train: np.ndarray, features for training
+        :param y_train: np.ndarray, labels for training
+        :param X_val: np.ndarray, features for validation
+        :param y_val: np.ndarray, labels for validation
         :param file_path: str, path to save the best results
         :param file_name: str, name of the file to save the best results
         :param grid_params: str, dictionary containing the grid search parameters
@@ -145,29 +146,27 @@ class XGBoostModel:
 
         # create an instance of the GridSearchCV class
         grid = GridSearchCV(
-            self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1, verbose=1
+            self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1
         )
 
         # fit the GridSearchCV object on the training data
         grid = grid.fit(
-            self.X_train,
-            self.y_train,
-            eval_set=[(self.X_val, self.y_val)],
+            X_train,
+            y_train,
+            eval_set=[(X_val, y_val)],
             eval_metric="logloss",
+            verbose=0,
         )
 
         # save evaluation metrics to file
         _save_best_parameters(file_path, file_name, grid)
 
-    def feature_importance(self):
+    def feature_importance(self) -> None:
         """
         Calculates the feature importance of the model
         """
         # retrieve feature importances
-        feature_importance = self.model.feature_importances_
-
-        # return feature importance
-        return feature_importance
+        return self.model.feature_importances_
 
     @staticmethod
     def create_log_df(log_data: dict) -> pd.DataFrame:
@@ -192,40 +191,3 @@ class XGBoostModel:
             list(zip(iteration, train_loss, train_acc, val_loss, val_acc)),
             columns=columns,
         )
-
-    def predict(self) -> np.ndarray:
-        """
-        Make predictions on test data
-
-        :return: numpy.ndarray, array containing the predicted labels on test data
-        """
-        # make predictions on the test data using the trained model
-        return self.model.predict(self.X_test)
-
-    def evaluate_predictions(self, y_pred: np.ndarray) -> float:
-        """
-        Evaluate predictions and return accuracy
-
-        :param y_pred: numpy.ndarray, predicted labels on test data
-        :return: float, accuracy score
-        """
-        # round the predictions to the nearest integer
-        predictions = [round(value) for value in y_pred]
-
-        # return accuracy
-        return accuracy_score(self.y_test, predictions)
-
-    @staticmethod
-    def load_model(filepath: str, filename: str) -> None:
-        """
-        Load a pre-trained machine learning model object from a file
-
-        :param filepath: str, the path to the directory containing the model object file
-        :param filename: str, the name of the model object file
-        :return: object, the loaded machine learning model
-        """
-        # Load the model object
-        try:
-            return joblib.load(os.path.join(filepath, filename))
-        except Exception as e:
-            raise Exception(f"Error loading the model: {str(e)}")

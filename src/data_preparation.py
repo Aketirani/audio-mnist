@@ -5,9 +5,9 @@ import numpy as np
 import scipy.stats
 
 
-class DataProcessing:
+class DataPreparation:
     """
-    The DataProcessing class is used to prepare audio data for analysis
+    This class is used to prepare data for analysis
     """
 
     def __init__(self, target_sr: int = 8000) -> None:

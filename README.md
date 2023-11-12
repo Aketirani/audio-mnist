@@ -107,7 +107,7 @@ These features are stored in a dictionary, where each key corresponds to a speci
 
 ## Model Performance
 
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.03%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.17%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ## Exectuion
 
