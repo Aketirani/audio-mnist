@@ -2,14 +2,15 @@ import argparse
 import glob
 import os
 import warnings
+
 import pandas as pd
 
 from src.data_preparation import DataPreparation
 from src.data_splitting import DataSplit
 from src.data_visualization import DataVisualization
 from src.feature_engineering import FeatureEngineering
-from src.model_training import ModelTraining
 from src.model_prediction import ModelPrediction
+from src.model_training import ModelTraining
 from src.setup import Setup
 
 warnings.filterwarnings("ignore")
@@ -42,10 +43,14 @@ class AudioMNIST:
         # Loop over audio recordings in the source path
         for i in range(1, num_folders):
             # Show progress
-            SU.loop_progress(i, num_folders - 1)            
+            SU.loop_progress(i, num_folders - 1)
 
             # Loop over files in directory
-            audio_file = sorted(glob.glob(os.path.join(os.path.join(SU.set_audio_path(), f"{i:02d}"), "*.wav")))
+            audio_file = sorted(
+                glob.glob(
+                    os.path.join(os.path.join(SU.set_audio_path(), f"{i:02d}"), "*.wav")
+                )
+            )
             for file in audio_file:
                 # Split file string
                 dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
@@ -94,9 +99,7 @@ class AudioMNIST:
 
         # Save prepared data
         df.to_csv(
-            os.path.join(
-                SU.set_data_path(), self.config_file["data"]["prepared"]
-            ),
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             index=False,
         )
 
@@ -114,9 +117,7 @@ class AudioMNIST:
         """
         # Load file into dataframe
         df = pd.read_csv(
-            os.path.join(
-                SU.set_data_path(), self.config_file["data"]["prepared"]
-            )
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"])
         )
 
         # Remove digit column
@@ -141,14 +142,14 @@ class AudioMNIST:
 
         # Remove correlated columns
         df = FE.remove_correlated_columns(
-            df, self.config_file["thresholds"]["correlation"], self.config_file["targets"][0]
+            df,
+            self.config_file["thresholds"]["correlation"],
+            self.config_file["targets"][0],
         )
 
         # Save engineered data
         df.to_csv(
-            os.path.join(
-                SU.set_data_path(), self.config_file["data"]["engineered"]
-            ),
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             index=False,
         )
 
@@ -158,21 +159,34 @@ class AudioMNIST:
         """
         # Load file into dataframe
         df = pd.read_csv(
-            os.path.join(
-                SU.set_data_path(), self.config_file["data"]["engineered"]
-            )
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"])
         )
 
         # Split datasets
-        self.train_df, self.val_df, self.test_df = DS.split(df, self.config_file["targets"][0])
+        self.train_df, self.val_df, self.test_df = DS.split(
+            df, self.config_file["targets"][0]
+        )
 
         # Show size of datasets
-        print(f"Training set, columns: {self.train_df.shape[1]} and rows: {self.train_df.shape[0]}")
-        print(f"Validation set, columns: {self.val_df.shape[1]} and rows: {self.val_df.shape[0]}")
-        print(f"Test set, columns: {self.test_df.shape[1]} and rows: {self.test_df.shape[0]}")
+        print(
+            f"Training set, columns: {self.train_df.shape[1]} and rows: {self.train_df.shape[0]}"
+        )
+        print(
+            f"Validation set, columns: {self.val_df.shape[1]} and rows: {self.val_df.shape[0]}"
+        )
+        print(
+            f"Test set, columns: {self.test_df.shape[1]} and rows: {self.test_df.shape[0]}"
+        )
 
         # Prepare datasets
-        self.X_train, self.y_train, self.X_val, self.y_val, self.X_test, self.y_test = DS.prepare_data(
+        (
+            self.X_train,
+            self.y_train,
+            self.X_val,
+            self.y_val,
+            self.X_test,
+            self.y_test,
+        ) = DS.prepare_data(
             self.train_df, self.val_df, self.test_df, self.config_file["targets"][0]
         )
 
@@ -189,7 +203,8 @@ class AudioMNIST:
             SU.set_result_path(),
             self.config_file["results"]["model_best_param"],
             SU.read_file(
-                SU.set_model_path(), self.config_file["parameters"]["model_hyperparameters"]
+                SU.set_model_path(),
+                self.config_file["parameters"]["model_hyperparameters"],
             ),
         )
 
@@ -263,9 +278,7 @@ class AudioMNIST:
 
         # Save predicted data
         df.to_csv(
-            os.path.join(
-                SU.set_data_path(), self.config_file["data"]["predicted"]
-            ),
+            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             index=False,
         )
 
