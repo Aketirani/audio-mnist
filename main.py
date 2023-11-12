@@ -1,4 +1,3 @@
-# Import python packages
 import argparse
 import glob
 import os
@@ -12,7 +11,6 @@ from src.feature_engineering import FeatureEngineering
 from src.model_training import ModelTraining
 from src.model_predict import ModelPrediction
 from src.setup import Setup
-from src.utilities import Utilities
 
 warnings.filterwarnings("ignore")
 
@@ -33,10 +31,10 @@ class AudioMNIST:
         Data Preparation
         """
         # Read meta data file
-        meta_data = UT.read_file(SU.set_audio_path(), self.config_file["meta_data"])
+        meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta_data"])
 
         # Create empty dataframe
-        df = UT.create_dataframe(None, self.config_file["targets"])
+        df = pd.DataFrame()
 
         # Specify total number of folders in source path
         num_folders = len(next(os.walk(SU.set_audio_path()))[1]) + 1
@@ -44,19 +42,16 @@ class AudioMNIST:
         # Loop over audio recordings in the source path
         for i in range(1, num_folders):
             # Show progress
-            UT.loop_progress(i, num_folders - 1)
-
-            # Assign source temp
-            src_temp = os.path.join(SU.set_audio_path(), f"{i:02d}")
-            filepath_filename = sorted(glob.glob(os.path.join(src_temp, "*.wav")))
+            SU.loop_progress(i, num_folders - 1)            
 
             # Loop over files in directory
-            for file in filepath_filename:
+            audio_file = sorted(glob.glob(os.path.join(os.path.join(SU.set_audio_path(), f"{i:02d}"), "*.wav")))
+            for file in audio_file:
                 # Split file string
                 dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
 
                 # Read audio data
-                fs, audio_data = UT.read_audio(file)
+                fs, audio_data = DP.read_audio(file)
 
                 # # Plot audio signal
                 # audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
@@ -85,28 +80,28 @@ class AudioMNIST:
                 n_features = DP.normalize_features(features)
 
                 # Add gender and digit column
-                features = UT.add_column_dict(
+                features = DP.add_column_dict(
                     n_features,
                     self.config_file["targets"][0],
                     meta_data[vp][self.config_file["targets"][0]],
                 )
-                features = UT.add_column_dict(
+                features = DP.add_column_dict(
                     n_features, self.config_file["targets"][1], dig[-1]
                 )
 
                 # Append new dict values to the DataFrame
                 df = df.append(features, ignore_index=True)
 
-        # Save processed data
+        # Save prepared data
         df.to_csv(
             os.path.join(
-                SU.set_data_path(), self.config_file["data"]["data_prepared"]
+                SU.set_data_path(), self.config_file["data"]["prepared"]
             ),
             index=False,
         )
 
         # Show size of dataset
-        print(f"Processed dataset, columns: {df.shape[1]} and rows: {df.shape[0]}")
+        print(f"Prepared dataset, columns: {df.shape[1]} and rows: {df.shape[0]}")
 
     def FeatureEngineer(self):
         """
@@ -115,12 +110,12 @@ class AudioMNIST:
         # Load file into dataframe
         df = pd.read_csv(
             os.path.join(
-                SU.set_data_path(), self.config_file["data"]["data_prepared"]
+                SU.set_data_path(), self.config_file["data"]["prepared"]
             )
         )
 
         # Remove digit column
-        df = UT.remove_column(df, self.config_file["targets"][1])
+        df = DP.remove_column(df, self.config_file["targets"][1])
 
         # Binarize target column where female is 0 and male is 1
         df = FE.binarize_column(df, self.config_file["targets"][0])
@@ -141,13 +136,13 @@ class AudioMNIST:
 
         # Remove correlated columns
         df = FE.remove_correlated_columns(
-            df, self.config_file["threshold"], self.config_file["targets"][0]
+            df, self.config_file["thresholds"]["correlation"], self.config_file["targets"][0]
         )
 
         # Save engineered data
         df.to_csv(
             os.path.join(
-                SU.set_data_path(), self.config_file["data"]["data_engineered"]
+                SU.set_data_path(), self.config_file["data"]["engineered"]
             ),
             index=False,
         )
@@ -159,7 +154,7 @@ class AudioMNIST:
         # Load file into dataframe
         df = pd.read_csv(
             os.path.join(
-                SU.set_data_path(), self.config_file["data"]["data_engineered"]
+                SU.set_data_path(), self.config_file["data"]["engineered"]
             )
         )
 
@@ -172,7 +167,7 @@ class AudioMNIST:
         print(f"Test set, columns: {self.test_df.shape[1]} and rows: {self.test_df.shape[0]}")
 
         # Show gender balance
-        gender_count = UT.column_value_counts(df, self.config_file["targets"][0])
+        gender_count = DP.column_value_counts(df, self.config_file["targets"][0])
         print(f"Female audio recordings: {gender_count[0]}")
         print(f"Male audio recordings: {gender_count[1]}")
 
@@ -192,9 +187,9 @@ class AudioMNIST:
             self.X_val,
             self.y_val,
             SU.set_result_path(),
-            self.config_file["results"]["model_param_best"],
-            UT.read_file(
-                SU.set_model_path(), self.config_file["parameters"]["model_dynamic"]
+            self.config_file["results"]["model_best_param"],
+            SU.read_file(
+                SU.set_model_path(), self.config_file["parameters"]["model_hyperparameters"]
             ),
         )
 
@@ -204,8 +199,8 @@ class AudioMNIST:
         """
         # Set model parameters
         MT.set_params(
-            UT.read_file(
-                SU.set_model_path(), self.config_file["parameters"]["model_static"]
+            SU.read_file(
+                SU.set_model_path(), self.config_file["parameters"]["model_parameters"]
             )
         )
 
@@ -222,7 +217,7 @@ class AudioMNIST:
 
         # Load results into pandas dataframe
         df = MT.create_log_df(
-            UT.read_file(
+            SU.read_file(
                 SU.set_result_path(), self.config_file["results"]["model_results"]
             )
         )
@@ -264,12 +259,12 @@ class AudioMNIST:
         df = self.test_df.reset_index(drop=True)
 
         # Add predicted values column to final dataframe
-        df = UT.add_column_df(df, self.config_file["predicted"], y_pred)
+        df = DP.add_column_df(df, self.config_file["predicted"], y_pred)
 
         # Save predicted data
         df.to_csv(
             os.path.join(
-                SU.set_data_path(), self.config_file["data"]["data_final"]
+                SU.set_data_path(), self.config_file["data"]["predicted"]
             ),
             index=False,
         )
@@ -300,7 +295,7 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Prepare Data",
     )
     parser.add_argument(
@@ -342,7 +337,6 @@ if __name__ == "__main__":
 
     # Initialize classes
     SU = Setup(args.cfg_file)
-    UT = Utilities(SU.set_data_path())
     DP = DataPreparation()
     DV = DataVisualization(SU.set_plot_path())
     FE = FeatureEngineering()

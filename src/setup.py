@@ -14,6 +14,29 @@ class Setup:
         """
         self.cfg_file = cfg_file
 
+    @staticmethod
+    def read_file(filepath: str, filename: str) -> dict:
+        """
+        Read the file and return it as a dictionary
+
+        :param filepath: str, path to the file to be read
+        :param filepath: str, filename to be read
+        :return: dict, containing the file data
+        """
+        # join filepath and filename
+        path_file = os.path.join(filepath, filename)
+        try:
+            # open the file in read mode
+            with open(path_file, "r") as file:
+                # use yaml.safe_load() to parse the file and return it as a dictionary
+                file_data = yaml.safe_load(file)
+        except:
+            # raise a FileNotFoundError if the filepath is not valid
+            raise FileNotFoundError(f"{path_file} is not a valid filepath!")
+
+        # return file data
+        return file_data
+
     def read_config(self) -> dict:
         """
         Read the config yaml file and return the data as a dictionary
@@ -44,7 +67,7 @@ class Setup:
         :return: str, path to the audio folder
         """
         # combine the project path and the audio folder path
-        return os.path.join(self.cfg_setup["project_path"], "audio")
+        return os.path.join(self.read_config()["project_path"], "audio")
 
     def set_data_path(self) -> str:
         """
@@ -99,3 +122,19 @@ class Setup:
         """
         # combine the project path and the parameters folder path
         return os.path.join(self.read_config()["project_path"], "parameters")
+
+
+    @staticmethod
+    def loop_progress(index: int, total: int):
+        """
+        This function takes in the current index, total number of iterations and sleep time
+        and displays the progress of the loop every iteration
+
+        :param index: int, the current index of the loop
+        :param total: int, total number of iterations in the loop
+        """
+        # calculate progress
+        progress = (index) / (total)
+
+        # print progress and elapsed time
+        print(f"Progress: {progress:.2%}")

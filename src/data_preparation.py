@@ -2,7 +2,9 @@ import statistics
 
 import librosa
 import numpy as np
+import pandas as pd
 import scipy.stats
+import scipy.io.wavfile as wavf
 
 
 class DataPreparation:
@@ -17,6 +19,24 @@ class DataPreparation:
         :param target_sr: int, target sample rate for the resampled audio recordings
         """
         self.target_sr = target_sr
+
+    @staticmethod
+    def read_audio(filepath: str) -> tuple:
+        """
+        Read the audio data from the given file and return the sample rate and audio data
+
+        :param filepath: str, path to the audio file
+        :return audio: tuple, containing the sample rate and audio data
+        """
+        try:
+            # read the audio data from the file using the wavfile library
+            audio = wavf.read(filepath)
+        except:
+            # raise an error if the filepath is not valid
+            raise FileNotFoundError(f"{filepath} is not a valid filepath!")
+
+        # return a tuple containing the sample rate and audio data
+        return audio
 
     def resample_data(self, fs: int, data: np.ndarray) -> np.ndarray:
         """
@@ -171,3 +191,67 @@ class DataPreparation:
 
         # return normalized features
         return features
+
+    @staticmethod
+    def add_column_dict(data: dict, column_name: str, value: str) -> dict:
+        """
+        Add column and value to the dictionary
+
+        :param data: dict, input data
+        :param column_name: str, column name to add
+        :param value: str, value to add
+        :return: dict, data with column added
+        """
+        # add the column to the dictionary
+        data[column_name] = value
+
+        # return dictionary
+        return data
+
+    @staticmethod
+    def add_column_df(data: pd.DataFrame, column_name: str, value: str) -> pd.DataFrame:
+        """
+        Add column and value to the DataFrame
+
+        :param data: DataFrame, input data
+        :param column_name: str, column name to add
+        :param value: str, value to add
+        :return: DataFrame, data with column added
+        """
+        # add the column to the dataframe
+        data[column_name] = value
+
+        # return dataframe
+        return data
+
+    @staticmethod
+    def remove_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
+        """
+        Remove a column from DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :param column: str, column name to remove
+        :return: pd.DataFrame, DataFrame with column removed
+        """
+        # check if column exists in the dataframe
+        if column in df.columns:
+            # drop the column
+            df = df.drop([column], axis=1)
+        else:
+            # if column does not exist, print message
+            print(f"{column} not found in DataFrame")
+
+        # return dataframe
+        return df
+
+    @staticmethod
+    def column_value_counts(df: pd.DataFrame, column: str) -> pd.Series:
+        """
+        Returns the value counts of a given column in a DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :param column: str, name of the column in the DataFrame
+        :return: pd.Series, containing the value counts of the specified column
+        """
+        # return the value counts of the specified column in the dataframe
+        return df[column].value_counts()

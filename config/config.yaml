@@ -1,12 +1,12 @@
 project_path: "C:/GitProjects/AudioMNIST"
 meta_data: "audioMNIST_meta.txt"
-parameters:
-  model_static: "model_parameters.yaml"
-  model_dynamic: "model_hyperparameters.yaml"
 data:
-  data_prepared: "data_prepared.csv"
-  data_engineered: "data_engineered.csv"
-  data_final: "data_final.csv"
+  prepared: "data_prepared.csv"
+  engineered: "data_engineered.csv"
+  predicted: "data_predicted.csv"
+parameters:
+  model_parameters: "model_parameters.yaml"
+  model_hyperparameters: "model_hyperparameters.yaml"
 plots:
   column_distribution: "column_distribution.png"
   correlation_matrix: "correlation_matrix.png"
@@ -15,10 +15,11 @@ plots:
   model_loss: "model_loss.png"
   model_accuracy: "model_accuracy.png"
 results:
-  model_param_best: "model_param_best.yaml"
+  model_best_param: "model_best_param.yaml"
   model_results: "model_results.yaml"
   model_object: "model_object.pkl"
-threshold: 0.95
+thresholds:
+  correlation: 0.95
 targets: ["gender", "digit"]
 labels: ["Female", "Male"]
-predicted: predicted
+predicted: gender
