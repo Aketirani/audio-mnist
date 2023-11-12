@@ -12,12 +12,12 @@ from sklearn.metrics import confusion_matrix
 
 class DataVisualization:
     """
-    The DataVisualization class is used to visualize data
+    This class is used to visualize data
     """
 
     def __init__(self, plot_path: str):
         """
-        Initialize the DataVisualization class
+        Initialize the class
 
         :param plot_path: str, directory where the plots will be saved
         """

@@ -18,7 +18,7 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |   ├── config.yaml             <-- Configuration File
 |
 ├── data                        <-- Data Folder
-|   ├── data*.csv               <-- Data Files
+|   ├── *.csv                   <-- Data Files
 |
 ├── logs                        <-- Log Folder
 |   ├── *.log                   <-- Log Files
@@ -33,13 +33,13 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |   ├── *.yaml                  <-- Model Results
 |
 ├── src                         <-- Source Folder
-|   ├── data_processing.py      <-- Data Processing
-|   ├── data_split.py           <-- Data Split
+|   ├── data_preparation.py     <-- Data Preparation
+|   ├── data_splitting.py       <-- Data Splitting
 |   ├── data_visualization.py   <-- Data Visualization
 |   ├── feature_engineering.py  <-- Feature Engineering
-|   ├── setup.py                <-- Set Up Paths
-|   ├── utilites.py             <-- Help Functions
-|   ├── xgboost_model.py        <-- Model Training And Prediction
+|   ├── model_prediction.py     <-- Model Prediction
+|   ├── model_training.py       <-- Model Training
+|   ├── setup.py                <-- Setup File
 |
 ├── test                        <-- Test Folder
 |   ├── *.py                    <-- Unit Tests
@@ -48,11 +48,11 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
+├── audiomnist.py               <-- Main Python Script
+|
+├── audiomnist.sh               <-- Main Shell Script
+|
 ├── flowchart.wsd               <-- Pipeline Flowchart
-|
-├── main.py                     <-- Main Python Script
-|
-├── main.sh                     <-- Main Shell Script
 |
 ├── readme.md                   <-- You Are Here
 |
@@ -107,15 +107,19 @@ These features are stored in a dictionary, where each key corresponds to a speci
 
 ## Model Performance
 
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.03%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.17%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ## Exectuion
 
-Execute the `main.sh` script to initiate the entire pipeline, streamlining the process from data preparation to model training and evaluation.
+Execute the `audiomnist.sh` script to initiate the entire pipeline, streamlining the process from data preparation to model training and evaluation.
 
 ## Unit Test
 
 Navigate to the `test` directory and execute `python -m unittest` to run all unit tests, ensuring the reliability and stability of the code base.
+
+# Developer
+
+Execute `python -m pre_commit run --all-files` to ensure code quality and formatting checks.
 
 ## Conclusion
 

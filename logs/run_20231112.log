@@ -1,0 +1,69 @@
+Running Script...
+Progress: 1.67%
+Progress: 3.33%
+Progress: 5.00%
+Progress: 6.67%
+Progress: 8.33%
+Progress: 10.00%
+Progress: 11.67%
+Progress: 13.33%
+Progress: 15.00%
+Progress: 16.67%
+Progress: 18.33%
+Progress: 20.00%
+Progress: 21.67%
+Progress: 23.33%
+Progress: 25.00%
+Progress: 26.67%
+Progress: 28.33%
+Progress: 30.00%
+Progress: 31.67%
+Progress: 33.33%
+Progress: 35.00%
+Progress: 36.67%
+Progress: 38.33%
+Progress: 40.00%
+Progress: 41.67%
+Progress: 43.33%
+Progress: 45.00%
+Progress: 46.67%
+Progress: 48.33%
+Progress: 50.00%
+Progress: 51.67%
+Progress: 53.33%
+Progress: 55.00%
+Progress: 56.67%
+Progress: 58.33%
+Progress: 60.00%
+Progress: 61.67%
+Progress: 63.33%
+Progress: 65.00%
+Progress: 66.67%
+Progress: 68.33%
+Progress: 70.00%
+Progress: 71.67%
+Progress: 73.33%
+Progress: 75.00%
+Progress: 76.67%
+Progress: 78.33%
+Progress: 80.00%
+Progress: 81.67%
+Progress: 83.33%
+Progress: 85.00%
+Progress: 86.67%
+Progress: 88.33%
+Progress: 90.00%
+Progress: 91.67%
+Progress: 93.33%
+Progress: 95.00%
+Progress: 96.67%
+Progress: 98.33%
+Progress: 100.00%
+Female audio recordings: 6000
+Male audio recordings: 24000
+Prepared dataset, columns: 13 and rows: 30000
+Training set, columns: 9 and rows: 24000
+Validation set, columns: 9 and rows: 3000
+Test set, columns: 9 and rows: 3000
+Model Accuracy: 85.17%
+Run Finished!

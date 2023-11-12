@@ -1,0 +1,193 @@
+import json
+import os
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
+from xgboost import XGBClassifier
+
+
+class ModelTraining:
+    """
+    This class is used to do hyperparameter tuning and model training
+    """
+
+    def __init__(self):
+        """
+        Initialize the class
+        """
+        self._initialize_model()
+
+    def _initialize_model(self):
+        """
+        Initialize the model based on the specified model type
+        """
+        self.model = XGBClassifier()
+
+    def set_params(self, model_param: dict):
+        """
+        Set model parameters
+
+        :param model_param: dict, dictionary containing the parameters for the model
+        """
+        # set the model parameters using the provided dictionary
+        self.model.set_params(
+            learning_rate=model_param["learning_rate"],
+            max_depth=model_param["max_depth"],
+            n_estimators=model_param["n_estimators"],
+            gamma=model_param["gamma"],
+            reg_lambda=model_param["lambda"],
+            scale_pos_weight=model_param["scale_pos_weight"],
+            min_child_weight=model_param["min_child_weight"],
+            objective=model_param["objective"],
+            tree_method=model_param["tree_method"],
+        )
+
+    def fit(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
+        file_path: str,
+        file_name_results: str,
+        file_name_object: str,
+    ):
+        """
+        Fit the model on training data
+
+        :param X_train: np.ndarray, features for training
+        :param y_train: np.ndarray, labels for training
+        :param X_val: np.ndarray, features for validation
+        :param y_val: np.ndarray, labels for validation
+        :param file_path: str, path where the eval_metrics should be saved
+        :param file_name_results: str, name of the model results file to be saved
+        :param file_name_object: str, name of the model object file to be saved
+        """
+        # define accuracy metric function
+        def _accuracy(preds, dtrain):
+            """
+            Calculates the accuracy of predictions made by a model
+
+            :param preds: np.array, an array of predictions made by the model
+            :param dtrain: object, the training data that is used to evaluate the accuracy of the model
+            :return: tuple, a tuple containing the string 'accuracy' and the calculated accuracy score
+            """
+            # retrieve true labels from the training data
+            labels = dtrain.get_label()
+
+            # calculate accuracy by comparing true labels to the rounded predictions
+            accuracy = accuracy_score(labels, np.round(preds))
+            return "accuracy", accuracy
+
+        # define save evaluation metrics function
+        def _save_eval_metrics(file_path: str, file_name_results: str, result):
+            """
+            Save the eval_metrics of a model in yaml format
+
+            :param file_path: str, path where the eval_metrics should be saved
+            :param result: object, the result returned by the fit method of a model
+            """
+            # open the file in write mode
+            with open(os.path.join(file_path, file_name_results), "w") as f:
+                # dump the eval_result_ attribute of the result object into the file
+                json.dump(result.evals_result_, f)
+
+        # fit the model on the training data and evaluate on validation data
+        result = self.model.fit(
+            X_train,
+            y_train,
+            eval_set=[(X_train, y_train), (X_val, y_val)],
+            eval_metric=_accuracy,
+            verbose=0,
+        )
+
+        # save the trained model to a file
+        joblib.dump(self.model, os.path.join(file_path, file_name_object))
+
+        # save evaluation metrics to file
+        _save_eval_metrics(file_path, file_name_results, result)
+
+    def grid_search(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
+        file_path: str,
+        file_name: str,
+        grid_params: dict,
+    ):
+        """
+        Runs a grid search to tune the hyperparameters of the model
+
+        :param X_train: np.ndarray, features for training
+        :param y_train: np.ndarray, labels for training
+        :param X_val: np.ndarray, features for validation
+        :param y_val: np.ndarray, labels for validation
+        :param file_path: str, path to save the best results
+        :param file_name: str, name of the file to save the best results
+        :param grid_params: str, dictionary containing the grid search parameters
+        """
+        # define save best parameters function
+        def _save_best_parameters(file_path: str, file_name: str, grid):
+            """
+            Save the best parameters and best score of a model in yaml format
+
+            :param file_path: str, path where the best parameters and best score should be saved
+            :param grid: object, the grid returned by the fit method of a model
+            """
+            # open the file in write mode
+            with open(os.path.join(file_path, file_name), "w") as f:
+                # dump the eval_result_ attribute of the result object into the file
+                json.dump(grid.best_params_, f)
+
+        # create an instance of the GridSearchCV class
+        grid = GridSearchCV(
+            self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1
+        )
+
+        # fit the GridSearchCV object on the training data
+        grid = grid.fit(
+            X_train,
+            y_train,
+            eval_set=[(X_val, y_val)],
+            eval_metric="logloss",
+            verbose=0,
+        )
+
+        # save evaluation metrics to file
+        _save_best_parameters(file_path, file_name, grid)
+
+    def feature_importance(self) -> None:
+        """
+        Calculates the feature importance of the model
+        """
+        # retrieve feature importances
+        return self.model.feature_importances_
+
+    @staticmethod
+    def create_log_df(log_data: dict) -> pd.DataFrame:
+        """
+        Create a DataFrame from log data
+
+        :param log_data: dict, log data
+        :return: pd.DataFrame, DataFrame containing log data
+        """
+        # extract data from log data
+        train_loss = log_data["validation_0"]["logloss"]
+        val_loss = log_data["validation_1"]["logloss"]
+        train_acc = log_data["validation_0"]["accuracy"]
+        val_acc = log_data["validation_1"]["accuracy"]
+        iteration = list(range(0, len(train_loss)))
+
+        # define column names
+        columns = ["iteration", "train_loss", "train_acc", "val_loss", "val_acc"]
+
+        # create DataFrame from extracted data and column names
+        return pd.DataFrame(
+            list(zip(iteration, train_loss, train_acc, val_loss, val_acc)),
+            columns=columns,
+        )
