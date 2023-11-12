@@ -22,4 +22,4 @@ thresholds:
   correlation: 0.95
 targets: ["gender", "digit"]
 labels: ["Female", "Male"]
-predicted: gender
+predicted: predicted

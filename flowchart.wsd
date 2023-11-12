@@ -2,15 +2,17 @@
 |AudioMNIST|
 package "AudioMNIST" {
     :start|
-    partition "main.sh" {
+    partition "audiomnist.sh" {
+        :set repository path;
         :set log path;
         :run python script;
-        partition "main.py" {
-            :import packages;
-            :initialize classes;
-            :prepare raw audio data for analysis;
-            :prepare processed data for modelling;
-            :train model and make predictions;
+        partition "audiomnist.py" {
+            :data preparation;
+            :feature engineering;
+            :data splitting;
+            :model tuning;
+            :model training;
+            :model prediction;
         }
         :write to log;
     }

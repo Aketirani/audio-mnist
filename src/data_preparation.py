@@ -3,8 +3,8 @@ import statistics
 import librosa
 import numpy as np
 import pandas as pd
-import scipy.stats
 import scipy.io.wavfile as wavf
+import scipy.stats
 
 
 class DataPreparation:

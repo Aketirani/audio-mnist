@@ -123,7 +123,6 @@ class Setup:
         # combine the project path and the parameters folder path
         return os.path.join(self.read_config()["project_path"], "parameters")
 
-
     @staticmethod
     def loop_progress(index: int, total: int):
         """
