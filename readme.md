@@ -108,7 +108,7 @@ Execute `audiomnist.sh` to initiate the entire pipeline.
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
 
 ### Developer
-Execute `python -m pre_commit run --all-files` to ensure code formatting checks.
+Execute `python -m pre_commit run --all-files` to ensure code quality and formatting checks.
 
 ### Conclusion
 This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features. Please explore this repository, delve into the code, and even extend it to foster further advancements in this field. 
