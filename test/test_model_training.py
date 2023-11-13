@@ -1,10 +1,8 @@
-import sys
 import unittest
 
 import pandas as pd
 
-sys.path.append("../src")
-from model_training import ModelTraining
+from src.model_training import ModelTraining
 
 
 class TestModelTraining(unittest.TestCase):
@@ -65,9 +63,7 @@ class TestModelTraining(unittest.TestCase):
             self.model_train.model.n_estimators, self.model_param["n_estimators"]
         )
         self.assertEqual(self.model_train.model.gamma, self.model_param["gamma"])
-        self.assertEqual(
-            self.model_train.model.reg_lambda, self.model_param["lambda"]
-        )
+        self.assertEqual(self.model_train.model.reg_lambda, self.model_param["lambda"])
         self.assertEqual(
             self.model_train.model.scale_pos_weight,
             self.model_param["scale_pos_weight"],

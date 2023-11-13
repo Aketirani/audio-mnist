@@ -1,10 +1,10 @@
 import unittest
-import sys
+
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-sys.path.append("../src")
-from model_prediction import ModelPrediction
+from src.model_prediction import ModelPrediction
+
 
 class TestModelPrediction(unittest.TestCase):
     """
@@ -27,7 +27,9 @@ class TestModelPrediction(unittest.TestCase):
         Test the evaluate_predictions method
         """
         # calculate accuracy using the sample true labels and predicted labels
-        accuracy = self.model_predict.evaluate_predictions(self.y_test, self.y_pred, False)
-        
+        accuracy = self.model_predict.evaluate_predictions(
+            self.y_test, self.y_pred, False
+        )
+
         # ensure accuracy is a float value
         self.assertIsInstance(accuracy, float)

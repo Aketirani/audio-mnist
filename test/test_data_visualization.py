@@ -1,13 +1,11 @@
 import os
-import sys
 import unittest
 
 import numpy as np
 import pandas as pd
 
-sys.path.append("../src")
-from data_visualization import DataVisualization
-from setup import Setup
+from src.data_visualization import DataVisualization
+from src.setup import Setup
 
 
 class TestDataVisualization(unittest.TestCase):

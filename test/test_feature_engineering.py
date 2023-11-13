@@ -1,10 +1,8 @@
-import sys
 import unittest
 
 import pandas as pd
 
-sys.path.append("../src")
-from feature_engineering import FeatureEngineering
+from src.feature_engineering import FeatureEngineering
 
 
 class TestFeatureEngineering(unittest.TestCase):

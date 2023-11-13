@@ -1,10 +1,8 @@
-import sys
 import unittest
 
 import pandas as pd
 
-sys.path.append("../src")
-from data_splitting import DataSplitting
+from src.data_splitting import DataSplitting
 
 
 class TestDataSplitting(unittest.TestCase):

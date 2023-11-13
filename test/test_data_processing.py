@@ -1,10 +1,8 @@
-import sys
 import unittest
 
 import numpy as np
 
-sys.path.append("../src")
-from data_preparation import DataPreparation
+from src.data_preparation import DataPreparation
 
 
 class TestDataPreparation(unittest.TestCase):
