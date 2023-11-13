@@ -30,13 +30,7 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |   ├── *.yaml                  <-- Model Results
 |
 ├── src                         <-- Source Folder
-|   ├── data_preparation.py     <-- Data Preparation
-|   ├── data_splitting.py       <-- Data Splitting
-|   ├── data_visualization.py   <-- Data Visualization
-|   ├── feature_engineering.py  <-- Feature Engineering
-|   ├── model_prediction.py     <-- Model Prediction
-|   ├── model_training.py       <-- Model Training
-|   ├── setup.py                <-- Setup File
+|   ├── *.py                    <-- Source Files
 |
 ├── test                        <-- Test Folder
 |   ├── *.py                    <-- Unit Tests
