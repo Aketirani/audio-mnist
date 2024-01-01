@@ -120,6 +120,9 @@ class AudioMNIST:
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"])
         )
 
+        # Remove constant columns
+        df = FE.remove_constant_columns(df, self.config_file["targets"][0])
+
         # Remove digit column
         df = DP.remove_column(df, self.config_file["targets"][1])
 
@@ -127,10 +130,11 @@ class AudioMNIST:
         df = FE.binarize_column(df, self.config_file["targets"][0])
 
         # Plot column distribution
-        DV.plot_column_dist(df, self.config_file["plots"]["column_distribution"], self.config_file["targets"][0])
-
-        # Remove constant columns
-        df = FE.remove_constant_columns(df, self.config_file["targets"][0])
+        DV.plot_column_dist(
+            df,
+            self.config_file["plots"]["column_distribution"],
+            self.config_file["targets"][0],
+        )
 
         # Calculate correlation matrix
         corr_matrix = FE.pearson_correlation(df, self.config_file["targets"][0])
@@ -290,7 +294,11 @@ class AudioMNIST:
         )
 
         # Plot Shapley summary
-        DV.plot_shapley_summary(MT.model, self.test_df.iloc[:, :-1], self.config_file["plots"]["shapley_summary"])
+        DV.plot_shapley_summary(
+            MT.model,
+            self.test_df.iloc[:, :-1],
+            self.config_file["plots"]["shapley_summary"],
+        )
 
         # Evaluate model
         MP.evaluate_predictions(self.y_test, y_pred)
@@ -310,7 +318,7 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Data Preparation",
     )
     parser.add_argument(
@@ -331,7 +339,7 @@ if __name__ == "__main__":
         "-u",
         "--model_tune",
         type=str,
-        default="false",
+        default="true",
         help="Model Tuning",
     )
     parser.add_argument(

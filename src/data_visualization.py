@@ -1,5 +1,5 @@
 import os
-import shap
+
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import playsound
 import seaborn as sns
+import shap
 import xgboost as xgb
 from sklearn.metrics import confusion_matrix
 
@@ -170,7 +171,9 @@ class DataVisualization:
         # play audio data sound
         playsound.playsound(filepath)
 
-    def plot_column_dist(self, df: pd.DataFrame, plot_name: str, target_column: str) -> None:
+    def plot_column_dist(
+        self, df: pd.DataFrame, plot_name: str, target_column: str
+    ) -> None:
         """
         Plots the column distribution of the dataframe with respect to the target column and saves it
 
@@ -183,22 +186,29 @@ class DataVisualization:
 
         # calculate the number of columns and rows for subplot layout
         num_columns = len(numeric_columns)
-        num_rows = (num_columns + 2) // 3
+        num_rows = (num_columns + 1) // 2
 
         # create a grid of subplots with custom layout
-        fig, axes = plt.subplots(num_rows, 3, figsize=(15, 5 * num_rows))
+        fig, axes = plt.subplots(num_rows, 2, figsize=(15, 5 * num_rows))
         axes = axes.flatten()
 
         # loop through columns and plot histograms
         for i, col in enumerate(numeric_columns):
             ax = axes[i]
-            sns.histplot(x=col, data=df, hue=target_column, multiple="stack", bins=20, palette="pastel", edgecolor="black", ax=ax)
-            ax.set_title(f"Distribution of {col} by {target_column}")
+            sns.histplot(
+                data=df,
+                x=col,
+                hue=target_column,
+                common_norm=False,
+                palette="pastel",
+                ax=ax,
+            )
+            ax.set_title(f"Distribution of {col}")
             ax.set_xlabel("")
-            ax.set_ylabel("Frequency")
+            ax.set_ylabel("Count" if col == target_column else "Density")
 
         # hide any empty subplots
-        for i in range(num_columns, num_rows * 3):
+        for i in range(num_columns, num_rows * 2):
             fig.delaxes(axes[i])
 
         # adjust layout and spacing
@@ -210,7 +220,9 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_feature_importance(self, xgb_model: xgb.XGBClassifier, plot_name: str) -> None:
+    def plot_feature_importance(
+        self, xgb_model: xgb.XGBClassifier, plot_name: str
+    ) -> None:
         """
         Plots the feature importance of the dataset and saves it
 

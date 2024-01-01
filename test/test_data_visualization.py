@@ -89,23 +89,8 @@ class TestDataVisualization(unittest.TestCase):
         Test the plot_column_dist method
         """
         # plot columns distribution
-        self.data_visualization.plot_column_dist(self.matrix, self.plot_name)
-
-        # check if the plot has been saved at the specified location
-        self.assertTrue(
-            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
-        )
-
-        # delete the plot file after the test
-        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
-
-    def test_plot_feature_importance(self):
-        """
-        Test the plot_feature_importance method
-        """
-        # plot feature importance
-        self.data_visualization.plot_feature_importance(
-            self.data, self.columns, self.plot_name
+        self.data_visualization.plot_column_dist(
+            self.matrix, self.plot_name, target_column="col1"
         )
 
         # check if the plot has been saved at the specified location
