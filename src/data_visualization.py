@@ -1,5 +1,5 @@
 import os
-
+import shap
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import playsound
 import seaborn as sns
+import xgboost as xgb
 from sklearn.metrics import confusion_matrix
 
 
@@ -169,41 +170,39 @@ class DataVisualization:
         # play audio data sound
         playsound.playsound(filepath)
 
-    def plot_column_dist(self, df: pd.DataFrame, plot_name: str) -> None:
+    def plot_column_dist(self, df: pd.DataFrame, plot_name: str, target_column: str) -> None:
         """
-        Plots the column distribution of the dataframe and saves it
+        Plots the column distribution of the dataframe with respect to the target column and saves it
 
         :param df: pd.DataFrame, dataframe to be plotted
         :param plot_name: str, name of the plot to be saved
+        :param target_column: str, the target column for distribution comparison
         """
-        # Select numeric columns
+        # select numeric columns
         numeric_columns = df.select_dtypes(include=np.number).columns
 
-        # Calculate the number of columns and rows for subplot layout
+        # calculate the number of columns and rows for subplot layout
         num_columns = len(numeric_columns)
-        num_rows = (num_columns + 2) // 3  # 3 columns per row
+        num_rows = (num_columns + 2) // 3
 
-        # Create a grid of subplots with custom layout
+        # create a grid of subplots with custom layout
         fig, axes = plt.subplots(num_rows, 3, figsize=(15, 5 * num_rows))
         axes = axes.flatten()
 
-        # Loop through columns and plot histograms
+        # loop through columns and plot histograms
         for i, col in enumerate(numeric_columns):
             ax = axes[i]
-            df[col].plot.hist(ax=ax, bins=20)  # Adjust the number of bins as needed
-            ax.set_title(col)
-            ax.set_xlabel("")  # Remove x-axis label for better spacing
+            sns.histplot(x=col, data=df, hue=target_column, multiple="stack", bins=20, palette="pastel", edgecolor="black", ax=ax)
+            ax.set_title(f"Distribution of {col} by {target_column}")
+            ax.set_xlabel("")
             ax.set_ylabel("Frequency")
 
-        # Hide any empty subplots
+        # hide any empty subplots
         for i in range(num_columns, num_rows * 3):
             fig.delaxes(axes[i])
 
-        # Adjust layout and spacing
+        # adjust layout and spacing
         plt.tight_layout()
-
-        # add a title to the plot
-        plt.suptitle("Column Distribution")
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))
@@ -211,20 +210,17 @@ class DataVisualization:
         # clear the current figure
         plt.clf()
 
-    def plot_feature_importance(
-        self, feature_importance: list, columns: list, plot_name: str
-    ) -> None:
+    def plot_feature_importance(self, xgb_model: xgb.XGBClassifier, plot_name: str) -> None:
         """
         Plots the feature importance of the dataset and saves it
 
-        :param feature_importance: list[float], feature importance values
-        :param columns: list[str], column names to be used as x-axis labels
+        :param xgb_model: xgb.XGBClassifier, trained XGBoost model
         :param plot_name: str, name of the plot to be saved
         """
-        # create the bar chart
-        plt.bar(columns, feature_importance)
+        # plot feature importance
+        xgb.plot_importance(xgb_model, importance_type="weight")
 
-        # add a title to the plot
+        # add title to the plot
         plt.title("Feature Importance")
 
         # save the plot to the specified filepath with the given file name
@@ -237,7 +233,7 @@ class DataVisualization:
         self, y_test: list, y_pred: list, labels: list, plot_name: str
     ) -> None:
         """
-        Plots the confusion matrix for binary classification and displays the values.
+        Plots the confusion matrix of the classification and saves it
 
         :param y_test: list, true labels
         :param y_pred: list, predicted labels
@@ -246,9 +242,6 @@ class DataVisualization:
         """
         # compute the confusion matrix
         cm = confusion_matrix(y_test, y_pred)
-
-        # extract TP, FP, FN, TN from the confusion matrix
-        TP, FP, FN, TN = cm.ravel()
 
         # use seaborn to create a heatmap of the confusion matrix
         sns.heatmap(
@@ -265,43 +258,39 @@ class DataVisualization:
         plt.xlabel("Predicted")
         plt.ylabel("True")
 
-        # display TP, FP, FN, TN values as text
-        plt.text(
-            0,
-            0,
-            f"TN = {TN}",
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=12,
-            color="white",
+        # save the plot to the specified filepath with the given file name
+        plt.savefig(os.path.join(self.plot_path, plot_name))
+
+        # clear the current figure
+        plt.clf()
+
+    def plot_shapley_summary(
+        self, xgb_model, test_X: pd.DataFrame, plot_name: str
+    ) -> None:
+        """
+        Plots the Shapley summary of the classification and saves it
+
+        :param xgb_model: trained XGBoost model
+        :param test_X: pd.DataFrame, test features
+        :param plot_name: str, name of the plot to be saved
+        """
+        # create a TreeExplainer for the XGBoost model
+        explainer = shap.TreeExplainer(xgb_model)
+
+        # calculate Shapley values
+        shap_values = explainer.shap_values(test_X)
+
+        # create the Shapley summary plot
+        shap.summary_plot(
+            shap_values,
+            test_X,
+            feature_names=test_X.columns,
+            class_names=xgb_model.classes_,
+            show=False,
         )
-        plt.text(
-            1,
-            0,
-            f"FP = {FP}",
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=12,
-            color="white",
-        )
-        plt.text(
-            0,
-            1,
-            f"FN = {FN}",
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=12,
-            color="white",
-        )
-        plt.text(
-            1,
-            1,
-            f"TP = {TP}",
-            horizontalalignment="center",
-            verticalalignment="center",
-            fontsize=12,
-            color="white",
-        )
+
+        # add title to the plot
+        plt.title("Shapley Summary Plot")
 
         # save the plot to the specified filepath with the given file name
         plt.savefig(os.path.join(self.plot_path, plot_name))

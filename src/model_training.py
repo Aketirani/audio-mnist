@@ -151,7 +151,6 @@ class ModelTraining:
             X_train,
             y_train,
             eval_set=[(X_val, y_val)],
-            eval_metric="logloss",
             verbose=0,
         )
 

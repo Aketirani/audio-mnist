@@ -9,11 +9,12 @@ parameters:
   model_hyperparameters: "model_hyperparameters.yaml"
 plots:
   column_distribution: "column_distribution.png"
+  confusion_matrix: "confusion_matrix.png"
   correlation_matrix: "correlation_matrix.png"
   feature_importance: "feature_importance.png"
-  confusion_matrix: "confusion_matrix.png"
-  model_loss: "model_loss.png"
   model_accuracy: "model_accuracy.png"
+  model_loss: "model_loss.png"
+  shapley_summary: "shapley_summary.png"
 results:
   model_best_param: "model_best_param.yaml"
   model_results: "model_results.yaml"
