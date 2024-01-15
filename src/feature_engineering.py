@@ -47,9 +47,7 @@ class FeatureEngineering:
         ]
 
         # remove the constant value columns
-        df = df.drop(constant_columns, axis=1)
-
-        return df
+        return df.drop(constant_columns, axis=1)
 
     @staticmethod
     def remove_correlated_columns(
@@ -89,16 +87,16 @@ class FeatureEngineering:
         return df
 
     @staticmethod
-    def binarize_column(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    def categorize_column_values(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
         """
-        Binarize the column and move it to the last position in the DataFrame
+        Categorize the specified column values ('female' and 'male') to numerical values (0 and 1)
 
         :param df: pd.DataFrame, input DataFrame
-        :param column_name: str, column name to be binarized and moved
-        :return: pd.DataFrame, DataFrame with the binarized column moved to the last position
+        :param column_name: str, column name to be categorized
+        :return: pd.DataFrame, DataFrame with the categorized column
         """
-        # binarize the specified column
+        # categorize the specified column values ('female' and 'male') to numerical values (0 and 1)
         df[column_name] = df[column_name].map({"female": 0, "male": 1})
 
-        # move the specified column to the last position
-        return df[[col for col in df if col != column_name] + [column_name]]
+        # return dataframe
+        return df

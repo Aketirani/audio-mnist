@@ -120,12 +120,12 @@ class TestFeatureEngineering(unittest.TestCase):
         self.assertEqual(len(correlated_columns), 0)
         self.assertTrue(df_result.shape[1] < self.df.shape[1])
 
-    def test_binarize_column(self):
+    def test_categorize_column_values(self):
         """
-        Test the binarize_column method of the FeatureEngineering class
+        Test the categorize_column_values method of the FeatureEngineering class
         """
-        # call the binarize_column method
-        result = self.feature_engineering.binarize_column(
+        # call the categorize_column_values method
+        result = self.feature_engineering.categorize_column_values(
             self.df, self.gender_column[0]
         )  # Use the first element of the list
 

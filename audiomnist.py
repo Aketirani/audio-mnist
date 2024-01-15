@@ -59,15 +59,15 @@ class AudioMNIST:
                 fs, audio_data = DP.read_audio(file)
 
                 # # Plot audio signal
-                # audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-                # DV.plot_audio(fs, audio_data, audio_name)
+                audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
+                DV.plot_audio(fs, audio_data, audio_name, 0)
 
                 # # Plot STFT of audio signal
-                # stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-                # DV.plot_stft(fs, audio_data, stft_name)
+                stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
+                DV.plot_stft(fs, audio_data, stft_name, 0)
 
                 # # Play audio signal
-                # DV.play_audio(file)
+                DV.play_audio(file, 0)
 
                 # Resample audio data
                 audio_data = DP.resample_data(fs, audio_data)
@@ -126,8 +126,11 @@ class AudioMNIST:
         # Remove digit column
         df = DP.remove_column(df, self.config_file["targets"][1])
 
-        # Binarize target column where female is 0 and male is 1
-        df = FE.binarize_column(df, self.config_file["targets"][0])
+        # Catogarize target column where female is 0 and male is 1
+        df = FE.categorize_column_values(df, self.config_file["targets"][0])
+
+        # Move target column to last position
+        df = DP.move_column_to_last(df, self.config_file["targets"][0])
 
         # Plot column distribution
         DV.plot_column_dist(

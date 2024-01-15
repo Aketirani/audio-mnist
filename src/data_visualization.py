@@ -25,38 +25,45 @@ class DataVisualization:
         """
         self.plot_path = plot_path
 
-    def plot_audio(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:
+    def plot_audio(
+        self, sr: int, audio_data: np.ndarray, plot_name: str, plot_flag: int = 1
+    ) -> None:
         """
         Plots the audio signal with seconds on the x-axis and saves it
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
         :param plot_name: str, name of the plot to be saved
+        :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
         # convert audio data to floating-point format
         audio_data = audio_data.astype(float)
 
-        # plot the audio signal
-        librosa.display.waveshow(audio_data, sr=sr)
+        if plot_flag:
+            # plot the audio signal
+            librosa.display.waveshow(audio_data, sr=sr)
 
-        # add labels
-        plt.title("Audio Signal")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Amplitude")
+            # add labels
+            plt.title("Audio Signal")
+            plt.xlabel("Time (s)")
+            plt.ylabel("Amplitude")
 
-        # save the plot to the specified filepath with the given file name
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+            # save the plot to the specified filepath with the given file name
+            plt.savefig(os.path.join(self.plot_path, plot_name))
 
-        # clear the current figure
-        plt.clf()
+            # clear the current figure
+            plt.clf()
 
-    def plot_stft(self, sr: int, audio_data: np.ndarray, plot_name: str) -> None:
+    def plot_stft(
+        self, sr: int, audio_data: np.ndarray, plot_name: str, plot_flag: int = 1
+    ) -> None:
         """
         Plots the stft signal and saves it
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
         :param plot_name: str, name of the plot to be saved
+        :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
         # convert audio data to floating-point format
         audio_data = audio_data.astype(float)
@@ -70,23 +77,24 @@ class DataVisualization:
         # convert the magnitude to dB scale
         stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
 
-        # display the amplitude of the stft data in dB
-        librosa.display.specshow(
-            stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
-        )
+        if plot_flag:
+            # display the amplitude of the stft data in dB
+            librosa.display.specshow(
+                stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
+            )
 
-        # add a colorbar with dB scale and labels
-        plt.colorbar(format="%+2.0f dB")
-        plt.title("STFT Spectrogram")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Frequency (Hz)")
-        plt.ylim(0, 1000)
+            # add a colorbar with dB scale and labels
+            plt.colorbar(format="%+2.0f dB")
+            plt.title("STFT Spectrogram")
+            plt.xlabel("Time (s)")
+            plt.ylabel("Frequency (Hz)")
+            plt.ylim(0, 1000)
 
-        # save the plot to the specified filepath with the given file name
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+            # save the plot to the specified filepath with the given file name
+            plt.savefig(os.path.join(self.plot_path, plot_name))
 
-        # clear the current figure
-        plt.clf()
+            # clear the current figure
+            plt.clf()
 
     def plot_corr_matrix(self, corr_matrix: pd.DataFrame, plot_name: str) -> None:
         """
@@ -162,14 +170,16 @@ class DataVisualization:
         plt.clf()
 
     @staticmethod
-    def play_audio(filepath: str) -> None:
+    def play_audio(filepath: str, play_flag: int = 1) -> None:
         """
         Play the audio data
 
         :param filepath: str, path to the audio file
+        :param play_flag: int, flag to determine whether to play (1) or not (0)
         """
-        # play audio data sound
-        playsound.playsound(filepath)
+        if play_flag:
+            # play audio data sound
+            playsound.playsound(filepath)
 
     def plot_column_dist(
         self, df: pd.DataFrame, plot_name: str, target_column: str
