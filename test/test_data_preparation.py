@@ -1,6 +1,7 @@
 import unittest
 
 import numpy as np
+import pandas as pd
 
 from src.data_preparation import DataPreparation
 
@@ -20,6 +21,7 @@ class TestDataPreparation(unittest.TestCase):
         :param audio_data: np.ndarray, audio data
         :param fft_data: np.ndarray, fft data
         :param feature_dict: dict, features
+        :param df: pd.DataFrame, sample DataFrame
         """
         self.target_sr = 2
         self.data_preparation = DataPreparation(self.target_sr)
@@ -39,6 +41,7 @@ class TestDataPreparation(unittest.TestCase):
             "sfm": 90,
             "cent": 100,
         }
+        self.df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
 
     def test_resample_data(self):
         """
@@ -117,3 +120,20 @@ class TestDataPreparation(unittest.TestCase):
         # check if the normalized features are between 0 and 1
         self.assertEqual(min(normalized_features.values()), 0)
         self.assertEqual(max(normalized_features.values()), 1)
+
+    def test_move_column_to_last(self):
+        """
+        Test the move_column_to_last method
+        """
+        # column to move to the last position
+        column_to_move = 'B'
+
+        # call the move_column_to_last method
+        result_df = self.data_preparation.move_column_to_last(self.df.copy(), column_to_move)
+
+        # check if the specified column is moved to the last position
+        expected_columns = ['A', 'C', 'B']
+        self.assertEqual(result_df.columns.tolist(), expected_columns)
+
+        # check if the values in the column are unchanged
+        self.assertTrue((result_df['B'] == self.df['B']).all())

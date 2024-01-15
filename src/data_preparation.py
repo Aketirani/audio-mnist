@@ -255,3 +255,15 @@ class DataPreparation:
         """
         # return the value counts of the specified column in the dataframe
         return df[column].value_counts()
+
+    @staticmethod
+    def move_column_to_last(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+        """
+        Move the specified column to the last position in the DataFrame
+
+        :param df: pd.DataFrame, input DataFrame
+        :param column_name: str, column name to be moved
+        :return: pd.DataFrame, DataFrame with the specified column moved to the last position
+        """
+        # move the specified column to the last position
+        return df[[col for col in df if col != column_name] + [column_name]]
