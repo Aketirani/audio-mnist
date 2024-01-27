@@ -21,6 +21,6 @@ results:
   model_object: "model_object.pkl"
 thresholds:
   correlation: 0.95
-targets: ["gender", "digit"]
+target: "gender"
 labels: ["Female", "Male"]
 predicted: predicted

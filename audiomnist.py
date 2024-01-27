@@ -58,17 +58,6 @@ class AudioMNIST:
                 # Read audio data
                 fs, audio_data = DP.read_audio(file)
 
-                # # Plot audio signal
-                audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-                DV.plot_audio(fs, audio_data, audio_name, 0)
-
-                # # Plot STFT of audio signal
-                stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-                DV.plot_stft(fs, audio_data, stft_name, 0)
-
-                # # Play audio signal
-                DV.play_audio(file, 0)
-
                 # Resample audio data
                 audio_data = DP.resample_data(fs, audio_data)
 
@@ -87,15 +76,23 @@ class AudioMNIST:
                 # Add gender and digit column
                 features = DP.add_column_dict(
                     n_features,
-                    self.config_file["targets"][0],
-                    meta_data[vp][self.config_file["targets"][0]],
-                )
-                features = DP.add_column_dict(
-                    n_features, self.config_file["targets"][1], dig[-1]
+                    self.config_file["target"],
+                    meta_data[vp][self.config_file["target"]],
                 )
 
                 # Append new dict values to the DataFrame
                 df = df.append(features, ignore_index=True)
+
+        # Plot audio signal
+        audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
+        DV.plot_audio(fs, audio_data, audio_name, 1)
+
+        # Plot STFT of audio signal
+        stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
+        DV.plot_stft(fs, audio_data, stft_name, 1)
+
+        # Play audio signal
+        DV.play_audio(file, 1)
 
         # Save prepared data
         df.to_csv(
@@ -104,7 +101,7 @@ class AudioMNIST:
         )
 
         # Show gender balance
-        gender_count = DP.column_value_counts(df, self.config_file["targets"][0])
+        gender_count = DP.column_value_counts(df, self.config_file["target"])
         print(f"Female audio recordings: {gender_count[0]}")
         print(f"Male audio recordings: {gender_count[1]}")
 
@@ -121,26 +118,20 @@ class AudioMNIST:
         )
 
         # Remove constant columns
-        df = FE.remove_constant_columns(df, self.config_file["targets"][0])
-
-        # Remove digit column
-        df = DP.remove_column(df, self.config_file["targets"][1])
+        df = FE.remove_constant_columns(df, self.config_file["target"])
 
         # Catogarize target column where female is 0 and male is 1
-        df = FE.categorize_column_values(df, self.config_file["targets"][0])
-
-        # Move target column to last position
-        df = DP.move_column_to_last(df, self.config_file["targets"][0])
+        df = FE.categorize_column_values(df, self.config_file["target"])
 
         # Plot column distribution
         DV.plot_column_dist(
             df,
             self.config_file["plots"]["column_distribution"],
-            self.config_file["targets"][0],
+            self.config_file["target"],
         )
 
         # Calculate correlation matrix
-        corr_matrix = FE.pearson_correlation(df, self.config_file["targets"][0])
+        corr_matrix = FE.pearson_correlation(df, self.config_file["target"])
 
         # Plot correlation matrix
         DV.plot_corr_matrix(
@@ -151,7 +142,7 @@ class AudioMNIST:
         df = FE.remove_correlated_columns(
             df,
             self.config_file["thresholds"]["correlation"],
-            self.config_file["targets"][0],
+            self.config_file["target"],
         )
 
         # Save engineered data
@@ -171,7 +162,7 @@ class AudioMNIST:
 
         # Split datasets
         self.train_df, self.val_df, self.test_df = DS.split(
-            df, self.config_file["targets"][0]
+            df, self.config_file["target"]
         )
 
         # Show size of datasets
@@ -194,7 +185,7 @@ class AudioMNIST:
             self.X_test,
             self.y_test,
         ) = DS.prepare_data(
-            self.train_df, self.val_df, self.test_df, self.config_file["targets"][0]
+            self.train_df, self.val_df, self.test_df, self.config_file["target"]
         )
 
     def ModelTune(self):
