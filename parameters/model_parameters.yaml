@@ -1,5 +1,5 @@
-learning_rate: 0.1            # Learning rate eta
-max_depth: 5                  # Maximum depth of a tree
+learning_rate: 0.05           # Learning rate eta
+max_depth: 7                  # Maximum depth of a tree
 n_estimators: 300             # Number of estimators
 gamma: 0                      # Minimum split loss
 lambda: 1                     # Regularization term
