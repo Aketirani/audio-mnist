@@ -93,7 +93,7 @@ These features include:
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ### Model Performance
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.17%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.73%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ### Exectuion
 Execute `audiomnist.sh` to initiate the entire pipeline.
