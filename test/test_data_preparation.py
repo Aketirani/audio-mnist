@@ -20,7 +20,8 @@ class TestDataPreparation(unittest.TestCase):
         :param fs: int, audio sample rate
         :param audio_data: np.ndarray, audio data
         :param fft_data: np.ndarray, fft data
-        :param feature_dict: dict, features
+        :param feature_dict_t: dict, time-domain features
+        :param feature_dict_f: dict, frequency-domain features
         :param df: pd.DataFrame, sample DataFrame
         """
         self.target_sr = 2
@@ -28,18 +29,31 @@ class TestDataPreparation(unittest.TestCase):
         self.fs = 4
         self.audio_data = np.array([0.1, 0.2, 0.3, 0.4])
         self.fft_data = np.array([1 + 0.0j, -0.2 + 0.2j, -0.2 + 0.0j, -0.2 - 0.2j])
-        self.feature_dict = {
-            "mean": 0,
-            "std": 10,
-            "med": 20,
-            "q25": 30,
-            "q75": 40,
-            "min": 50,
-            "max": 60,
-            "skew": 70,
-            "kurt": 80,
-            "sfm": 90,
-            "cent": 100,
+        self.feature_dict_t = {
+            "mean_t": 0,
+            "std_t": 10,
+            "med_t": 20,
+            "q25_t": 30,
+            "q75_t": 40,
+            "min_t": 50,
+            "max_t": 60,
+            "skew_t": 70,
+            "kurt_t": 80,
+            "zeroxrate_t": 90,
+            "entropy_t": 100,
+        }
+        self.feature_dict_f = {
+            "mean_f": 0,
+            "std_f": 10,
+            "med_f": 20,
+            "q25_f": 30,
+            "q75_f": 40,
+            "min_f": 50,
+            "max_f": 60,
+            "skew_f": 70,
+            "kurt_f": 80,
+            "sfm_f": 90,
+            "cent_f": 100,
         }
         self.df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
 
@@ -98,15 +112,27 @@ class TestDataPreparation(unittest.TestCase):
         for i, f in enumerate(frequencies):
             self.assertLessEqual(fft_result[i], 1e-5)
 
-    def test_feature_creation(self):
+    def test_feature_creation_time_domain(self):
         """
-        Test the feature_creation method
+        Test the feature_creation_time_domain method
         """
-        # call the feature_creation method to create the features
-        features = self.data_preparation.feature_creation(self.fft_data)
+        # call the feature_creation_time_domain method to create the features
+        features = self.data_preparation.feature_creation_time_domain(self.audio_data)
 
         # check if the created feature columns are equal to the expected feature columns
-        self.assertEqual(set(features.keys()), self.feature_dict.keys())
+        self.assertEqual(set(features.keys()), self.feature_dict_t.keys())
+
+    def test_feature_creation_frequency_domain(self):
+        """
+        Test the feature_creation_frequency_domain method
+        """
+        # call the feature_creation_frequency_domain method to create the features
+        features = self.data_preparation.feature_creation_frequency_domain(
+            self.fft_data
+        )
+
+        # check if the created feature columns are equal to the expected feature columns
+        self.assertEqual(set(features.keys()), self.feature_dict_f.keys())
 
     def test_normalize_features(self):
         """
@@ -114,7 +140,7 @@ class TestDataPreparation(unittest.TestCase):
         """
         # call the normalized_features method to normalize the features
         normalized_features = self.data_preparation.normalize_features(
-            self.feature_dict
+            self.feature_dict_f
         )
 
         # check if the normalized features are between 0 and 1
