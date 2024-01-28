@@ -1,5 +1,3 @@
-import statistics
-
 import librosa
 import numpy as np
 import pandas as pd
@@ -124,9 +122,38 @@ class DataPreparation:
         return filtered_fft_data
 
     @staticmethod
-    def feature_creation(fft_data: np.ndarray) -> dict:
+    def feature_creation_time_domain(audio_data: np.ndarray) -> dict:
         """
-        Calculate various statistical features of the given FFT data
+        Calculate time-domain features of the given audio data
+
+        :param audio_data: np.ndarray, audio data
+        :return: dict, containing time-domain features
+        """
+        # create empty dictionary
+        features = {}
+
+        # time-domain features
+        features["mean_t"] = np.mean(audio_data)
+        features["std_t"] = np.std(audio_data)
+        features["med_t"] = np.median(audio_data)
+        features["min_t"] = np.min(audio_data)
+        features["max_t"] = np.max(audio_data)
+        features["q25_t"] = np.percentile(audio_data, 25)
+        features["q75_t"] = np.percentile(audio_data, 75)
+        features["skew_t"] = scipy.stats.skew(audio_data)
+        features["kurt_t"] = scipy.stats.kurtosis(audio_data)
+        features["zeroxrate_t"] = librosa.feature.zero_crossing_rate(audio_data)[0, 0]
+        features["entropy_t"] = scipy.stats.entropy(
+            np.histogram(audio_data, bins=10)[0]
+        )
+
+        # return features
+        return features
+
+    @staticmethod
+    def feature_creation_frequency_domain(fft_data: np.ndarray) -> dict:
+        """
+        Calculate frequency-domain features of the given FFT data
 
         :param fft_data: np.ndarray, FFT data
         :return: dict, containing created features
@@ -137,38 +164,18 @@ class DataPreparation:
         # create empty dictionary
         features = {}
 
-        # mean
-        features["mean"] = np.mean(fft_data)
-
-        # standard deviation
-        features["std"] = np.std(fft_data)
-
-        # median
-        features["med"] = statistics.median(fft_data)
-
-        # 25th percentiles
-        features["q25"] = np.percentile(fft_data, 25)
-
-        # 75th percentiles
-        features["q75"] = np.percentile(fft_data, 75)
-
-        # minimum value
-        features["min"] = min(fft_data)
-
-        # maximum value
-        features["max"] = max(fft_data)
-
-        # skewness
-        features["skew"] = scipy.stats.skew(fft_data)
-
-        # kurtosis
-        features["kurt"] = scipy.stats.kurtosis(fft_data)
-
-        # spectral flatness
-        features["sfm"] = scipy.stats.gmean(fft_data) / np.mean(fft_data)
-
-        # frequency centroid
-        features["cent"] = scipy.stats.mstats.gmean(fft_data)
+        # frequency-domain features
+        features["mean_f"] = np.mean(fft_data)
+        features["std_f"] = np.std(fft_data)
+        features["med_f"] = np.median(fft_data)
+        features["min_f"] = min(fft_data)
+        features["max_f"] = max(fft_data)
+        features["q25_f"] = np.percentile(fft_data, 25)
+        features["q75_f"] = np.percentile(fft_data, 75)
+        features["skew_f"] = scipy.stats.skew(fft_data)
+        features["kurt_f"] = scipy.stats.kurtosis(fft_data)
+        features["sfm_f"] = scipy.stats.gmean(fft_data) / np.mean(fft_data)
+        features["cent_f"] = scipy.stats.mstats.gmean(fft_data)
 
         # return features
         return features

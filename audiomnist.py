@@ -64,11 +64,17 @@ class AudioMNIST:
                 # Zero padding audio data
                 audio_data = DP.zero_pad(audio_data)
 
+                # Calculate time-domain features
+                time_domain_features = DP.feature_creation_time_domain(audio_data)
+
                 # FFT audio data
                 fft_data = DP.fft_data(audio_data)
 
-                # Feature creation
-                features = DP.feature_creation(fft_data)
+                # Calculate frequency-domain features
+                features = DP.feature_creation_frequency_domain(fft_data)
+
+                # Merge features
+                features.update(time_domain_features)
 
                 # Normalize features
                 n_features = DP.normalize_features(features)

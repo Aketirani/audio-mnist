@@ -74,26 +74,28 @@ The model uses the following key parameters:
 By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
 ### Model Features
-The model relies on various statistical features calculated from the FFT (Fast Fourier Transform) data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
+The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
 
 These features include:
 
-- `mean`: Mean of the FFT data
-- `std`: Standard deviation of the FFT data
-- `med`: Median of the FFT data
-- `q25`: 25th percentiles of the FFT data
-- `q75`: 75th percentiles of the FFT data
-- `min`: Minimum value of the FFT data
-- `max`: Maximum value of the FFT data
-- `skew`: Skewness of the FFT data
-- `kurt`: Kurtosis of the FFT data
-- `sfm`: Spectral flatness of the FFT data
-- `cent`: Frequency centroid of the FFT data
+- `mean`: Mean
+- `std`: Standard Deviation
+- `med`: Median
+- `q25`: 25th Percentiles
+- `q75`: 75th Percentiles
+- `min`: Minimum
+- `max`: Maximum
+- `skew`: Skewness
+- `kurt`: Kurtosis
+- `zeroxrate`: Zero Crossing Rate
+- `entropy`: Entropy
+- `sfm`: Spectral Flatness
+- `cent`: Frequency Centroid
 
 These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
 
 ### Model Performance
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `85.73%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ### Exectuion
 Execute `audiomnist.sh` to initiate the entire pipeline.
