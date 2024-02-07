@@ -1,0 +1,19 @@
+Started at 2024-02-07 21:23:23
+Progress: 10.00%
+Progress: 20.00%
+Progress: 30.00%
+Progress: 40.00%
+Progress: 50.00%
+Progress: 60.00%
+Progress: 70.00%
+Progress: 80.00%
+Progress: 90.00%
+Progress: 100.00%
+Female audio recordings: 24000
+Male audio recordings: 6000
+Prepared dataset, columns: 23 and rows: 30000
+Training set, columns: 18 and rows: 24000
+Validation set, columns: 18 and rows: 3000
+Test set, columns: 18 and rows: 3000
+Model Accuracy: 87.40%
+Finished at 2024-02-07 21:34:00

@@ -43,7 +43,7 @@ class AudioMNIST:
         # Loop over audio recordings in the source path
         for i in range(1, num_folders):
             # Show progress
-            SU.loop_progress(i, num_folders - 1)
+            SU.loop_progress(i, num_folders - 1, 6)
 
             # Loop over files in directory
             audio_file = sorted(
