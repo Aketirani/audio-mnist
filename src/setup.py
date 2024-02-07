@@ -124,16 +124,19 @@ class Setup:
         return os.path.join(self.read_config()["project_path"], "parameters")
 
     @staticmethod
-    def loop_progress(index: int, total: int):
+    def loop_progress(index: int, total: int, show_every: int = 1):
         """
-        This function takes in the current index, total number of iterations and sleep time
-        and displays the progress of the loop every iteration
+        This function takes in the current index, total number of iterations,
+        and optional parameter 'show_every' to display the progress of the loop
+        every 'show_every' iterations.
 
         :param index: int, the current index of the loop
         :param total: int, total number of iterations in the loop
+        :param show_every: int, optional, frequency of progress updates (default is 1)
         """
-        # calculate progress
-        progress = (index) / (total)
+        if index % show_every == 0:
+            # calculate progress
+            progress = index / total
 
-        # print progress and elapsed time
-        print(f"Progress: {progress:.2%}")
+            # print progress and elapsed time
+            print(f"Progress: {progress:.2%}")
