@@ -18,12 +18,6 @@ class ModelTraining:
         """
         Initialize the class
         """
-        self._initialize_model()
-
-    def _initialize_model(self):
-        """
-        Initialize the model based on the specified model type
-        """
         self.model = XGBClassifier()
 
     def set_params(self, model_param: dict):

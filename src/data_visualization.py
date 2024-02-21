@@ -48,7 +48,7 @@ class DataVisualization:
             plt.xlabel("Time (s)")
             plt.ylabel("Amplitude")
 
-            # save the plot to the specified filepath with the given file name
+            # save plot
             plt.savefig(os.path.join(self.plot_path, plot_name))
 
             # clear the current figure
@@ -78,19 +78,19 @@ class DataVisualization:
         stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
 
         if plot_flag:
-            # display the amplitude of the stft data in dB
+            # display the stft
             librosa.display.specshow(
                 stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
             )
 
             # add a colorbar with dB scale and labels
             plt.colorbar(format="%+2.0f dB")
-            plt.title("STFT Spectrogram")
+            plt.title("Short-Time Fourier Transform")
             plt.xlabel("Time (s)")
             plt.ylabel("Frequency (Hz)")
             plt.ylim(0, 1000)
 
-            # save the plot to the specified filepath with the given file name
+            # save plot
             plt.savefig(os.path.join(self.plot_path, plot_name))
 
             # clear the current figure
@@ -106,10 +106,10 @@ class DataVisualization:
         # use seaborn to create a heatmap of the correlation matrix
         sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", center=0)
 
-        # set the title of the plot
+        # set the title
         plt.title("Correlation Matrix")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -136,7 +136,7 @@ class DataVisualization:
         plt.ylabel("Loss")
         plt.legend(loc="upper right")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -163,7 +163,7 @@ class DataVisualization:
         plt.ylabel("Accuracy")
         plt.legend(loc="upper right")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -224,7 +224,7 @@ class DataVisualization:
         # adjust layout and spacing
         plt.tight_layout()
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -242,10 +242,10 @@ class DataVisualization:
         # plot feature importance
         xgb.plot_importance(xgb_model, importance_type="weight")
 
-        # add title to the plot
+        # add title
         plt.title("Feature Importance")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -280,7 +280,7 @@ class DataVisualization:
         plt.xlabel("Predicted")
         plt.ylabel("True")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
@@ -311,10 +311,10 @@ class DataVisualization:
             show=False,
         )
 
-        # add title to the plot
+        # add title
         plt.title("Shapley Summary Plot")
 
-        # save the plot to the specified filepath with the given file name
+        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name))
 
         # clear the current figure
