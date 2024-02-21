@@ -97,10 +97,6 @@ class AudioMNIST:
         stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
         DV.plot_stft(fs, audio_data, stft_name, 1)
 
-        # Plot Spectogram of audio signal
-        stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-        DV.plot_stft(fs, audio_data, stft_name, 1)
-
         # Play audio signal
         DV.play_audio(file, 1)
 

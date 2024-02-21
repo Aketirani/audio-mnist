@@ -1,4 +1,4 @@
-project_path: "C:/GitProjects/AudioMNIST"
+project_path: "C:/GitProjects/audio-mnist"
 meta_data: "audioMNIST_meta.txt"
 data:
   prepared: "data_prepared.csv"
