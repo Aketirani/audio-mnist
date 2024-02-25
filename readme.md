@@ -86,10 +86,11 @@ These features include:
 - `sfm`: Spectral Flatness
 - `cent`: Frequency Centroid
 
-These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
-
 ### Model Performance
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+The model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+
+### Conclusion
+This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
 
 ### Exectuion
 Execute `audiomnist.sh` to initiate the entire pipeline.
@@ -99,6 +100,3 @@ Execute `python -m unittest discover test` to run all unit tests, ensuring the r
 
 ### Developer
 Execute `python -m pre_commit run --all-files` to ensure code quality and formatting checks.
-
-### Conclusion
-This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
