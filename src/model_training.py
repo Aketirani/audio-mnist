@@ -31,10 +31,6 @@ class ModelTraining:
             learning_rate=model_param["learning_rate"],
             max_depth=model_param["max_depth"],
             n_estimators=model_param["n_estimators"],
-            gamma=model_param["gamma"],
-            reg_lambda=model_param["lambda"],
-            scale_pos_weight=model_param["scale_pos_weight"],
-            min_child_weight=model_param["min_child_weight"],
             objective=model_param["objective"],
             tree_method=model_param["tree_method"],
         )

@@ -1,9 +1,5 @@
-learning_rate: 0.1            # Learning rate eta
-max_depth: 9                  # Maximum depth of a tree
-n_estimators: 300             # Number of estimators
-gamma: 0                      # Minimum split loss
-lambda: 1                     # Regularization term
-scale_pos_weight: 1           # Balance between positive and negative weights
-min_child_weight: 1           # Minimum sum of weights of all observations in a child
-objective: "binary:logistic"  # Loss function
-tree_method: "hist"           # Histogram tree grow method
+learning_rate: 0.1          # Learning rate eta
+max_depth: 9                # Maximum depth of a tree
+n_estimators: 300           # Number of iterations (trees)
+objective: binary:logistic  # Loss function
+tree_method: hist           # Histogram tree grow method

@@ -64,14 +64,8 @@ The model uses the following key parameters:
 - `learning_rate`: The step size of the optimization algorithm
 - `max_depth`: The maximum depth of a tree
 - `n_estimators`: The number of of trees in the ensemble
-- `gamma`: Minimum split loss
-- `lambda`: Regularization term
-- `scale_pos_weight`: The balance between positive and negative weights
-- `min_child_weight`: Minimum sum of weights of all observations in a child
 - `objective`: Loss function
 - `tree_method`: Method used to grow the tree
-
-By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
 ### Model Features
 The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.

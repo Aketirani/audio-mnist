@@ -1,6 +1,6 @@
 @startuml Pipeline Flowchart
-|AudioMNIST|
-package "AudioMNIST" {
+|audio_mnist|
+package "audio-mnist" {
     :start|
     partition "audiomnist.sh" {
         :set repository path;
