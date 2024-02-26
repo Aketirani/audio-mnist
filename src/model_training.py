@@ -31,15 +31,11 @@ class ModelTraining:
             learning_rate=model_param["learning_rate"],
             max_depth=model_param["max_depth"],
             n_estimators=model_param["n_estimators"],
-            gamma=model_param["gamma"],
-            reg_lambda=model_param["lambda"],
-            scale_pos_weight=model_param["scale_pos_weight"],
-            min_child_weight=model_param["min_child_weight"],
             objective=model_param["objective"],
             tree_method=model_param["tree_method"],
         )
 
-    def _accuracy(self, preds, dtrain):
+    def _accuracy(self, preds: np.ndarray, dtrain: object) -> tuple:
         """
         Calculates the accuracy of predictions made by a model
 
@@ -54,7 +50,9 @@ class ModelTraining:
         accuracy = accuracy_score(labels, np.round(preds))
         return "accuracy", accuracy
 
-    def _save_eval_metrics(self, file_path: str, file_name_results: str, result):
+    def _save_eval_metrics(
+        self, file_path: str, file_name_results: str, result: object
+    ) -> None:
         """
         Save the eval_metrics of a model in yaml format
 
@@ -75,7 +73,7 @@ class ModelTraining:
         file_path: str,
         file_name_results: str,
         file_name_object: str,
-    ):
+    ) -> None:
         """
         Fit the model on training data
 
@@ -96,13 +94,15 @@ class ModelTraining:
             verbose=0,
         )
 
-        # save the trained model to a file
+        # save the trained model object to a file
         joblib.dump(self.model, os.path.join(file_path, file_name_object))
 
         # save evaluation metrics to file
         self._save_eval_metrics(file_path, file_name_results, result)
 
-    def _save_best_parameters(self, file_path: str, file_name: str, grid):
+    def _save_best_parameters(
+        self, file_path: str, file_name: str, grid: object
+    ) -> None:
         """
         Save the best parameters and best score of a model in yaml format
 
@@ -123,7 +123,7 @@ class ModelTraining:
         file_path: str,
         file_name: str,
         grid_params: dict,
-    ):
+    ) -> None:
         """
         Runs a grid search to tune the hyperparameters of the model
 
@@ -151,7 +151,7 @@ class ModelTraining:
         # save evaluation metrics to file
         self._save_best_parameters(file_path, file_name, grid)
 
-    def feature_importance(self) -> None:
+    def feature_importance(self) -> np.ndarray:
         """
         Calculates the feature importance of the model
         """

@@ -64,14 +64,8 @@ The model uses the following key parameters:
 - `learning_rate`: The step size of the optimization algorithm
 - `max_depth`: The maximum depth of a tree
 - `n_estimators`: The number of of trees in the ensemble
-- `gamma`: Minimum split loss
-- `lambda`: Regularization term
-- `scale_pos_weight`: The balance between positive and negative weights
-- `min_child_weight`: Minimum sum of weights of all observations in a child
 - `objective`: Loss function
 - `tree_method`: Method used to grow the tree
-
-By adjusting these parameters, the model can be fine-tuned to achieve the best performance on the given dataset.
 
 ### Model Features
 The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
@@ -92,10 +86,11 @@ These features include:
 - `sfm`: Spectral Flatness
 - `cent`: Frequency Centroid
 
-These features are stored in a dictionary, where each key corresponds to a specific feature and its associated value. This dictionary can then be used as input for the model.
-
 ### Model Performance
-With meticulous tuning and optimization, the model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+The model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+
+### Conclusion
+This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
 
 ### Exectuion
 Execute `audiomnist.sh` to initiate the entire pipeline.
@@ -105,6 +100,3 @@ Execute `python -m unittest discover test` to run all unit tests, ensuring the r
 
 ### Developer
 Execute `python -m pre_commit run --all-files` to ensure code quality and formatting checks.
-
-### Conclusion
-This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.

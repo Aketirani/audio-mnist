@@ -62,16 +62,6 @@ class TestModelTraining(unittest.TestCase):
         self.assertEqual(
             self.model_train.model.n_estimators, self.model_param["n_estimators"]
         )
-        self.assertEqual(self.model_train.model.gamma, self.model_param["gamma"])
-        self.assertEqual(self.model_train.model.reg_lambda, self.model_param["lambda"])
-        self.assertEqual(
-            self.model_train.model.scale_pos_weight,
-            self.model_param["scale_pos_weight"],
-        )
-        self.assertEqual(
-            self.model_train.model.min_child_weight,
-            self.model_param["min_child_weight"],
-        )
         self.assertEqual(
             self.model_train.model.objective, self.model_param["objective"]
         )
