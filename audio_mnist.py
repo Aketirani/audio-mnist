@@ -318,14 +318,14 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Data Preparation",
     )
     parser.add_argument(
         "-f",
         "--feat_eng",
         type=str,
-        default="false",
+        default="true",
         help="Feature Engineering",
     )
     parser.add_argument(
