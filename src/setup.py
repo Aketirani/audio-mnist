@@ -11,6 +11,8 @@ class Setup:
     def __init__(self, cfg_file: str) -> None:
         """
         Initialize the class
+
+        :param cfg_file: str, path to the configuration file
         """
         self.cfg_file = cfg_file
 
