@@ -372,35 +372,35 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Data Preparation",
     )
     parser.add_argument(
         "-f",
         "--feat_eng",
         type=str,
-        default="false",
+        default="true",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="false",
+        default="true",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="false",
+        default="true",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="false",
+        default="true",
         help="Model Training",
     )
     parser.add_argument(
