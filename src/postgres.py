@@ -55,51 +55,22 @@ class PostgresManager:
             # raise error
             raise e
 
-    def write_df_to_table(self, df, table_name: str) -> None:
-        """
-        Create a table in the PostgreSQL database based on a DataFrame
-
-        :param df: pandas DataFrame containing the data to be inserted into the table
-        :param table_name: str, name of the PostgreSQL table to create
-        """
-        try:
-            # connect to database
-            self._connect_to_database()
-            # use the DataFrame's to_sql method to write data to the table
-            df.to_sql(table_name, self.conn, if_exists="fail", index=False)
-        except psycopg2.Error as e:
-            # rollback the transaction and raise error
-            self.conn.rollback()
-            raise e
-        finally:
-            # close the connection
-            self.conn.close()
-
     def write_csv_to_table(self, file_path: str, table_name: str) -> None:
         """
-        Load data from a csv file into a PostgreSQL table
+        Load data from a CSV file into a PostgreSQL table using the COPY command
 
-        :param file_path: str, path to the file containing data
+        :param file_path: str, path to the CSV file containing data
         :param table_name: str, name of the PostgreSQL table to write data into
         """
         try:
-            # connect to database
-            self._connect_to_database()
-            with open(file_path, "r") as f:
-                # create a cursor
-                cur = self.conn.cursor()
-                # use the COPY command to load data from file into table
-                cur.copy_from(f, table_name, sep=",")
-                # commit the transaction
-                self.conn.commit()
+            # construct the query
+            query = f"COPY {table_name} FROM '{file_path}' DELIMITER ',' CSV HEADER;"
+            # Execute the COPY command with the file path as a parameter
+            self._execute_query(query)
         except psycopg2.Error as e:
             # rollback the transaction and raise error
             self.conn.rollback()
             raise e
-        finally:
-            # close the cursor and connection
-            cur.close()
-            self.conn.close()
 
     def _execute_query(self, query: str) -> None:
         """
@@ -141,10 +112,10 @@ class PostgresManager:
             column_definitions = ", ".join([f"{column} NUMERIC" for column in columns])
 
         # construct the query
-        create_query = f"CREATE TABLE {table_name} ({column_definitions});"
+        query = f"CREATE TABLE {table_name} ({column_definitions});"
 
         # execute the query
-        self._execute_query(create_query)
+        self._execute_query(query)
 
     def drop_table(self, table_name: str) -> None:
         """
@@ -153,7 +124,7 @@ class PostgresManager:
         :param table_name: str, name of the table to drop
         """
         # construct the query
-        drop_query = f"DROP TABLE IF EXISTS {table_name};"
+        query = f"DROP TABLE IF EXISTS {table_name};"
 
         # execute the query
-        self._execute_query(drop_query)
+        self._execute_query(query)

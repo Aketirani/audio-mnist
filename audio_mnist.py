@@ -108,6 +108,15 @@ class AudioMNIST:
             index=False,
         )
 
+        # Drop table in PostgreSQL
+        PM.drop_table(self.pgs_file["table"]["prepared"])
+
+        # Create table from csv in PostgreSQL
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            self.pgs_file["table"]["prepared"],
+        )
+
         # Save prepared data to PostgreSQL
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
@@ -175,7 +184,10 @@ class AudioMNIST:
         )
 
         # Save engineered data to PostgreSQL
-        PM.write_df_to_table(df, self.pgs_file["table"]["engineered"])
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            self.pgs_file["table"]["engineered"],
+        )
 
     def DataSplit(self):
         """
@@ -305,6 +317,15 @@ class AudioMNIST:
             index=False,
         )
 
+        # Drop table in PostgreSQL
+        PM.drop_table(self.pgs_file["table"]["predicted"])
+
+        # Create table from csv in PostgreSQL
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            self.pgs_file["table"]["predicted"],
+        )
+
         # Save predicted data to PostgreSQL
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
@@ -358,7 +379,7 @@ if __name__ == "__main__":
         "-f",
         "--feat_eng",
         type=str,
-        default="true",
+        default="false",
         help="Feature Engineering",
     )
     parser.add_argument(
@@ -386,7 +407,7 @@ if __name__ == "__main__":
         "-p",
         "--model_pred",
         type=str,
-        default="false",
+        default="true",
         help="Model Prediction",
     )
     args = parser.parse_args()
