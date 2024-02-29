@@ -11,6 +11,7 @@ from src.data_visualization import DataVisualization
 from src.feature_engineering import FeatureEngineering
 from src.model_prediction import ModelPrediction
 from src.model_training import ModelTraining
+from src.postgres import PostgresManager
 from src.setup import Setup
 
 warnings.filterwarnings("ignore")
@@ -26,6 +27,7 @@ class AudioMNIST:
         Initialize the class
         """
         self.config_file = SU.read_config()
+        self.pgs_file = PM.read_config()
 
     def DataPrepare(self):
         """
@@ -100,10 +102,16 @@ class AudioMNIST:
         # Play audio signal
         DV.play_audio(file, 1)
 
-        # Save prepared data
+        # Save prepared data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             index=False,
+        )
+
+        # Save prepared data to PostgreSQL
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            self.pgs_file["table"]["prepared"],
         )
 
         # Show gender balance
@@ -151,11 +159,23 @@ class AudioMNIST:
             self.config_file["target"],
         )
 
-        # Save engineered data
+        # Save engineered data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             index=False,
         )
+
+        # Drop table in PostgreSQL
+        PM.drop_table(self.pgs_file["table"]["engineered"])
+
+        # Create table from csv in PostgreSQL
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            self.pgs_file["table"]["engineered"],
+        )
+
+        # Save engineered data to PostgreSQL
+        PM.write_df_to_table(df, self.pgs_file["table"]["engineered"])
 
     def DataSplit(self):
         """
@@ -279,10 +299,16 @@ class AudioMNIST:
         # Add predicted values column to final dataframe
         df = DP.add_column_df(df, self.config_file["predicted"], y_pred)
 
-        # Save predicted data
+        # Save predicted data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             index=False,
+        )
+
+        # Save predicted data to PostgreSQL
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            self.pgs_file["table"]["predicted"],
         )
 
         # Plot confusion matrix
@@ -315,10 +341,17 @@ if __name__ == "__main__":
         help="Configuration File",
     )
     parser.add_argument(
+        "-y",
+        "--pgs_file",
+        type=str,
+        default="postgres.yaml",
+        help="Postgres File",
+    )
+    parser.add_argument(
         "-d",
         "--data_prep",
         type=str,
-        default="true",
+        default="false",
         help="Data Preparation",
     )
     parser.add_argument(
@@ -332,34 +365,35 @@ if __name__ == "__main__":
         "-s",
         "--data_split",
         type=str,
-        default="true",
+        default="false",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="true",
+        default="false",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="true",
+        default="false",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="true",
+        default="false",
         help="Model Prediction",
     )
     args = parser.parse_args()
 
     # Initialize classes
     SU = Setup(args.cfg_file)
+    PM = PostgresManager(args.pgs_file)
     DP = DataPreparation()
     DV = DataVisualization(SU.set_plot_path())
     FE = FeatureEngineering()

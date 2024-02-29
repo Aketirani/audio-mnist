@@ -1,0 +1,159 @@
+import csv
+import os
+
+import pandas as pd
+import psycopg2
+import yaml
+
+
+class PostgresManager:
+    """
+    This class provides methods to manage PostgreSQL database connections and operations
+    """
+
+    def __init__(self, pgs_file: str) -> None:
+        """
+        Initialize the class
+
+        :param pgs_file: str, path to the PostgreSQL configuration file
+        """
+        self.pgs_file = pgs_file
+
+    def read_config(self) -> dict:
+        """
+        Read the config yaml file and return the data as a dictionary
+
+        :return: dict, containing the configuration data
+        """
+        try:
+            # change the directory to the configuration folder
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            config_folder = os.path.join(script_dir, "../config")
+            os.chdir(config_folder)
+
+            # open the configuration folder
+            with open(self.pgs_file, "r") as file:
+                # load the configuration file into a dictionary
+                pgs_setup = yaml.safe_load(file)
+        except:
+            # raise an error if the filename is not valid
+            raise FileNotFoundError(f"{self.pgs_file} is not a valid config filepath!")
+
+        # return the configuration data
+        return pgs_setup
+
+    def _connect_to_database(self) -> None:
+        """
+        Connect to the PostgreSQL database
+        """
+        # read config file
+        config = self.read_config()["connection"]
+        try:
+            # connect to the database
+            self.conn = psycopg2.connect(**config)
+        except psycopg2.Error as e:
+            # raise error
+            raise e
+
+    def write_df_to_table(self, df, table_name: str) -> None:
+        """
+        Create a table in the PostgreSQL database based on a DataFrame
+
+        :param df: pandas DataFrame containing the data to be inserted into the table
+        :param table_name: str, name of the PostgreSQL table to create
+        """
+        try:
+            # connect to database
+            self._connect_to_database()
+            # use the DataFrame's to_sql method to write data to the table
+            df.to_sql(table_name, self.conn, if_exists="fail", index=False)
+        except psycopg2.Error as e:
+            # rollback the transaction and raise error
+            self.conn.rollback()
+            raise e
+        finally:
+            # close the connection
+            self.conn.close()
+
+    def write_csv_to_table(self, file_path: str, table_name: str) -> None:
+        """
+        Load data from a csv file into a PostgreSQL table
+
+        :param file_path: str, path to the file containing data
+        :param table_name: str, name of the PostgreSQL table to write data into
+        """
+        try:
+            # connect to database
+            self._connect_to_database()
+            with open(file_path, "r") as f:
+                # create a cursor
+                cur = self.conn.cursor()
+                # use the COPY command to load data from file into table
+                cur.copy_from(f, table_name, sep=",")
+                # commit the transaction
+                self.conn.commit()
+        except psycopg2.Error as e:
+            # rollback the transaction and raise error
+            self.conn.rollback()
+            raise e
+        finally:
+            # close the cursor and connection
+            cur.close()
+            self.conn.close()
+
+    def _execute_query(self, query: str) -> None:
+        """
+        Execute a SQL query on the connected PostgreSQL database
+
+        :param query: str, SQL query to be executed
+        """
+        try:
+            # connect to the database
+            self._connect_to_database()
+            # create a cursor
+            cur = self.conn.cursor()
+            # execute the query
+            cur.execute(query)
+            # commit the transaction
+            self.conn.commit()
+        except psycopg2.Error as e:
+            # rollback the transaction and raise error
+            self.conn.rollback()
+            raise e
+        finally:
+            # close the cursor and connection
+            cur.close()
+            self.conn.close()
+
+    def create_table_from_csv(self, file_path: str, table_name: str) -> None:
+        """
+        Create a table in the PostgreSQL database based on the columns in a CSV file
+
+        :param file_path: str, path to the CSV file containing column names and sample data
+        :param table_name: str, name of the table to create
+        """
+        # read the CSV file to get column names and sample data types
+        with open(file_path, "r") as file:
+            # use the first row to get column names
+            reader = csv.reader(file)
+            columns = next(reader)
+            # assume all columns are of type NUMERIC for simplicity
+            column_definitions = ", ".join([f"{column} NUMERIC" for column in columns])
+
+        # construct the query
+        create_query = f"CREATE TABLE {table_name} ({column_definitions});"
+
+        # execute the query
+        self._execute_query(create_query)
+
+    def drop_table(self, table_name: str) -> None:
+        """
+        Drop a table from the PostgreSQL database
+
+        :param table_name: str, name of the table to drop
+        """
+        # construct the query
+        drop_query = f"DROP TABLE IF EXISTS {table_name};"
+
+        # execute the query
+        self._execute_query(drop_query)
