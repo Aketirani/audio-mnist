@@ -87,7 +87,7 @@ These features include:
 - `cent`: Frequency Centroid
 
 ### Model Performance
-The model has achieved a promising accuracy rate of `87.40%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+The model has achieved a promising accuracy rate of `95.60%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ### Conclusion
 This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
