@@ -54,23 +54,6 @@ class PostgresManager:
             # raise error
             raise e
 
-    def write_csv_to_table(self, file_path: str, table_name: str) -> None:
-        """
-        Load data from a CSV file into a PostgreSQL table using the COPY command
-
-        :param file_path: str, path to the CSV file containing data
-        :param table_name: str, name of the PostgreSQL table to write data into
-        """
-        try:
-            # construct the query
-            query = f"COPY {table_name} FROM '{file_path}' DELIMITER ',' CSV HEADER;"
-            # Execute the COPY command with the file path as a parameter
-            self._execute_query(query)
-        except psycopg2.Error as e:
-            # rollback the transaction and raise error
-            self.conn.rollback()
-            raise e
-
     def _execute_query(self, query: str) -> None:
         """
         Execute a SQL query on the connected PostgreSQL database
@@ -84,16 +67,33 @@ class PostgresManager:
             cur = self.conn.cursor()
             # execute the query
             cur.execute(query)
-            # commit the transaction
+            # commit
             self.conn.commit()
         except psycopg2.Error as e:
-            # rollback the transaction and raise error
+            # rollback and raise error
             self.conn.rollback()
             raise e
         finally:
             # close the cursor and connection
             cur.close()
             self.conn.close()
+
+    def write_csv_to_table(self, file_path: str, table_name: str) -> None:
+        """
+        Load data from a CSV file into a PostgreSQL table using the COPY command
+
+        :param file_path: str, path to the CSV file containing data
+        :param table_name: str, name of the PostgreSQL table to write data into
+        """
+        try:
+            # construct the query
+            query = f"COPY {table_name} FROM '{file_path}' DELIMITER ',' CSV HEADER;"
+            # execute the COPY command with the file path as a parameter
+            self._execute_query(query)
+        except psycopg2.Error as e:
+            # rollback and raise error
+            self.conn.rollback()
+            raise e
 
     def create_table_from_csv(self, file_path: str, table_name: str) -> None:
         """

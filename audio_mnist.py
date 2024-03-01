@@ -33,157 +33,157 @@ class AudioMNIST:
         """
         Data Preparation
         """
-        # Read meta data file
+        # read meta data file
         meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta_data"])
 
-        # Create empty dataframe
+        # create empty dataframe
         df = pd.DataFrame()
 
-        # Specify total number of folders in source path
+        # specify total number of folders in source path
         num_folders = len(next(os.walk(SU.set_audio_path()))[1]) + 1
 
-        # Loop over audio recordings in the source path
+        # loop over audio recordings in the source path
         for i in range(1, num_folders):
-            # Show progress
+            # show progress
             SU.loop_progress(i, num_folders - 1, 6)
 
-            # Loop over files in directory
+            # loop over files in directory
             audio_file = sorted(
                 glob.glob(
                     os.path.join(os.path.join(SU.set_audio_path(), f"{i:02d}"), "*.wav")
                 )
             )
             for file in audio_file:
-                # Split file string
+                # split file string
                 dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
 
-                # Read audio data
+                # read audio data
                 fs, audio_data = DP.read_audio(file)
 
-                # Resample audio data
+                # resample audio data
                 audio_data = DP.resample_data(fs, audio_data)
 
-                # Zero padding audio data
+                # zero padding audio data
                 audio_data = DP.zero_pad(audio_data)
 
-                # Calculate time-domain features
+                # calculate time-domain features
                 time_domain_features = DP.feature_creation_time_domain(audio_data)
 
                 # FFT audio data
                 fft_data = DP.fft_data(audio_data)
 
-                # Calculate frequency-domain features
+                # calculate frequency-domain features
                 features = DP.feature_creation_frequency_domain(fft_data)
 
-                # Merge features
+                # merge features
                 features.update(time_domain_features)
 
-                # Normalize features
+                # normalize features
                 n_features = DP.normalize_features(features)
 
-                # Add gender and digit column
+                # add gender and digit column
                 features = DP.add_column_dict(
                     n_features,
                     self.config_file["target"],
                     meta_data[vp][self.config_file["target"]],
                 )
 
-                # Append new dict values to the DataFrame
+                # append new dict values to the DataFrame
                 df = df.append(features, ignore_index=True)
 
-        # Plot audio signal
+        # plot audio signal
         audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
         DV.plot_audio(fs, audio_data, audio_name, 1)
 
-        # Plot STFT of audio signal
+        # plot STFT of audio signal
         stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
         DV.plot_stft(fs, audio_data, stft_name, 1)
 
-        # Play audio signal
+        # play audio signal
         DV.play_audio(file, 1)
 
-        # Save prepared data to csv
+        # save prepared data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             index=False,
         )
 
-        # Drop table in PostgreSQL
+        # drop table in PostgreSQL
         PM.drop_table(self.pgs_file["table"]["prepared"])
 
-        # Create table from csv in PostgreSQL
+        # create table from csv in PostgreSQL
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             self.pgs_file["table"]["prepared"],
         )
 
-        # Save prepared data to PostgreSQL
+        # save prepared data to PostgreSQL
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             self.pgs_file["table"]["prepared"],
         )
 
-        # Show gender balance
+        # show gender balance
         gender_count = DP.column_value_counts(df, self.config_file["target"])
         print(f"Female audio recordings: {gender_count[0]}")
         print(f"Male audio recordings: {gender_count[1]}")
 
-        # Show size of dataset
+        # show size of dataset
         print(f"Prepared dataset, columns: {df.shape[1]} and rows: {df.shape[0]}")
 
     def FeatureEngineer(self):
         """
         Feature Engineering
         """
-        # Load file into dataframe
+        # load file into dataframe
         df = pd.read_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"])
         )
 
-        # Remove constant columns
+        # remove constant columns
         df = FE.remove_constant_columns(df, self.config_file["target"])
 
-        # Catogarize target column where female is 0 and male is 1
+        # catogarize target column where female is 0 and male is 1
         df = FE.categorize_column_values(df, self.config_file["target"])
 
-        # Plot column distribution
+        # plot column distribution
         DV.plot_column_dist(
             df,
             self.config_file["plots"]["column_distribution"],
             self.config_file["target"],
         )
 
-        # Calculate correlation matrix
+        # calculate correlation matrix
         corr_matrix = FE.pearson_correlation(df, self.config_file["target"])
 
-        # Plot correlation matrix
+        # plot correlation matrix
         DV.plot_corr_matrix(
             corr_matrix, self.config_file["plots"]["correlation_matrix"]
         )
 
-        # Remove correlated columns
+        # remove correlated columns
         df = FE.remove_correlated_columns(
             df,
             self.config_file["thresholds"]["correlation"],
             self.config_file["target"],
         )
 
-        # Save engineered data to csv
+        # save engineered data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             index=False,
         )
 
-        # Drop table in PostgreSQL
+        # drop table in PostgreSQL
         PM.drop_table(self.pgs_file["table"]["engineered"])
 
-        # Create table from csv in PostgreSQL
+        # create table from csv in PostgreSQL
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             self.pgs_file["table"]["engineered"],
         )
 
-        # Save engineered data to PostgreSQL
+        # save engineered data to PostgreSQL
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             self.pgs_file["table"]["engineered"],
@@ -193,17 +193,17 @@ class AudioMNIST:
         """
         Data Splitting
         """
-        # Load file into dataframe
+        # load file into dataframe
         df = pd.read_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"])
         )
 
-        # Split datasets
+        # split datasets
         self.train_df, self.val_df, self.test_df = DS.split(
             df, self.config_file["target"]
         )
 
-        # Show size of datasets
+        # show size of datasets
         print(
             f"Training set, columns: {self.train_df.shape[1]} and rows: {self.train_df.shape[0]}"
         )
@@ -214,7 +214,7 @@ class AudioMNIST:
             f"Test set, columns: {self.test_df.shape[1]} and rows: {self.test_df.shape[0]}"
         )
 
-        # Prepare datasets
+        # prepare datasets
         (
             self.X_train,
             self.y_train,
@@ -230,7 +230,7 @@ class AudioMNIST:
         """
         Model Hyperparameter Tuning
         """
-        # Hyperparameters tuning through grid search
+        # hyperparameters tuning through grid search
         MT.grid_search(
             self.X_train,
             self.y_train,
@@ -248,14 +248,14 @@ class AudioMNIST:
         """
         Model Training
         """
-        # Set model parameters
+        # set model parameters
         MT.set_params(
             SU.read_file(
                 SU.set_model_path(), self.config_file["parameters"]["model_parameters"]
             )
         )
 
-        # Train model
+        # train model
         MT.fit(
             self.X_train,
             self.y_train,
@@ -266,20 +266,20 @@ class AudioMNIST:
             self.config_file["results"]["model_object"],
         )
 
-        # Load results into pandas dataframe
+        # load results into pandas dataframe
         df = MT.create_log_df(
             SU.read_file(
                 SU.set_result_path(), self.config_file["results"]["model_results"]
             )
         )
 
-        # Plot feature importance
+        # plot feature importance
         DV.plot_feature_importance(
             MT.model,
             self.config_file["plots"]["feature_importance"],
         )
 
-        # Plot training and validation accuracy and loss
+        # plot training and validation accuracy and loss
         DV.plot_loss(
             df["iteration"],
             df["train_loss"],
@@ -297,42 +297,42 @@ class AudioMNIST:
         """
         Model Prediction And Evaluation
         """
-        # Load the pre-trained model object
+        # load the pre-trained model object
         MT.model = MP.load_model(
             SU.set_result_path(), self.config_file["results"]["model_object"]
         )
 
-        # Make predictions
+        # make predictions
         y_pred = MP.predict(MT.model, self.test_df.iloc[:, :-1])
 
-        # Create final dataframe from test set and reset index
+        # create final dataframe from test set and reset index
         df = self.test_df.reset_index(drop=True)
 
-        # Add predicted values column to final dataframe
+        # add predicted values column to final dataframe
         df = DP.add_column_df(df, self.config_file["predicted"], y_pred)
 
-        # Save predicted data to csv
+        # save predicted data to csv
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             index=False,
         )
 
-        # Drop table in PostgreSQL
+        # drop table in PostgreSQL
         PM.drop_table(self.pgs_file["table"]["predicted"])
 
-        # Create table from csv in PostgreSQL
+        # create table from csv in PostgreSQL
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             self.pgs_file["table"]["predicted"],
         )
 
-        # Save predicted data to PostgreSQL
+        # save predicted data to PostgreSQL
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             self.pgs_file["table"]["predicted"],
         )
 
-        # Plot confusion matrix
+        # plot confusion matrix
         DV.plot_confusion_matrix(
             self.y_test,
             y_pred,
@@ -340,19 +340,19 @@ class AudioMNIST:
             self.config_file["plots"]["confusion_matrix"],
         )
 
-        # Plot Shapley summary
+        # plot Shapley summary
         DV.plot_shapley_summary(
             MT.model,
             self.test_df.iloc[:, :-1],
             self.config_file["plots"]["shapley_summary"],
         )
 
-        # Evaluate model
+        # evaluate model
         MP.evaluate_predictions(self.y_test, y_pred)
 
 
 if __name__ == "__main__":
-    # Add arguments
+    # add arguments
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-c",
@@ -372,35 +372,35 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="true",
+        default="false",
         help="Data Preparation",
     )
     parser.add_argument(
         "-f",
         "--feat_eng",
         type=str,
-        default="true",
+        default="false",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="true",
+        default="false",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="true",
+        default="false",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="true",
+        default="false",
         help="Model Training",
     )
     parser.add_argument(
@@ -412,7 +412,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # Initialize classes
+    # initialize classes
     SU = Setup(args.cfg_file)
     PM = PostgresManager(args.pgs_file)
     DP = DataPreparation()
