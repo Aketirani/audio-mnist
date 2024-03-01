@@ -86,34 +86,33 @@ class PostgresManager:
         :param table_name: str, name of the PostgreSQL table to write data into
         """
         try:
-            # construct the query
+            # construct the query and execute
             query = f"COPY {table_name} FROM '{file_path}' DELIMITER ',' CSV HEADER;"
-            # execute the COPY command with the file path as a parameter
             self._execute_query(query)
         except psycopg2.Error as e:
             # rollback and raise error
             self.conn.rollback()
             raise e
 
-    def create_table_from_csv(self, file_path: str, table_name: str) -> None:
+    def create_table_from_csv(self, file_path: str, table_name: str, target_column: str = None) -> None:
         """
         Create a table in the PostgreSQL database based on the columns in a CSV file
 
         :param file_path: str, path to the CSV file containing column names and sample data
         :param table_name: str, name of the table to create
+        :param target_column: str, name of the target variable column (default is None)
         """
-        # read the CSV file to get column names and sample data types
+        # read the CSV file to get column names
         with open(file_path, "r") as file:
             # use the first row to get column names
             reader = csv.reader(file)
             columns = next(reader)
-            # assume all columns are of type NUMERIC for simplicity
-            column_definitions = ", ".join([f"{column} NUMERIC" for column in columns])
+            # construct column definitions with VARCHAR(10) for target column if provided
+            column_definitions = [f"{column} {'VARCHAR(10)' if column == target_column else 'NUMERIC'}" for column in columns]
+            column_definitions = ", ".join(column_definitions)
 
-        # construct the query
+        # construct the query and execute
         query = f"CREATE TABLE {table_name} ({column_definitions});"
-
-        # execute the query
         self._execute_query(query)
 
     def drop_table(self, table_name: str) -> None:
@@ -122,8 +121,6 @@ class PostgresManager:
 
         :param table_name: str, name of the table to drop
         """
-        # construct the query
+        # construct the query and execute
         query = f"DROP TABLE IF EXISTS {table_name};"
-
-        # execute the query
         self._execute_query(query)

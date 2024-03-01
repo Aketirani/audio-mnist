@@ -89,7 +89,7 @@ class AudioMNIST:
                 )
 
                 # append new dict values to the DataFrame
-                df = df.append(features, ignore_index=True)
+                df = pd.concat([df, pd.DataFrame(features, index=[0])], ignore_index=True)
 
         # plot audio signal
         audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
@@ -115,6 +115,7 @@ class AudioMNIST:
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             self.pgs_file["table"]["prepared"],
+            self.config_file["target"],
         )
 
         # save prepared data to PostgreSQL
