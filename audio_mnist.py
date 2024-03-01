@@ -89,7 +89,9 @@ class AudioMNIST:
                 )
 
                 # append new dict values to the DataFrame
-                df = pd.concat([df, pd.DataFrame(features, index=[0])], ignore_index=True)
+                df = pd.concat(
+                    [df, pd.DataFrame(features, index=[0])], ignore_index=True
+                )
 
         # plot audio signal
         audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
@@ -380,35 +382,35 @@ if __name__ == "__main__":
         "-f",
         "--feat_eng",
         type=str,
-        default="false",
+        default="true",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="false",
+        default="true",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="false",
+        default="true",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="false",
+        default="true",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="false",
+        default="true",
         help="Model Prediction",
     )
     args = parser.parse_args()

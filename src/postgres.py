@@ -94,7 +94,9 @@ class PostgresManager:
             self.conn.rollback()
             raise e
 
-    def create_table_from_csv(self, file_path: str, table_name: str, target_column: str = None) -> None:
+    def create_table_from_csv(
+        self, file_path: str, table_name: str, target_column: str = None
+    ) -> None:
         """
         Create a table in the PostgreSQL database based on the columns in a CSV file
 
@@ -108,7 +110,10 @@ class PostgresManager:
             reader = csv.reader(file)
             columns = next(reader)
             # construct column definitions with VARCHAR(10) for target column if provided
-            column_definitions = [f"{column} {'VARCHAR(10)' if column == target_column else 'NUMERIC'}" for column in columns]
+            column_definitions = [
+                f"{column} {'VARCHAR(10)' if column == target_column else 'NUMERIC'}"
+                for column in columns
+            ]
             column_definitions = ", ".join(column_definitions)
 
         # construct the query and execute
