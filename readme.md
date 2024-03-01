@@ -95,6 +95,17 @@ This project epitomizes the application of machine learning in voice and speech 
 ### Exectuion
 Execute `audiomnist.sh` to initiate the entire pipeline.
 
+Following arguments can be specified:
+
+- `-c`, `--cfg_file`: Path to the configuration file
+- `-y`, `--pgs_file`: Path to the PostgreSQL configuration file
+- `-d`, `--data_prep`: Indicates whether to execute the data preparation step (true or false)
+- `-f`, `--feat_eng`: Indicates whether to execute the feature engineering step (true or false)
+- `-s`, `--data_split`: Indicates whether to execute the data splitting step (true or false)
+- `-u`, `--model_tune`: Indicates whether to execute the model tuning step (true or false)
+- `-t`, `--model_train`: Indicates whether to execute the model training step (true or false)
+- `-p`, `--model_pred`: Indicates whether to execute the model prediction step (true or false)
+
 ### Unit Test
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
 
