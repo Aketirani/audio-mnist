@@ -306,7 +306,7 @@ class AudioMNIST:
         )
 
         # make predictions
-        y_pred = MP.predict(MT.model, self.test_df.iloc[:, :-1])
+        y_pred = MP.predict(MT.model, self.X_test)
 
         # create final dataframe from test set and reset index
         df = self.test_df.reset_index(drop=True)
@@ -346,7 +346,7 @@ class AudioMNIST:
         # plot Shapley summary
         DV.plot_shapley_summary(
             MT.model,
-            self.test_df.iloc[:, :-1],
+            self.X_test,
             self.config_file["plots"]["shapley_summary"],
         )
 
