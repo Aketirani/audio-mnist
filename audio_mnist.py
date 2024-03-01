@@ -372,7 +372,7 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Data Preparation",
     )
     parser.add_argument(
@@ -407,7 +407,7 @@ if __name__ == "__main__":
         "-p",
         "--model_pred",
         type=str,
-        default="true",
+        default="false",
         help="Model Prediction",
     )
     args = parser.parse_args()
