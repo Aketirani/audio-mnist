@@ -1,0 +1,10 @@
+connection:
+  host: your_host
+  database: your_database
+  user: your_user
+  password: your_password
+  port: your_port
+table:
+  prepared: data_prepared
+  engineered: data_engineered
+  predicted: data_predicted

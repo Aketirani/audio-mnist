@@ -110,22 +110,6 @@ class AudioMNIST:
             index=False,
         )
 
-        # drop table in PostgreSQL
-        PM.drop_table(self.pgs_file["table"]["prepared"])
-
-        # create table from csv in PostgreSQL
-        PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
-            self.pgs_file["table"]["prepared"],
-            self.config_file["target"],
-        )
-
-        # save prepared data to PostgreSQL
-        PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
-            self.pgs_file["table"]["prepared"],
-        )
-
         # show gender balance
         gender_count = DP.column_value_counts(df, self.config_file["target"])
         print(f"Female audio recordings: {gender_count[0]}")
@@ -175,21 +159,6 @@ class AudioMNIST:
         df.to_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             index=False,
-        )
-
-        # drop table in PostgreSQL
-        PM.drop_table(self.pgs_file["table"]["engineered"])
-
-        # create table from csv in PostgreSQL
-        PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
-            self.pgs_file["table"]["engineered"],
-        )
-
-        # save engineered data to PostgreSQL
-        PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
-            self.pgs_file["table"]["engineered"],
         )
 
     def DataSplit(self):
@@ -320,21 +289,6 @@ class AudioMNIST:
             index=False,
         )
 
-        # drop table in PostgreSQL
-        PM.drop_table(self.pgs_file["table"]["predicted"])
-
-        # create table from csv in PostgreSQL
-        PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
-            self.pgs_file["table"]["predicted"],
-        )
-
-        # save predicted data to PostgreSQL
-        PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
-            self.pgs_file["table"]["predicted"],
-        )
-
         # plot confusion matrix
         DV.plot_confusion_matrix(
             self.y_test,
@@ -343,7 +297,7 @@ class AudioMNIST:
             self.config_file["plots"]["confusion_matrix"],
         )
 
-        # plot Shapley summary
+        # plot shapley summary
         DV.plot_shapley_summary(
             MT.model,
             self.X_test,
@@ -352,6 +306,44 @@ class AudioMNIST:
 
         # evaluate model
         MP.evaluate_predictions(self.y_test, y_pred)
+
+    def DataSQL(self):
+        """
+        Data To PostgreSQL
+        """
+        # drop tables
+        PM.drop_table(self.pgs_file["table"]["prepared"])
+        PM.drop_table(self.pgs_file["table"]["engineered"])
+        PM.drop_table(self.pgs_file["table"]["predicted"])
+
+        # create table schemas
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            self.pgs_file["table"]["prepared"],
+            self.config_file["target"],
+        )
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            self.pgs_file["table"]["engineered"],
+        )
+        PM.create_table_from_csv(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            self.pgs_file["table"]["predicted"],
+        )
+
+        # save data
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            self.pgs_file["table"]["prepared"],
+        )
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            self.pgs_file["table"]["engineered"],
+        )
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            self.pgs_file["table"]["predicted"],
+        )
 
 
 if __name__ == "__main__":
@@ -413,6 +405,13 @@ if __name__ == "__main__":
         default="true",
         help="Model Prediction",
     )
+    parser.add_argument(
+        "-q",
+        "--data_sql",
+        type=str,
+        default="false",
+        help="Data To PostgreSQL",
+    )
     args = parser.parse_args()
 
     # initialize classes
@@ -449,3 +448,6 @@ if __name__ == "__main__":
 
     if args.model_pred == "true":
         AM.ModelPredict()
+
+    if args.data_sql == "true":
+        AM.DataSQL()
