@@ -49,13 +49,12 @@ class AudioMNIST:
 
             # loop over files in directory
             audio_file = sorted(
-                glob.glob(
-                    os.path.join(os.path.join(SU.set_audio_path(), f"{i:02d}"), "*.wav")
-                )
+                glob.glob(os.path.join(SU.set_audio_path(), f"{i:02d}", "*.wav"))
             )
+
             for file in audio_file:
                 # split file string
-                dig, vp, rep = file.rstrip(".wav").split("/")[-1].split("_")
+                dig, vp, rep = SU.extract_file_info(file)
 
                 # read audio data
                 fs, audio_data = DP.read_audio(file)
@@ -81,7 +80,7 @@ class AudioMNIST:
                 # normalize features
                 n_features = DP.normalize_features(features)
 
-                # add gender and digit column
+                # add target
                 features = DP.add_column_dict(
                     n_features,
                     self.config_file["target"],
@@ -93,16 +92,16 @@ class AudioMNIST:
                     [df, pd.DataFrame(features, index=[0])], ignore_index=True
                 )
 
-        # plot audio signal
-        audio_name = f"audio_{dig[-1]}_{vp}_{rep}.png"
-        DV.plot_audio(fs, audio_data, audio_name, 1)
+                # plot audio signal
+                audio_name = self.config_file["plots"]["audio"].format(dig[-1], vp, rep)
+                DV.plot_audio(fs, audio_data, audio_name, 1)
 
-        # plot STFT of audio signal
-        stft_name = f"stft_{dig[-1]}_{vp}_{rep}.png"
-        DV.plot_stft(fs, audio_data, stft_name, 1)
+                # plot STFT of audio signal
+                stft_name = self.config_file["plots"]["stft"].format(dig[-1], vp, rep)
+                DV.plot_stft(fs, audio_data, stft_name, 1)
 
-        # play audio signal
-        DV.play_audio(file, 1)
+                # play audio signal
+                DV.play_audio(file, 0)
 
         # save prepared data to csv
         df.to_csv(
@@ -251,7 +250,7 @@ class AudioMNIST:
             self.config_file["plots"]["feature_importance"],
         )
 
-        # plot training and validation accuracy and loss
+        # plot training and validation loss and accuracy
         DV.plot_loss(
             df["iteration"],
             df["train_loss"],
@@ -374,35 +373,35 @@ if __name__ == "__main__":
         "-f",
         "--feat_eng",
         type=str,
-        default="true",
+        default="false",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="true",
+        default="false",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="true",
+        default="false",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="true",
+        default="false",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="true",
+        default="false",
         help="Model Prediction",
     )
     parser.add_argument(

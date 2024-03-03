@@ -29,7 +29,7 @@ class DataVisualization:
         self, sr: int, audio_data: np.ndarray, plot_name: str, plot_flag: int = 1
     ) -> None:
         """
-        Plots the audio signal with seconds on the x-axis and saves it
+        Plots the audio signal and saves it
 
         :param sr: int, sample rate for the audio recording
         :param audio_data: np.ndarray, audio data to be plotted
@@ -49,7 +49,7 @@ class DataVisualization:
             plt.ylabel("Amplitude")
 
             # save plot
-            plt.savefig(os.path.join(self.plot_path, plot_name))
+            plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
             # clear the current figure
             plt.clf()
@@ -91,7 +91,7 @@ class DataVisualization:
             plt.ylim(0, 1000)
 
             # save plot
-            plt.savefig(os.path.join(self.plot_path, plot_name))
+            plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
             # clear the current figure
             plt.clf()
@@ -104,13 +104,24 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         """
         # use seaborn to create a heatmap of the correlation matrix
-        sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", center=0)
+        sns.heatmap(
+            corr_matrix,
+            annot=True,
+            fmt=".2f",
+            cmap="coolwarm",
+            center=0,
+            annot_kws={"size": 12},
+            cbar_kws={"shrink": 0.22},
+        )
 
         # set the title
         plt.title("Correlation Matrix")
 
+        # manually set aspect ratio
+        plt.gca().set_aspect("equal", adjustable="box")
+
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -119,7 +130,7 @@ class DataVisualization:
         self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
     ) -> None:
         """
-        Plots iteration on the x-axis and loss on the y-axis and saves it
+        Plots the loss and saves it
 
         :param x: np.ndarray, iteration data to be plotted on x-axis
         :param y_train: np.ndarray, training loss data to be plotted on y-axis
@@ -137,7 +148,7 @@ class DataVisualization:
         plt.legend(loc="upper right")
 
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -146,7 +157,7 @@ class DataVisualization:
         self, x: np.ndarray, y_train: np.ndarray, y_val: np.ndarray, plot_name: str
     ) -> None:
         """
-        Plots iteration on the x-axis and accuracy on the y-axis and saves it
+        Plots the accuracy and saves it
 
         :param x: np.ndarray, iteration data to be plotted on x-axis
         :param y_train: np.ndarray, training accuracy data to be plotted on y-axis
@@ -164,7 +175,7 @@ class DataVisualization:
         plt.legend(loc="upper right")
 
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -172,7 +183,7 @@ class DataVisualization:
     @staticmethod
     def play_audio(filepath: str, play_flag: int = 1) -> None:
         """
-        Play the audio data
+        Plays the audio data
 
         :param filepath: str, path to the audio file
         :param play_flag: int, flag to determine whether to play (1) or not (0)
@@ -185,7 +196,7 @@ class DataVisualization:
         self, df: pd.DataFrame, plot_name: str, target_column: str
     ) -> None:
         """
-        Plots the column distribution of the dataframe with respect to the target column and saves it
+        Plots the column distribution with respect to the target column and saves it
 
         :param df: pd.DataFrame, dataframe to be plotted
         :param plot_name: str, name of the plot to be saved
@@ -221,11 +232,8 @@ class DataVisualization:
         for i in range(num_columns, num_rows * 2):
             fig.delaxes(axes[i])
 
-        # adjust layout and spacing
-        plt.tight_layout()
-
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -246,7 +254,7 @@ class DataVisualization:
         plt.title("Feature Importance")
 
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -255,7 +263,7 @@ class DataVisualization:
         self, y_test: list, y_pred: list, labels: list, plot_name: str
     ) -> None:
         """
-        Plots the confusion matrix of the classification and saves it
+        Plots the confusion matrix and saves it
 
         :param y_test: list, true labels
         :param y_pred: list, predicted labels
@@ -281,7 +289,7 @@ class DataVisualization:
         plt.ylabel("True")
 
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()
@@ -290,7 +298,7 @@ class DataVisualization:
         self, xgb_model, test_X: pd.DataFrame, plot_name: str
     ) -> None:
         """
-        Plots the Shapley summary of the classification and saves it
+        Plots the Shapley summary and saves it
 
         :param xgb_model: trained XGBoost model
         :param test_X: pd.DataFrame, test features
@@ -315,7 +323,7 @@ class DataVisualization:
         plt.title("Shapley Summary Plot")
 
         # save plot
-        plt.savefig(os.path.join(self.plot_path, plot_name))
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
 
         # clear the current figure
         plt.clf()

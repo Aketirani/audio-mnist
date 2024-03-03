@@ -16,6 +16,29 @@ class Setup:
         """
         self.cfg_file = cfg_file
 
+    def read_config(self) -> dict:
+        """
+        Read the config yaml file and return the data as a dictionary
+
+        :return: dict, containing the configuration data
+        """
+        try:
+            # change the directory to the configuration folder
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            config_folder = os.path.join(script_dir, "../config")
+            os.chdir(config_folder)
+
+            # open the configuration folder
+            with open(self.cfg_file, "r") as file:
+                # load the configuration file into a dictionary
+                cfg_setup = yaml.safe_load(file)
+        except:
+            # raise an error if the filename is not valid
+            raise FileNotFoundError(f"{self.cfg_file} is not a valid config filepath!")
+
+        # return the configuration data
+        return cfg_setup
+
     @staticmethod
     def read_file(filepath: str, filename: str) -> dict:
         """
@@ -39,28 +62,19 @@ class Setup:
         # return file data
         return file_data
 
-    def read_config(self) -> dict:
+    @staticmethod
+    def extract_file_info(filepath: str) -> tuple:
         """
-        Read the config yaml file and return the data as a dictionary
+        Extracts information from the file path and splits it into parts
 
-        :return: dict, containing the configuration data
+        :param filepath: str, path to the file
+        :return: tuple, containing extracted information (dig, vp, rep)
         """
-        try:
-            # change the directory to the configuration folder
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            config_folder = os.path.join(script_dir, "../config")
-            os.chdir(config_folder)
+        # extract file name, remove extension, and split
+        dig, vp, rep = os.path.splitext(os.path.basename(filepath))[0].split("_")
 
-            # open the configuration folder
-            with open(self.cfg_file, "r") as file:
-                # load the configuration file into a dictionary
-                cfg_setup = yaml.safe_load(file)
-        except:
-            # raise an error if the filename is not valid
-            raise FileNotFoundError(f"{self.cfg_file} is not a valid config filepath!")
-
-        # return the configuration data
-        return cfg_setup
+        # return parts
+        return dig, vp, rep
 
     def set_audio_path(self) -> str:
         """
