@@ -13,6 +13,7 @@ package "audio-mnist" {
             :model tuning;
             :model training;
             :model prediction;
+            :data to postgres;
         }
         :write to log;
     }
