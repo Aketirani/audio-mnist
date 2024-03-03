@@ -102,13 +102,13 @@ Following arguments can be specified:
 
 - `-c`, `--cfg_file`: Path to the configuration file
 - `-y`, `--pgs_file`: Path to the PostgreSQL configuration file
-- `-d`, `--data_prep`: Indicates whether to execute the data preparation step (true or false)
-- `-f`, `--feat_eng`: Indicates whether to execute the feature engineering step (true or false)
-- `-s`, `--data_split`: Indicates whether to execute the data splitting step (true or false)
-- `-u`, `--model_tune`: Indicates whether to execute the model tuning step (true or false)
-- `-t`, `--model_train`: Indicates whether to execute the model training step (true or false)
-- `-p`, `--model_pred`: Indicates whether to execute the model prediction step (true or false)
-- `-q`, `--data_sql`: Indicates whether to execute the data sql step (true or false)
+- `-d`, `--data_prep`: Execute the data preparation step
+- `-f`, `--feat_eng`: Execute the feature engineering step
+- `-s`, `--data_split`: Execute the data splitting step
+- `-u`, `--model_tune`: Execute the model tuning step
+- `-t`, `--model_train`: Execute the model training step
+- `-p`, `--model_pred`: Execute the model prediction step
+- `-q`, `--data_sql`: Execute the data sql step
 
 ### Unit Test
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
