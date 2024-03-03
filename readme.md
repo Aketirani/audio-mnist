@@ -61,11 +61,11 @@ The project employs a gradient boosting tree ensemble model within the XGBoost f
 
 The model uses the following key parameters:
 
-- `learning_rate`: The step size of the optimization algorithm
-- `max_depth`: The maximum depth of a tree
-- `n_estimators`: The number of of trees in the ensemble
+- `learning_rate`: Learning rate
+- `max_depth`: Maximum depth of a tree
+- `n_estimators`: Number of iterations (trees)
 - `objective`: Loss function
-- `tree_method`: Method used to grow the tree
+- `tree_method`: Tree grow method
 
 ### Model Features
 The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
