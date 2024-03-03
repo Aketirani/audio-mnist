@@ -54,7 +54,7 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) encompassing 30,000 spoken digits (0-9) audio samples from 60 distinct speakers. The dataset includes a directory for each speaker containing their respective audio recordings and a meta-information file detailing the gender and age of each speaker.
 
 ### Model Selection
-The choice of XGBoost (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
+The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
 
 ### Model Architecture
 The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters, including learning rate, maximum tree depth, and number of trees in the ensemble, govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
@@ -87,7 +87,10 @@ These features include:
 - `cent`: Frequency Centroid
 
 ### Model Performance
-The model has achieved a promising accuracy rate of `95.60%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+The model has achieved a promising accuracy rate of `95.77%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+
+### PostgreSQL Integration
+PostgreSQL integration enhances the project's data management capabilities. By utilizing [PostgreSQL](https://www.postgresql.org), an open-source object-relational database system, we ensure scalability, robustness, and efficient storage and retrieval of data. Utilize psycopg2, a Python driver, for seamless interaction with PostgreSQL. Store connection details in the `config/postgres.yaml` file for easy access, and perform database operations using SQL queries.
 
 ### Conclusion
 This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
@@ -105,6 +108,7 @@ Following arguments can be specified:
 - `-u`, `--model_tune`: Indicates whether to execute the model tuning step (true or false)
 - `-t`, `--model_train`: Indicates whether to execute the model training step (true or false)
 - `-p`, `--model_pred`: Indicates whether to execute the model prediction step (true or false)
+- `-q`, `--data_sql`: Indicates whether to execute the data sql step (true or false)
 
 ### Unit Test
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.

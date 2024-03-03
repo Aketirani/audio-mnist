@@ -297,7 +297,7 @@ class AudioMNIST:
             self.config_file["plots"]["confusion_matrix"],
         )
 
-        # plot Shapley summary
+        # plot shapley summary
         DV.plot_shapley_summary(
             MT.model,
             self.X_test,
@@ -307,51 +307,39 @@ class AudioMNIST:
         # evaluate model
         MP.evaluate_predictions(self.y_test, y_pred)
 
-    def ModelPredict(self):
+    def DataSQL(self):
         """
-        Model Prediction And Evaluation
+        Data To PostgreSQL
         """
-        # drop table in PostgreSQL
+        # drop tables
         PM.drop_table(self.pgs_file["table"]["prepared"])
+        PM.drop_table(self.pgs_file["table"]["engineered"])
+        PM.drop_table(self.pgs_file["table"]["predicted"])
 
-        # create table from csv in PostgreSQL
+        # create table schemas
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
             self.pgs_file["table"]["prepared"],
             self.config_file["target"],
         )
-
-        # save prepared data to PostgreSQL
-        PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
-            self.pgs_file["table"]["prepared"],
-        )
-
-        # drop table in PostgreSQL
-        PM.drop_table(self.pgs_file["table"]["engineered"])
-
-        # create table from csv in PostgreSQL
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
             self.pgs_file["table"]["engineered"],
         )
-
-        # save engineered data to PostgreSQL
-        PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
-            self.pgs_file["table"]["engineered"],
-        )
-
-        # drop table in PostgreSQL
-        PM.drop_table(self.pgs_file["table"]["predicted"])
-
-        # create table from csv in PostgreSQL
         PM.create_table_from_csv(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             self.pgs_file["table"]["predicted"],
         )
 
-        # save predicted data to PostgreSQL
+        # save data
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            self.pgs_file["table"]["prepared"],
+        )
+        PM.write_csv_to_table(
+            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            self.pgs_file["table"]["engineered"],
+        )
         PM.write_csv_to_table(
             os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
             self.pgs_file["table"]["predicted"],
@@ -379,50 +367,50 @@ if __name__ == "__main__":
         "-d",
         "--data_prep",
         type=str,
-        default="false",
+        default="true",
         help="Data Preparation",
     )
     parser.add_argument(
         "-f",
         "--feat_eng",
         type=str,
-        default="false",
+        default="true",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="false",
+        default="true",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="false",
+        default="true",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="false",
+        default="true",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="false",
+        default="true",
         help="Model Prediction",
     )
     parser.add_argument(
-        "-l",
-        "--data_table",
+        "-q",
+        "--data_sql",
         type=str,
         default="false",
-        help="Data Table",
+        help="Data To PostgreSQL",
     )
     args = parser.parse_args()
 
@@ -461,5 +449,5 @@ if __name__ == "__main__":
     if args.model_pred == "true":
         AM.ModelPredict()
 
-    if args.data_table == "true":
-        AM.DataTable()
+    if args.data_sql == "true":
+        AM.DataSQL()
