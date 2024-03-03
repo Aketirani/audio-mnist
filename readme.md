@@ -12,7 +12,7 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |   ├── audioMNIST_meta.txt     <-- Meta Information
 |
 ├── config                      <-- Configuration Folder
-|   ├── config.yaml             <-- Configuration File
+|   ├── *.yaml                  <-- Configuration Files
 |
 ├── data                        <-- Data Folder
 |   ├── *.csv                   <-- Data Files
@@ -39,9 +39,9 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
-├── audiomnist.py               <-- Main Python Script
+├── audio_mnist.py              <-- Main Python Script
 |
-├── audiomnist.sh               <-- Main Shell Script
+├── audio_mnist.sh              <-- Main Shell Script
 |
 ├── flowchart.wsd               <-- Pipeline Flowchart
 |
