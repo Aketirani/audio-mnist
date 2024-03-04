@@ -57,7 +57,7 @@ This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/
 The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
 
 ### Model Architecture
-The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters, govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
+The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
 
 The model uses the following key parameters:
 
