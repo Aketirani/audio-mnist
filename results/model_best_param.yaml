@@ -1,1 +1,5 @@
-{"learning_rate": 0.1, "max_depth": 9, "n_estimators": 300, "objective": "binary:logistic", "tree_method": "hist"}
+learning_rate: 0.1
+max_depth: 9
+n_estimators: 300
+objective: binary:logistic
+tree_method: hist

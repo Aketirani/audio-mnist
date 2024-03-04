@@ -104,15 +104,23 @@ class ModelTraining:
         self, file_path: str, file_name: str, grid: object
     ) -> None:
         """
-        Save the best parameters and best score of a model in yaml format
+        Saves the best parameters of the best score of a model in a yaml file
 
         :param file_path: str, path where the best parameters and best score should be saved
+        :param file_name: str, name of the file to save the best parameters
         :param grid: object, the grid returned by the fit method of a model
         """
+        # extract the best parameters from the grid object
+        best_params = grid.best_params_
+
         # open the file in write mode
         with open(os.path.join(file_path, file_name), "w") as f:
-            # dump the eval_result_ attribute of the result object into the file
-            json.dump(grid.best_params_, f)
+            # write each parameter along with its description to the file
+            f.write("learning_rate: {}\n".format(best_params["learning_rate"]))
+            f.write("max_depth: {}\n".format(best_params["max_depth"]))
+            f.write("n_estimators: {}\n".format(best_params["n_estimators"]))
+            f.write("objective: {}\n".format(best_params["objective"]))
+            f.write("tree_method: {}\n".format(best_params["tree_method"]))
 
     def grid_search(
         self,

@@ -8,6 +8,8 @@ parameters:
   model_parameters: "model_parameters.yaml"
   model_hyperparameters: "model_hyperparameters.yaml"
 plots:
+  audio: "audio/audio_{0}_{1}_{2}.png"
+  stft: "stft/stft_{0}_{1}_{2}.png"
   column_distribution: "column_distribution.png"
   confusion_matrix: "confusion_matrix.png"
   correlation_matrix: "correlation_matrix.png"
