@@ -1,4 +1,4 @@
-Started at 2024-02-07 21:23:23
+Started at 2024-03-04 09:23:23
 Progress: 10.00%
 Progress: 20.00%
 Progress: 30.00%
@@ -15,5 +15,5 @@ Prepared dataset, columns: 23 and rows: 30000
 Training set, columns: 18 and rows: 24000
 Validation set, columns: 18 and rows: 3000
 Test set, columns: 18 and rows: 3000
-Model Accuracy: 87.40%
-Finished at 2024-02-07 21:34:00
+Model Accuracy: 95.87%
+Finished at 2024-03-04 09:34:00
