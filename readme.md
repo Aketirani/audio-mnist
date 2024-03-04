@@ -57,15 +57,15 @@ This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/
 The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
 
 ### Model Architecture
-The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters, including learning rate, maximum tree depth, and number of trees in the ensemble, govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
+The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters, govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
 
 The model uses the following key parameters:
 
-- `learning_rate`: Learning rate
-- `max_depth`: Maximum depth of a tree
-- `n_estimators`: Number of iterations (trees)
-- `objective`: Loss function
-- `tree_method`: Tree grow method
+- `learning_rate`: Learning Rate
+- `max_depth`: Max Depth Of Tree
+- `n_estimators`: Number Of Estimators
+- `objective`: Objective Function
+- `tree_method`: Tree Method
 
 ### Model Features
 The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
