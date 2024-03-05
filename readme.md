@@ -1,5 +1,5 @@
 # Gender Recognition By Voice Analysis
-This repository is dedicated to a project that leverages acoustic features derived from voice recordings to predict the gender of the speaker. The analysis is based on a collection of 30,000 audio samples and utilizes the XGBoost machine learning library to achieve this objective. 
+This repository focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
 
 ### Project Overview
 Voice recordings can be analyzed to infer a myriad of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
