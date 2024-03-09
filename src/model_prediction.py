@@ -26,7 +26,6 @@ class ModelPrediction:
         :param filename: str, the name of the model object file
         :return: object, the loaded machine learning model
         """
-        # load the model object
         try:
             return joblib.load(os.path.join(filepath, filename))
         except Exception as e:
@@ -41,8 +40,8 @@ class ModelPrediction:
         :param X_test: pd.DataFrame, features for test data
         :return: pd.Series, series containing the predicted labels on test data
         """
-        # make predictions on the test data and convert to pandas Series
-        return pd.Series(model_object.predict(X_test))
+        predictions = model_object.predict(X_test)
+        return pd.Series(predictions)
 
     @staticmethod
     def evaluate_predictions(
@@ -56,12 +55,8 @@ class ModelPrediction:
         :param show: bool, whether to print the accuracy (deault=True)
         :return: float, model accuracy
         """
-        # round the predictions to the nearest integer
         predictions = [round(value) for value in y_pred]
         accuracy = accuracy_score(y_test, predictions)
-
         if show:
             print("Model Accuracy: %.2f%%" % (accuracy * 100))
-
-        # return model accuracy
         return accuracy

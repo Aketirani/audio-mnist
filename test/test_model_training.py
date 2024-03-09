@@ -46,13 +46,7 @@ class TestModelTraining(unittest.TestCase):
         )
 
     def test_set_params(self):
-        """
-        Test the set_params method
-        """
-        # call the set_params method with the sample model_param dictionary
         self.model_train.set_params(self.model_param)
-
-        # check that the parameters of the model object have been set correctly
         self.assertEqual(
             self.model_train.model.learning_rate, self.model_param["learning_rate"]
         )
@@ -70,11 +64,5 @@ class TestModelTraining(unittest.TestCase):
         )
 
     def test_create_log_df(self):
-        """
-        Test the create_log_df method
-        """
-        # get the resulting DataFrame from the method
         result_df = self.model_train.create_log_df(self.log_data)
-
-        # check if the resulting DataFrame match the expected one
         pd.testing.assert_frame_equal(result_df, self.expected_df)
