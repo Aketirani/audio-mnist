@@ -20,19 +20,13 @@ class ModelTraining:
         """
         self.model = XGBClassifier()
 
-    def set_params(self, model_param: dict):
+    def set_params_fit(self, model_param: dict):
         """
-        Set model parameters
+        Set model parameters for model training
 
-        :param model_param: dict, dictionary containing the parameters for the model
+        :param model_param: dict, dictionary containing the model parameters
         """
-        self.model.set_params(
-            learning_rate=model_param["learning_rate"],
-            max_depth=model_param["max_depth"],
-            n_estimators=model_param["n_estimators"],
-            objective=model_param["objective"],
-            tree_method=model_param["tree_method"],
-        )
+        self.model.set_params(**model_param)
 
     def _accuracy(self, preds: np.ndarray, dtrain: object) -> tuple:
         """
@@ -46,27 +40,12 @@ class ModelTraining:
         accuracy = accuracy_score(labels, np.round(preds))
         return "accuracy", accuracy
 
-    def _save_eval_metrics(
-        self, file_path: str, file_name_results: str, result: object
-    ) -> None:
-        """
-        Save the eval_metrics of a model in yaml format
-
-        :param file_path: str, path where the eval_metrics should be saved
-        :param result: object, the result returned by the fit method of a model
-        """
-        with open(os.path.join(file_path, file_name_results), "w") as f:
-            json.dump(result.evals_result_, f)
-
     def fit(
         self,
         X_train: np.ndarray,
         y_train: np.ndarray,
         X_val: np.ndarray,
         y_val: np.ndarray,
-        file_path: str,
-        file_name_results: str,
-        file_name_object: str,
     ) -> None:
         """
         Fit the model on training data
@@ -75,37 +54,41 @@ class ModelTraining:
         :param y_train: np.ndarray, labels for training
         :param X_val: np.ndarray, features for validation
         :param y_val: np.ndarray, labels for validation
-        :param file_path: str, path where the eval_metrics should be saved
-        :param file_name_results: str, name of the model results file to be saved
-        :param file_name_object: str, name of the model object file to be saved
         """
-        result = self.model.fit(
+        self.result = self.model.fit(
             X_train,
             y_train,
             eval_set=[(X_train, y_train), (X_val, y_val)],
             eval_metric=self._accuracy,
             verbose=0,
         )
-        joblib.dump(self.model, os.path.join(file_path, file_name_object))
-        self._save_eval_metrics(file_path, file_name_results, result)
 
-    def _save_best_parameters(
-        self, file_path: str, file_name: str, grid: object
-    ) -> None:
+    def save_model_object(self, file_path: str, file_name: object) -> None:
         """
-        Saves the best parameters of the best score of a model in a yaml file
+        Save the object of a model
 
-        :param file_path: str, path where the best parameters and best score should be saved
-        :param file_name: str, name of the file to save the best parameters
-        :param grid: object, the grid returned by the fit method of a model
+        :param file_path: str, path where the eval_metrics should be saved
+        :param file_name: str, name of the model object file to be saved
         """
-        best_params = grid.best_params_
-        with open(os.path.join(file_path, file_name), "w") as f:
-            f.write("learning_rate: {}\n".format(best_params["learning_rate"]))
-            f.write("max_depth: {}\n".format(best_params["max_depth"]))
-            f.write("n_estimators: {}\n".format(best_params["n_estimators"]))
-            f.write("objective: {}\n".format(best_params["objective"]))
-            f.write("tree_method: {}\n".format(best_params["tree_method"]))
+        joblib.dump(self.model, os.path.join(file_path, file_name))
+
+    def save_eval_metrics(self, file_path: str, file_name_results: str) -> None:
+        """
+        Save the eval metrics of a model
+
+        :param file_path: str, path where the eval_metrics should be saved
+        :param file_name_results: str, name of the model results file to be saved
+        """
+        with open(os.path.join(file_path, file_name_results), "w") as f:
+            json.dump(self.result.evals_result_, f)
+
+    def set_params_grid(self, grid_params: dict):
+        """
+        Set grid search hyperparameters for model tuning
+
+        :param grid_params: dict, dictionary containing the model hyperparameters
+        """
+        self.grid_params = grid_params
 
     def grid_search(
         self,
@@ -113,9 +96,6 @@ class ModelTraining:
         y_train: np.ndarray,
         X_val: np.ndarray,
         y_val: np.ndarray,
-        file_path: str,
-        file_name: str,
-        grid_params: dict,
     ) -> None:
         """
         Runs a grid search to tune the hyperparameters of the model
@@ -126,18 +106,31 @@ class ModelTraining:
         :param y_val: np.ndarray, labels for validation
         :param file_path: str, path to save the best results
         :param file_name: str, name of the file to save the best results
-        :param grid_params: str, dictionary containing the grid search parameters
         """
         grid = GridSearchCV(
-            self.model, grid_params, cv=3, scoring="accuracy", n_jobs=-1
+            self.model, self.grid_params, cv=3, scoring="accuracy", n_jobs=-1
         )
-        grid = grid.fit(
+        self.grid = grid.fit(
             X_train,
             y_train,
             eval_set=[(X_val, y_val)],
             verbose=0,
         )
-        self._save_best_parameters(file_path, file_name, grid)
+
+    def save_best_parameters(self, file_path: str, file_name: str) -> None:
+        """
+        Saves the best parameters of the best score of a model in a yaml file
+
+        :param file_path: str, path where the best parameters should be saved
+        :param file_name: str, name of the file to save the best parameters
+        """
+        best_params = self.grid.best_params_
+        with open(os.path.join(file_path, file_name), "w") as f:
+            f.write("learning_rate: {}\n".format(best_params["learning_rate"]))
+            f.write("max_depth: {}\n".format(best_params["max_depth"]))
+            f.write("n_estimators: {}\n".format(best_params["n_estimators"]))
+            f.write("objective: {}\n".format(best_params["objective"]))
+            f.write("tree_method: {}\n".format(best_params["tree_method"]))
 
     def feature_importance(self) -> np.ndarray:
         """

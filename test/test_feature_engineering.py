@@ -74,9 +74,7 @@ class TestFeatureEngineering(unittest.TestCase):
         df_result = self.feature_engineering.remove_correlated_columns(
             self.df,
             self.threshold,
-            self.gender_column[
-                0
-            ],
+            self.gender_column[0],
         )
         self.assertIsInstance(df_result, pd.DataFrame)
         self.assertTrue(self.gender_column[0] in df_result.columns)
