@@ -144,34 +144,43 @@ class AudioMNIST:
         )
 
     def ModelTune(self):
+        MT.set_params_grid(
+            SU.read_file(
+                SU.set_model_path(),
+                self.config_file["parameters"]["model_hyperparameters"],
+            )
+        )
         MT.grid_search(
             self.X_train,
             self.y_train,
             self.X_val,
             self.y_val,
-            SU.set_result_path(),
-            self.config_file["results"]["model_best_param"],
-            SU.read_file(
-                SU.set_model_path(),
-                self.config_file["parameters"]["model_hyperparameters"],
-            ),
+        )
+        MT.save_best_parameters(
+            SU.set_result_path(), self.config_file["results"]["model_best_param"]
         )
 
     def ModelTrain(self):
-        MT.set_params(
+        MT.set_params_fit(
             SU.read_file(
                 SU.set_model_path(), self.config_file["parameters"]["model_parameters"]
             )
         )
-
         MT.fit(
             self.X_train,
             self.y_train,
             self.X_val,
             self.y_val,
+        )
+
+        MT.save_model_object(
+            SU.set_result_path(),
+            self.config_file["results"]["model_object"],
+        )
+
+        MT.save_eval_metrics(
             SU.set_result_path(),
             self.config_file["results"]["model_results"],
-            self.config_file["results"]["model_object"],
         )
 
         df = MT.create_log_df(

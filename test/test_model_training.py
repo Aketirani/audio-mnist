@@ -46,7 +46,7 @@ class TestModelTraining(unittest.TestCase):
         )
 
     def test_set_params(self):
-        self.model_train.set_params(self.model_param)
+        self.model_train.set_params_fit(self.model_param)
         self.assertEqual(
             self.model_train.model.learning_rate, self.model_param["learning_rate"]
         )
