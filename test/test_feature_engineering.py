@@ -33,18 +33,10 @@ class TestFeatureEngineering(unittest.TestCase):
         self.threshold = 0.95
 
     def test_pearson_correlation(self):
-        """
-        Test the pearson_correlation method
-        """
-        # call the pearson_correlation method on the dataframe and columns to leave out
         corr_matrix = self.feature_engineering.pearson_correlation(
             self.df, self.gender_column
         )
-
-        # check that the returned value is a pandas DataFrame
         self.assertIsInstance(corr_matrix, pd.DataFrame)
-
-        # check that the shape of the returned DataFrame match number of columns in dataframe minus one
         self.assertEqual(
             corr_matrix.shape,
             (
@@ -52,8 +44,6 @@ class TestFeatureEngineering(unittest.TestCase):
                 self.df.shape[1] - len(self.gender_column),
             ),
         )
-
-        # check that all of the columns used in the correlation calculation are present in the returned corr_matrix
         self.assertTrue(
             all(
                 col in corr_matrix.columns
@@ -63,18 +53,10 @@ class TestFeatureEngineering(unittest.TestCase):
         )
 
     def test_remove_constant_columns(self):
-        """
-        Test the remove_constant_columns method
-        """
-        # call the remove_constant_columns method on the dataframe and columns to leave out
         df = self.feature_engineering.remove_constant_columns(
             self.df, self.gender_column
         )
-
-        # check that the returned value is a pandas DataFrame
         self.assertIsInstance(df, pd.DataFrame)
-
-        # check that the number of columns in the returned DataFrame match number of columns in dataframe minus the number of constant columns
         self.assertEqual(
             df.shape[1],
             self.df.shape[1]
@@ -86,30 +68,18 @@ class TestFeatureEngineering(unittest.TestCase):
                 ]
             ),
         )
-
-        # check that all of the columns specified in gender_column are present in the returned DataFrame
         self.assertTrue(all(col in df.columns for col in self.gender_column))
 
     def test_remove_correlated_columns(self):
-        """
-        Test the remove_correlated_columns method
-        """
-        # call the remove_correlated_columns method on the dataframe, threshold, and a single column to leave out
         df_result = self.feature_engineering.remove_correlated_columns(
             self.df,
             self.threshold,
             self.gender_column[
                 0
-            ],  # Use the first element of the list as a single column name
+            ],
         )
-
-        # check that the returned value is a pandas DataFrame
         self.assertIsInstance(df_result, pd.DataFrame)
-
-        # check that the specified column is still present in the returned dataframe
         self.assertTrue(self.gender_column[0] in df_result.columns)
-
-        # check that the correlated columns have been removed and that the number of columns in the returned dataframe is less than the original dataframe
         corr_matrix = df_result.drop(self.gender_column[0], axis=1).corr()
         correlated_columns = set()
         for i in range(len(corr_matrix.columns)):
@@ -121,14 +91,8 @@ class TestFeatureEngineering(unittest.TestCase):
         self.assertTrue(df_result.shape[1] < self.df.shape[1])
 
     def test_categorize_column_values(self):
-        """
-        Test the categorize_column_values method of the FeatureEngineering class
-        """
-        # call the categorize_column_values method
         result = self.feature_engineering.categorize_column_values(
             self.df, self.gender_column[0]
-        )  # Use the first element of the list
-
-        # check if the gender column has been created with the correct values
+        )
         self.assertIn(self.gender_column[0], result.columns)
         self.assertEqual(result[self.gender_column[0]].tolist(), [1, 0, 1, 0, 1, 0])

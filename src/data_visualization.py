@@ -36,22 +36,13 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
-        # convert audio data to floating-point format
         audio_data = audio_data.astype(float)
-
         if plot_flag:
-            # plot the audio signal
             librosa.display.waveshow(audio_data, sr=sr)
-
-            # add labels
             plt.title("Audio Signal")
             plt.xlabel("Time (s)")
             plt.ylabel("Amplitude")
-
-            # save plot
             plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-            # clear the current figure
             plt.clf()
 
     def plot_stft(
@@ -65,35 +56,19 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
-        # convert audio data to floating-point format
         audio_data = audio_data.astype(float)
-
-        # compute the stft of the audio signal
         stft = librosa.stft(audio_data)
-
-        # get the magnitude of the stft data
-        stft_magnitude = np.abs(stft)
-
-        # convert the magnitude to dB scale
-        stft_magnitude_db = librosa.power_to_db(stft_magnitude, ref=np.max)
-
+        stft_magnitude_db = librosa.power_to_db(np.abs(stft), ref=np.max)
         if plot_flag:
-            # display the stft
             librosa.display.specshow(
                 stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
             )
-
-            # add a colorbar with dB scale and labels
             plt.colorbar(format="%+2.0f dB")
             plt.title("Short-Time Fourier Transform")
             plt.xlabel("Time (s)")
             plt.ylabel("Frequency (Hz)")
             plt.ylim(0, 1000)
-
-            # save plot
             plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-            # clear the current figure
             plt.clf()
 
     def plot_corr_matrix(self, corr_matrix: pd.DataFrame, plot_name: str) -> None:
@@ -103,7 +78,6 @@ class DataVisualization:
         :param corr_matrix: pd.DataFrame, correlation matrix to plot
         :param plot_name: str, name of the plot to be saved
         """
-        # use seaborn to create a heatmap of the correlation matrix
         sns.heatmap(
             corr_matrix,
             annot=True,
@@ -113,17 +87,9 @@ class DataVisualization:
             annot_kws={"size": 12},
             cbar_kws={"shrink": 0.22},
         )
-
-        # set the title
         plt.title("Correlation Matrix")
-
-        # manually set aspect ratio
         plt.gca().set_aspect("equal", adjustable="box")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     def plot_loss(
@@ -137,20 +103,13 @@ class DataVisualization:
         :param y_val: np.ndarray, validation loss data to be plotted on y-axis
         :param plot_name: str, name of the plot to be saved
         """
-        # plot y_train and y_val loss over iteration
         plt.plot(x, y_train, label="Training")
         plt.plot(x, y_val, label="Validation")
-
-        # add labels
         plt.title("Log Loss")
         plt.xlabel("Iteration")
         plt.ylabel("Loss")
         plt.legend(loc="upper right")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     def plot_accuracy(
@@ -164,20 +123,13 @@ class DataVisualization:
         :param y_val: np.ndarray, validation accuracy data to be plotted on y-axis
         :param plot_name: str, name of the plot to be saved
         """
-        # plot y_train and y_val accuracy over iteration
         plt.plot(x, y_train, label="Training")
         plt.plot(x, y_val, label="Validation")
-
-        # add labels
         plt.title("Accuracy")
         plt.xlabel("Iteration")
         plt.ylabel("Accuracy")
         plt.legend(loc="upper right")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     @staticmethod
@@ -189,7 +141,6 @@ class DataVisualization:
         :param play_flag: int, flag to determine whether to play (1) or not (0)
         """
         if play_flag:
-            # play audio data sound
             playsound.playsound(filepath)
 
     def plot_column_dist(
@@ -202,18 +153,11 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         :param target_column: str, the target column for distribution comparison
         """
-        # select numeric columns
         numeric_columns = df.select_dtypes(include=np.number).columns
-
-        # calculate the number of columns and rows for subplot layout
         num_columns = len(numeric_columns)
         num_rows = (num_columns + 1) // 2
-
-        # create a grid of subplots with custom layout
         fig, axes = plt.subplots(num_rows, 2, figsize=(15, 5 * num_rows))
         axes = axes.flatten()
-
-        # loop through columns and plot histograms
         for i, col in enumerate(numeric_columns):
             ax = axes[i]
             sns.histplot(
@@ -227,15 +171,9 @@ class DataVisualization:
             ax.set_title(f"Distribution of {col}")
             ax.set_xlabel("")
             ax.set_ylabel("Count" if col == target_column else "Density")
-
-        # hide any empty subplots
         for i in range(num_columns, num_rows * 2):
             fig.delaxes(axes[i])
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     def plot_feature_importance(
@@ -247,16 +185,9 @@ class DataVisualization:
         :param xgb_model: xgb.XGBClassifier, trained XGBoost model
         :param plot_name: str, name of the plot to be saved
         """
-        # plot feature importance
         xgb.plot_importance(xgb_model, importance_type="weight")
-
-        # add title
         plt.title("Feature Importance")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     def plot_confusion_matrix(
@@ -270,10 +201,7 @@ class DataVisualization:
         :param labels: list of str, labels for display
         :param plot_name: str, name of the plot to be saved
         """
-        # compute the confusion matrix
         cm = confusion_matrix(y_test, y_pred)
-
-        # use seaborn to create a heatmap of the confusion matrix
         sns.heatmap(
             cm,
             annot=True,
@@ -282,16 +210,10 @@ class DataVisualization:
             xticklabels=labels,
             yticklabels=labels,
         )
-
-        # add labels
         plt.title("Confusion Matrix")
         plt.xlabel("Predicted")
         plt.ylabel("True")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()
 
     def plot_shapley_summary(
@@ -304,13 +226,8 @@ class DataVisualization:
         :param test_X: pd.DataFrame, test features
         :param plot_name: str, name of the plot to be saved
         """
-        # create a TreeExplainer for the XGBoost model
         explainer = shap.TreeExplainer(xgb_model)
-
-        # calculate Shapley values
         shap_values = explainer.shap_values(test_X)
-
-        # create the Shapley summary plot
         shap.summary_plot(
             shap_values,
             test_X,
@@ -318,12 +235,6 @@ class DataVisualization:
             class_names=xgb_model.classes_,
             show=False,
         )
-
-        # add title
         plt.title("Shapley Summary Plot")
-
-        # save plot
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
-
-        # clear the current figure
         plt.clf()

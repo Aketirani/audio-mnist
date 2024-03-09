@@ -58,91 +58,43 @@ class TestDataPreparation(unittest.TestCase):
         self.df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
 
     def test_resample_data(self):
-        """
-        Test the resample_data method
-        """
-        # call resample_data method to get resampled data
         resampled_data = self.data_preparation.resample_data(self.fs, self.audio_data)
-
-        # check if the number of samples in the resampled data is equal to the target sample rate
         self.assertEqual(resampled_data.shape[0], self.target_sr)
-
-        # check if the data type of the resampled data is float32
         self.assertEqual(resampled_data.dtype, np.float32)
 
     def test_zero_pad(self):
-        """
-        Test the zero_pad method
-        """
-        # call resample_data method to get resampled data
         resampled_data = self.data_preparation.resample_data(self.fs, self.audio_data)
-
-        # call zero_pad method to get zero padded data
         zero_padded_data = self.data_preparation.zero_pad(resampled_data)
-
-        # check if the length of zero padded data is equal to the target sample rate
         self.assertEqual(zero_padded_data.shape[0], self.target_sr)
 
     def test_fft_data(self):
-        """
-        Test the fft_data method
-        """
-        # call fft_data method to get FFT of the audio data
         fft_of_data = self.data_preparation.fft_data(self.audio_data)
-
-        # check if the FFT of the audio data is equal to the expected FFT
         self.assertTrue(np.allclose(fft_of_data, self.fft_data))
 
     def test_bandpass_filter(self):
-        """
-        Test the bandpass_filter method
-        """
-        # define the low and high thresholds for the filter
         low_threshold = 0.01
         high_threshold = 0.02
-
-        # call the bandpass_filter method to get the filtered FFT data
         filtered_fft_data = self.data_preparation.bandpass_filter(
             self.fft_data, low_threshold, high_threshold
         )
-
-        # verify that the frequencies outside the threshold range have been filtered out
         frequencies = np.fft.fftfreq(len(filtered_fft_data), 1 / self.target_sr)
         fft_result = np.abs(np.fft.fft(filtered_fft_data))
         for i, f in enumerate(frequencies):
             self.assertLessEqual(fft_result[i], 1e-5)
 
     def test_feature_creation_time_domain(self):
-        """
-        Test the feature_creation_time_domain method
-        """
-        # call the feature_creation_time_domain method to create the features
         features = self.data_preparation.feature_creation_time_domain(self.audio_data)
-
-        # check if the created feature columns are equal to the expected feature columns
         self.assertEqual(set(features.keys()), self.feature_dict_t.keys())
 
     def test_feature_creation_frequency_domain(self):
-        """
-        Test the feature_creation_frequency_domain method
-        """
-        # call the feature_creation_frequency_domain method to create the features
         features = self.data_preparation.feature_creation_frequency_domain(
             self.fft_data
         )
-
-        # check if the created feature columns are equal to the expected feature columns
         self.assertEqual(set(features.keys()), self.feature_dict_f.keys())
 
     def test_normalize_features(self):
-        """
-        Test the normalize_features method
-        """
-        # call the normalized_features method to normalize the features
         normalized_features = self.data_preparation.normalize_features(
             self.feature_dict_f
         )
-
-        # check if the normalized features are between 0 and 1
         self.assertEqual(min(normalized_features.values()), 0)
         self.assertEqual(max(normalized_features.values()), 1)

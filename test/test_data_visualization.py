@@ -36,67 +36,35 @@ class TestDataVisualization(unittest.TestCase):
         )
 
     def test_plot_corr_matrix(self):
-        """
-        Test the plot_corr_matrix method
-        """
-        # plot the correlation matrix
         self.data_visualization.plot_corr_matrix(self.matrix, self.plot_name)
-
-        # check if the plot has been saved at the specified location
         self.assertTrue(
             os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
-
-        # delete the plot file after the test
         os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_loss(self):
-        """
-        Test the plot_loss method
-        """
-        # plot the loss
         self.data_visualization.plot_loss(
             self.data, self.data, self.data, self.plot_name
         )
-
-        # check if the plot has been saved at the specified location
         self.assertTrue(
             os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
-
-        # delete the plot file after the test
         os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_accuracy(self):
-        """
-        Test the plot_accuracy method
-        """
-        # plot the accuracy
         self.data_visualization.plot_accuracy(
             self.data, self.data, self.data, self.plot_name
         )
-
-        # check if the plot has been saved at the specified location
         self.assertTrue(
             os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
-
-        # delete the plot file after the test
         os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
     def test_plot_column_dist(self):
-        """
-        Test the plot_column_dist method
-        """
-        # plot columns distribution
         self.data_visualization.plot_column_dist(
             self.matrix, self.plot_name, target_column="col1"
         )
-
-        # check if the plot has been saved at the specified location
         self.assertTrue(
             os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
         )
-
-        # delete the plot file after the test
         os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))

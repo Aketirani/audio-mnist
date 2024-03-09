@@ -23,13 +23,7 @@ class TestModelPrediction(unittest.TestCase):
         self.y_pred = np.array([0, 1, 0])
 
     def test_evaluate_predictions(self):
-        """
-        Test the evaluate_predictions method
-        """
-        # calculate accuracy using the sample true labels and predicted labels
         accuracy = self.model_predict.evaluate_predictions(
             self.y_test, self.y_pred, False
         )
-
-        # ensure accuracy is a float value
         self.assertIsInstance(accuracy, float)

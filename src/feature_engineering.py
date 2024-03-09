@@ -23,10 +23,7 @@ class FeatureEngineering:
         :param columns_to_leave_out: list, list of column names to exclude while calculating correlation
         :return: pd.DataFrame, DataFrame containing correlation coefficients
         """
-        # list of columns to use for correlation calculation
         columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
-
-        # calculate correlation matrix for the columns
         return df[columns_to_use].corr(method="pearson")
 
     def remove_constant_columns(
@@ -39,14 +36,11 @@ class FeatureEngineering:
         :param columns_to_leave_out: list, columns to exclude from removal
         :return: pd.DataFrame, DataFrame with constant value columns removed
         """
-        # get the columns with constant values
         constant_columns = [
             col
             for col in df.columns
             if df[col].nunique() <= 1 and col not in columns_to_leave_out
         ]
-
-        # remove the constant value columns
         return df.drop(constant_columns, axis=1)
 
     @staticmethod
@@ -61,29 +55,18 @@ class FeatureEngineering:
         :param columns_to_leave_out: list, column names to leave out of the correlation calculation but keep in the final output
         :return: pd.DataFrame, DataFrame with correlated columns removed
         """
-        # store a copy of the original DataFrame
         df_original = df.copy()
-
-        # calculate correlation matrix
         corr_matrix = df.drop(columns_to_leave_out, axis=1).corr()
-
-        # identify correlated columns
         correlated_columns = set()
         for i in range(len(corr_matrix.columns)):
             for j in range(i):
                 if abs(corr_matrix.iloc[i, j]) > threshold:
                     colname = corr_matrix.columns[i]
                     correlated_columns.add(colname)
-
-        # drop correlated columns
         df = df.drop(correlated_columns, axis=1)
-
-        # add back the columns that were left out
         for col in [columns_to_leave_out]:
             if col not in df.columns:
                 df[col] = df_original[col]
-
-        # return dataframe
         return df
 
     @staticmethod
@@ -95,8 +78,5 @@ class FeatureEngineering:
         :param column_name: str, column name to be categorized
         :return: pd.DataFrame, DataFrame with the categorized column
         """
-        # categorize the specified column values ('female' and 'male') to numerical values (0 and 1)
         df[column_name] = df[column_name].map({"female": 0, "male": 1})
-
-        # return dataframe
         return df
