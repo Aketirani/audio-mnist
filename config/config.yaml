@@ -18,7 +18,7 @@ plots:
   model_loss: "model_loss.png"
   shapley_summary: "shapley_summary.png"
 results:
-  model_best_param: "model_best_param.yaml"
+  model_best_params: "model_best_params.yaml"
   model_results: "model_results.yaml"
   model_object: "model_object.pkl"
 thresholds:
