@@ -156,8 +156,8 @@ class AudioMNIST:
             self.X_val,
             self.y_val,
         )
-        MT.save_best_parameters(
-            SU.set_result_path(), self.config_file["results"]["model_best_param"]
+        MT.save_best_params(
+            SU.set_result_path(), self.config_file["results"]["model_best_params"]
         )
 
     def ModelTrain(self):

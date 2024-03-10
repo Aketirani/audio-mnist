@@ -72,14 +72,14 @@ class ModelTraining:
         """
         joblib.dump(self.model, os.path.join(file_path, file_name))
 
-    def save_eval_metrics(self, file_path: str, file_name_results: str) -> None:
+    def save_eval_metrics(self, file_path: str, file_name: str) -> None:
         """
         Save the eval metrics of a model
 
         :param file_path: str, path where the eval_metrics should be saved
-        :param file_name_results: str, name of the model results file to be saved
+        :param file_name: str, name of the model results file to be saved
         """
-        with open(os.path.join(file_path, file_name_results), "w") as f:
+        with open(os.path.join(file_path, file_name), "w") as f:
             json.dump(self.result.evals_result_, f)
 
     def set_params_grid(self, grid_params: dict):
@@ -117,7 +117,7 @@ class ModelTraining:
             verbose=0,
         )
 
-    def save_best_parameters(self, file_path: str, file_name: str) -> None:
+    def save_best_params(self, file_path: str, file_name: str) -> None:
         """
         Saves the best parameters of the best score of a model in a yaml file
 
