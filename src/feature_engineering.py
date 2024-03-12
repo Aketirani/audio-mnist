@@ -72,7 +72,7 @@ class FeatureEngineering:
     @staticmethod
     def categorize_column_values(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
         """
-        Categorize the specified column values ('female' and 'male') to numerical values (0 and 1)
+        Categorize the specified column values to numerical values
 
         :param df: pd.DataFrame, input DataFrame
         :param column_name: str, column name to be categorized

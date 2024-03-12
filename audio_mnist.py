@@ -119,7 +119,10 @@ class AudioMNIST:
         )
 
         self.train_df, self.val_df, self.test_df = DS.split(
-            df, self.config_file["target"]
+            df,
+            self.config_file["target"],
+            self.config_file["datasplit"]["val_size"],
+            self.config_file["datasplit"]["test_size"],
         )
 
         print(

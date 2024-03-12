@@ -24,7 +24,7 @@ class TestDataSplitting(unittest.TestCase):
         """
         self.test_size = 0.1
         self.val_size = 0.1
-        self.data_split = DataSplitting(self.test_size, self.val_size)
+        self.data_split = DataSplitting()
         self.train_df = pd.DataFrame(
             {
                 "col1": [1, 2, 3, 4, 5, 6],
@@ -50,7 +50,9 @@ class TestDataSplitting(unittest.TestCase):
 
     def test_split(self):
         combined_df = pd.concat([self.train_df, self.val_df, self.test_df])
-        train_df, val_df, test_df = self.data_split.split(combined_df, "label")
+        train_df, val_df, test_df = self.data_split.split(
+            combined_df, "label", self.test_size, self.val_size
+        )
         self.assertEqual(
             train_df["label"].value_counts(normalize=True).values.tolist(),
             combined_df["label"].value_counts(normalize=True).values.tolist(),

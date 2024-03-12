@@ -94,8 +94,6 @@ class PostgresManager:
                 for column in columns
             ]
             column_definitions = ", ".join(column_definitions)
-
-        # construct the query and execute
         query = f"CREATE TABLE {table_name} ({column_definitions});"
         self._execute_query(query)
 

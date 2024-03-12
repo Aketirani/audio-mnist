@@ -40,10 +40,7 @@ class DataPreparation:
         :param data: np.ndarray, audio data
         :return: np.ndarray, resampled audio data
         """
-        if not isinstance(data, float) or not (
-            hasattr(data, "dtype") and np.issubdtype(data.dtype, np.floating)
-        ):
-            data = data.astype(np.float32)
+        data = data.astype(np.float32)
         resampled_data = librosa.core.resample(
             y=data, orig_sr=fs, target_sr=self.target_sr, res_type="scipy"
         )
@@ -56,16 +53,15 @@ class DataPreparation:
         :param data: np.ndarray, audio data
         :return: np.ndarray, the zero-padded audio data
         """
-        padding_length = self.target_sr
-        if len(data) < padding_length:
-            embedded_data = np.zeros(padding_length)
-            offset = np.random.randint(low=0, high=padding_length - len(data))
+        if len(data) < self.target_sr:
+            embedded_data = np.zeros(self.target_sr)
+            offset = np.random.randint(low=0, high=self.target_sr - len(data))
             embedded_data[offset : offset + len(data)] = data
-        elif len(data) == padding_length:
+        elif len(data) == self.target_sr:
             embedded_data = data
-        elif len(data) > padding_length:
+        elif len(data) > self.target_sr:
             raise ValueError(
-                f"Data length {len(data)} cannot exceed padding length {padding_length}!"
+                f"Data length {len(data)} cannot exceed padding length {self.target_sr}!"
             )
         return embedded_data
 
@@ -154,8 +150,7 @@ class DataPreparation:
         :param features: dict, containing the statistical features of the FFT data
         :return: dict, containing the normalized statistical features of the FFT data
         """
-        feature_keys = list(features.keys())
-        for key in feature_keys:
+        for key in list(features.keys()):
             features[key] = (features[key] - min(features.values())) / (
                 max(features.values()) - min(features.values())
             )
