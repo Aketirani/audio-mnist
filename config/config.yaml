@@ -21,6 +21,9 @@ results:
   model_best_params: "model_best_params.yaml"
   model_results: "model_results.yaml"
   model_object: "model_object.pkl"
+datasplit:
+  val_size: 0.10
+  test_size: 0.10
 thresholds:
   correlation: 0.95
 target: "gender"

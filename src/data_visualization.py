@@ -36,8 +36,8 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
-        audio_data = audio_data.astype(float)
         if plot_flag:
+            audio_data = audio_data.astype(float)
             librosa.display.waveshow(audio_data, sr=sr)
             plt.title("Audio Signal")
             plt.xlabel("Time (s)")
@@ -56,10 +56,10 @@ class DataVisualization:
         :param plot_name: str, name of the plot to be saved
         :param plot_flag: int, flag to determine whether to plot (1) or not (0)
         """
-        audio_data = audio_data.astype(float)
-        stft = librosa.stft(audio_data)
-        stft_magnitude_db = librosa.power_to_db(np.abs(stft), ref=np.max)
         if plot_flag:
+            audio_data = audio_data.astype(float)
+            stft = librosa.stft(audio_data)
+            stft_magnitude_db = librosa.power_to_db(np.abs(stft), ref=np.max)
             librosa.display.specshow(
                 stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
             )
