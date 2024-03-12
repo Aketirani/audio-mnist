@@ -44,19 +44,15 @@ class ModelPrediction:
         return pd.Series(predictions)
 
     @staticmethod
-    def evaluate_predictions(
-        y_test: np.ndarray, y_pred: np.ndarray, show: bool = True
-    ) -> float:
+    def evaluate_predictions(y_test: np.ndarray, y_pred: np.ndarray) -> float:
         """
         Evaluate predictions and returns model accuracy
 
         :param y_test: np.ndarray, true labels
         :param y_pred: np.ndarray, predicted labels
-        :param show: bool, whether to print the accuracy (deault=True)
         :return: float, model accuracy
         """
         predictions = [round(value) for value in y_pred]
         accuracy = accuracy_score(y_test, predictions)
-        if show:
-            print("Model Accuracy: %.2f%%" % (accuracy * 100))
+        print("Model Accuracy: %.2f%%" % (accuracy * 100))
         return accuracy
