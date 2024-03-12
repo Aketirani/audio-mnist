@@ -119,9 +119,7 @@ class Setup:
     @staticmethod
     def loop_progress(index: int, total: int, show_every: int = 1):
         """
-        This function takes in the current index, total number of iterations,
-        and optional parameter 'show_every' to display the progress of the loop
-        every 'show_every' iterations.
+        Display the progress of the loop every iterations
 
         :param index: int, the current index of the loop
         :param total: int, total number of iterations in the loop

@@ -1,7 +1,6 @@
 import unittest
 
 import numpy as np
-from sklearn.metrics import accuracy_score
 
 from src.model_prediction import ModelPrediction
 
@@ -23,7 +22,5 @@ class TestModelPrediction(unittest.TestCase):
         self.y_pred = np.array([0, 1, 0])
 
     def test_evaluate_predictions(self):
-        accuracy = self.model_predict.evaluate_predictions(
-            self.y_test, self.y_pred, False
-        )
+        accuracy = self.model_predict.evaluate_predictions(self.y_test, self.y_pred)
         self.assertIsInstance(accuracy, float)

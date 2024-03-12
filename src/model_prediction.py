@@ -20,11 +20,11 @@ class ModelPrediction:
     @staticmethod
     def load_model(filepath: str, filename: str) -> None:
         """
-        Load a pre-trained machine learning model object from a file
+        Load a pre-trained model object from a file
 
         :param filepath: str, the path to the directory containing the model object file
         :param filename: str, the name of the model object file
-        :return: object, the loaded machine learning model
+        :return: object, the loaded pre-trained model
         """
         try:
             return joblib.load(os.path.join(filepath, filename))
@@ -34,9 +34,9 @@ class ModelPrediction:
     @staticmethod
     def predict(model_object: object, X_test: pd.DataFrame) -> pd.Series:
         """
-        Make predictions on test data using a pre-loaded model
+        Make predictions on test data using a loaded pre-trained model
 
-        :param model_object: object, a pre-trained machine learning model object
+        :param model_object: object, a loaded pre-trained model
         :param X_test: pd.DataFrame, features for test data
         :return: pd.Series, series containing the predicted labels on test data
         """
