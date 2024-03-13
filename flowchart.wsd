@@ -3,9 +3,8 @@
 package "audio-mnist" {
     :start|
     partition "audiomnist.sh" {
-        :set repository path;
-        :set log path;
-        :run python script;
+        :set paths;
+        :run script;
         partition "audiomnist.py" {
             :data preparation;
             :feature engineering;
@@ -19,5 +18,4 @@ package "audio-mnist" {
     }
     :end|
 }
-stop
 @enduml
