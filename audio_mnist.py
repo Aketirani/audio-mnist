@@ -216,7 +216,7 @@ class AudioMNIST:
 
         y_pred = MP.predict(MT.model, self.X_test)
 
-        df = self.test_df.reset_index(drop=True)
+        df = DP.reset_index(self.test_df)
 
         df = DP.add_column_df(df, self.config_file["predicted"], y_pred)
 

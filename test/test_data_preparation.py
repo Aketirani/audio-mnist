@@ -98,3 +98,7 @@ class TestDataPreparation(unittest.TestCase):
         )
         self.assertEqual(min(normalized_features.values()), 0)
         self.assertEqual(max(normalized_features.values()), 1)
+
+    def test_reset_index(self):
+        df_reset = self.data_preparation.reset_index(self.df)
+        self.assertTrue(df_reset.equals(self.df.reset_index(drop=True)))

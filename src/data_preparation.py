@@ -208,3 +208,14 @@ class DataPreparation:
         """
         value_counts = df[column].value_counts()
         return value_counts
+
+    @staticmethod
+    def reset_index(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Reset index of a DataFrame and drop old index
+
+        :param df: pd.DataFrame, input DataFrame
+        :return: pd.DataFrame, DataFrame with reset index
+        """
+        df.reset_index(drop=True, inplace=True)
+        return df
