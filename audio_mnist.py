@@ -63,13 +63,13 @@ class AudioMNIST:
                     fs,
                     audio_data,
                     self.config_file["plots"]["audio"].format(dig[-1], vp, rep),
-                    1,
+                    0,
                 )
                 DV.plot_stft(
                     fs,
                     audio_data,
                     self.config_file["plots"]["stft"].format(dig[-1], vp, rep),
-                    1,
+                    0,
                 )
                 DV.play_audio(file, 0)
 
