@@ -1,6 +1,6 @@
 **AudioMNIST**
 
-Authors:
+Author:
 Aria Ketirani
 
 Description:
