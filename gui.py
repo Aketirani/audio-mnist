@@ -26,7 +26,7 @@ class GUI:
         "button": ("Helvetica", 10, "bold"),
     }
 
-    TITLE = "Gender Recognition By Voice Analysis \n With Machine Learning"
+    TITLE = "Utilizing XGBoost In Voice Gender Classification"
     INITIAL_TEXT = "Please Select The Boxes And Click Run... ✔️"
     NOTHING_TEXT = "No Boxes Were Selected, Please Try Again... ⚠️"
     WAIT_DISPLAY = "Processing, Please Wait... ⏳"
@@ -213,7 +213,7 @@ class GUI:
         """
         image_path = os.path.join(self.SU.set_img_path(), "logo.png")
         original_image = Image.open(image_path)
-        resized_image = original_image.resize((240, 130), Image.LANCZOS)
+        resized_image = original_image.resize((250, 150), Image.LANCZOS)
         photo = ImageTk.PhotoImage(resized_image)
         image_label = Label(self.root, image=photo)
         image_label.image = photo
@@ -294,7 +294,7 @@ class GUI:
         Save the content of the output text widget to a file with a timestamp in the filename
         """
         output_text = self.output_text.get("1.0", "end-1c")
-        current_datetime = datetime.datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+        current_datetime = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
         suggested_filename = f"run_{current_datetime}.txt"
 
         file_path = filedialog.asksaveasfilename(
