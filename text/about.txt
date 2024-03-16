@@ -1,0 +1,9 @@
+**AudioMNIST**
+
+Authors:
+Aria Ketirani
+
+Description:
+This project focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
+
+© 2024

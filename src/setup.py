@@ -76,6 +76,14 @@ class Setup:
         """
         return os.path.join(self.read_config()["project_path"], "data")
 
+    def set_img_path(self) -> str:
+        """
+        Get the path to the folder containing images for gui
+
+        :return: str, path to the images folder
+        """
+        return os.path.join(self.read_config()["project_path"], "images")
+
     def set_param_path(self) -> str:
         """
         Get the path to the folder containing model parameters
@@ -107,6 +115,14 @@ class Setup:
         :return: str, path to the test folder
         """
         return os.path.join(self.read_config()["project_path"], "test")
+
+    def set_txt_path(self) -> str:
+        """
+        Get the path to the folder containing txt for gui
+
+        :return: str, path to the text folder
+        """
+        return os.path.join(self.read_config()["project_path"], "text")
 
     def set_model_path(self) -> str:
         """

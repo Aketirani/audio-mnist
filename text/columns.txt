@@ -1,0 +1,21 @@
+**Column Used For Model Training & Prediction**
+
+1: mean_f
+2: std_f
+3: med_f
+4: min_f
+5: q25_f
+6: q75_f
+7: skew_f
+8: kurt_f
+9: cent_f
+10: mean_t
+11: std_t
+12: q25_t
+13: q75_t
+14: skew_t
+15: kurt_t
+16: zeroxrate_t
+17: entropy_t
+
+Target: gender
