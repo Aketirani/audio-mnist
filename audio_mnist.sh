@@ -6,7 +6,7 @@ path_log="/C/GitProjects/audio-mnist/logs/run_$(date +%Y%m%d).log"
 echo "Started at $(date +"%Y-%m-%d %T")" >> "$path_log" 2>&1
 
 # Run script
-python "$path_repo/audio_mnist.py" >> "$path_log" 2>&1
+python "$path_repo/gui.py" >> "$path_log" 2>&1
 
 # Show status
 echo "Finished at $(date +"%Y-%m-%d %T")" >> "$path_log" 2>&1

@@ -1,5 +1,5 @@
-# Gender Recognition By Voice Analysis
-This repository focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
+# Utilizing XGBoost In Voice Gender Classification
+This project focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
 
 ### Project Overview
 Voice recordings can be analyzed to infer a myriad of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
@@ -16,6 +16,9 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 |
 ├── data                        <-- Data Folder
 |   ├── *.csv                   <-- Data Files
+|
+├── images                      <-- Image Folder
+|   ├── *.png                   <-- Image Files
 |
 ├── logs                        <-- Log Folder
 |   ├── *.log                   <-- Log Files
@@ -35,6 +38,9 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 ├── test                        <-- Test Folder
 |   ├── *.py                    <-- Unit Tests
 |
+├── text                        <-- Text Folder
+|   ├── *.txt                   <-- Text Files
+|
 ├── .gitignore                  <-- Configuring Ignored Files
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
@@ -44,6 +50,8 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 ├── audio_mnist.sh              <-- Main Shell Script
 |
 ├── flowchart.wsd               <-- Pipeline Flowchart
+|
+├── gui.py                      <-- GUI Python Script
 |
 ├── readme.md                   <-- You Are Here
 |

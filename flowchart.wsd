@@ -5,14 +5,17 @@ package "audio-mnist" {
     partition "audiomnist.sh" {
         :set paths;
         :run script;
-        partition "audiomnist.py" {
-            :data preparation;
-            :feature engineering;
-            :data splitting;
-            :model tuning;
-            :model training;
-            :model prediction;
-            :data to postgres;
+        partition "gui.py" {
+            :run application;
+            partition "audiomnist.py" {
+                :data preparation;
+                :feature engineering;
+                :data splitting;
+                :model tuning;
+                :model training;
+                :model prediction;
+                :data to postgres;
+            }
         }
         :write to log;
     }

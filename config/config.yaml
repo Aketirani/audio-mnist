@@ -4,6 +4,10 @@ data:
   prepared: "data_prepared.csv"
   engineered: "data_engineered.csv"
   predicted: "data_predicted.csv"
+images:
+  logo: "logo.png"
+  info: "info.png"
+  icon: "icon.png"
 parameters:
   model_parameters: "model_parameters.yaml"
   model_hyperparameters: "model_hyperparameters.yaml"
