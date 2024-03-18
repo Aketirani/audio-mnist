@@ -26,8 +26,9 @@ class FeatureEngineering:
         columns_to_use = [col for col in df.columns if col not in columns_to_leave_out]
         return df[columns_to_use].corr(method="pearson")
 
+    @staticmethod
     def remove_constant_columns(
-        self, df: pd.DataFrame, columns_to_leave_out: list
+        df: pd.DataFrame, columns_to_leave_out: list
     ) -> pd.DataFrame:
         """
         Remove columns with constant values from the DataFrame, except for the ones specified in columns_to_leave_out
