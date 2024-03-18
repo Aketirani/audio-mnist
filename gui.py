@@ -489,7 +489,7 @@ class GUI:
 
         command = [
             "python",
-            os.path.join(self.config_file["project_path"], "audio_mnist.py"),
+            os.path.join(self.config_file["project"], "audio_mnist.py"),
             "-d",
             data_prep,
             "-f",
