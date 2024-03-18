@@ -27,15 +27,15 @@ class GUI:
         }
 
         self.fonts = {
-            "title": ("Helvetica", 14, "bold"),
+            "title": ("Helvetica", 12, "bold"),
             "checkbox": ("Helvetica", 10, "bold", "underline"),
             "button": ("Helvetica", 10, "bold"),
         }
 
-        self.title = "Utilizing XGBoost In Voice Gender Classification"
-        self.initial_text = "Please Select The Boxes And Click Run... ✔️"
-        self.nothing_text = "No Boxes Were Selected, Please Try Again... ⚠️"
-        self.wait_display = "Processing, Please Wait... ⏳"
+        self.title = "UTILIZING XGBOOST IN VOICE GENDER CLASSIFICATION"
+        self.initial_text = "PLEASE SELECT THE BOXES, AND CLICK RUN... ✔️"
+        self.nothing_text = "NO BOXES WERE SELECTED, PLEASE TRY AGAIN... ⚠️"
+        self.wait_display = "PROCESSING, PLEASE WAIT... ⏳"
 
         self.checkbox_labels = [
             "DATA PREPARATION",
@@ -84,7 +84,9 @@ class GUI:
         menubar.add_cascade(label="Data", menu=data_menu)
         data_menu.add_command(
             label="Columns",
-            command=lambda: self.show_help_boxes("columns.txt", "Columns"),
+            command=lambda: self.show_help_boxes(
+                self.config_file["text"]["cols"], "Columns"
+            ),
         )
 
         visuals_menu = Menu(menubar, tearoff=0)
@@ -94,7 +96,10 @@ class GUI:
         help_menu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu)
         help_menu.add_command(
-            label="About", command=lambda: self.show_help_boxes("about.txt", "About")
+            label="About",
+            command=lambda: self.show_help_boxes(
+                self.config_file["text"]["about"], "About"
+            ),
         )
 
     def create_widgets(self) -> None:
@@ -115,7 +120,7 @@ class GUI:
             self.run_pipeline,
             self.colors["run"],
             self.SU.set_img_path(),
-            "run.png",
+            self.config_file["image"]["run"],
         )
         self.create_label("", pady=0)
         self.create_button(
@@ -123,7 +128,7 @@ class GUI:
             self.exit_app,
             self.colors["exit"],
             self.SU.set_img_path(),
-            "exit.png",
+            self.config_file["image"]["exit"],
         )
 
     def show_tooltip(self, event, text) -> None:
@@ -211,10 +216,12 @@ class GUI:
         """
         Create a label widget to display a resized image
         """
-        image_path = os.path.join(self.SU.set_img_path(), "logo.png")
-        original_image = Image.open(image_path)
-        resized_image = original_image.resize((250, 150), Image.LANCZOS)
-        photo = ImageTk.PhotoImage(resized_image)
+        image_path = os.path.join(
+            self.SU.set_img_path(), self.config_file["image"]["logo"]
+        )
+        image_orginal = Image.open(image_path)
+        image_resized = image_orginal.resize((250, 150), Image.LANCZOS)
+        photo = ImageTk.PhotoImage(image_resized)
         image_label = Label(self.root, image=photo)
         image_label.image = photo
         image_label.pack()
@@ -243,9 +250,12 @@ class GUI:
             )
             checkbox.grid(row=0, column=0, sticky="w")
 
-            info_icon = Image.open(os.path.join(self.SU.set_img_path(), "info.png"))
-            info_icon = info_icon.resize((15, 15), Image.LANCZOS)
-            info_image = ImageTk.PhotoImage(info_icon)
+            info_path = os.path.join(
+                self.SU.set_img_path(), self.config_file["image"]["info"]
+            )
+            info_original = Image.open(info_path)
+            info_resized = info_original.resize((15, 15), Image.LANCZOS)
+            info_image = ImageTk.PhotoImage(info_resized)
             info_label = Label(checkbox_frame, image=info_image, bg=self.colors["gui"])
             info_label.image = info_image
             info_label.grid(row=0, column=1)
@@ -394,7 +404,6 @@ class GUI:
 
         self.plot_window = Toplevel(self.root)
         self.plot_window.title("Plots")
-
         self.plot_window.geometry("550x550")
 
         self.plot_images = [Image.open(os.path.join(filepath, file)) for file in files]
@@ -480,7 +489,7 @@ class GUI:
 
         command = [
             "python",
-            os.path.join(self.config_file["project_path"], "audio_mnist.py"),
+            os.path.join(self.config_file["project"], "audio_mnist.py"),
             "-d",
             data_prep,
             "-f",
