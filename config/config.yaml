@@ -1,35 +1,39 @@
-project_path: "C:/GitProjects/audio-mnist"
-meta_data: "audioMNIST_meta.txt"
+project: "C:/GitProjects/audio-mnist"
+meta: "audioMNIST_meta.txt"
 data:
   prepared: "data_prepared.csv"
   engineered: "data_engineered.csv"
   predicted: "data_predicted.csv"
-images:
-  logo: "logo.png"
+image:
+  exit: "exit.png"
   info: "info.png"
-  icon: "icon.png"
-parameters:
-  model_parameters: "model_parameters.yaml"
-  model_hyperparameters: "model_hyperparameters.yaml"
-plots:
+  logo: "logo.png"
+  run: "run.png"
+param:
+  model_param: "model_parameters.yaml"
+  model_hyperparam: "model_hyperparameters.yaml"
+plot:
   audio: "audio/audio_{0}_{1}_{2}.png"
   stft: "stft/stft_{0}_{1}_{2}.png"
-  column_distribution: "column_distribution.png"
-  confusion_matrix: "confusion_matrix.png"
-  correlation_matrix: "correlation_matrix.png"
-  feature_importance: "feature_importance.png"
-  model_accuracy: "model_accuracy.png"
+  col_dist: "column_distribution.png"
+  conf_matrix: "confusion_matrix.png"
+  corr_matrix: "correlation_matrix.png"
+  feat_imp: "feature_importance.png"
+  model_acc: "model_accuracy.png"
   model_loss: "model_loss.png"
-  shapley_summary: "shapley_summary.png"
-results:
-  model_best_params: "model_best_params.yaml"
-  model_results: "model_results.yaml"
-  model_object: "model_object.pkl"
-datasplit:
-  val_size: 0.10
-  test_size: 0.10
-thresholds:
-  correlation: 0.95
+  shap_sum: "shapley_summary.png"
+result:
+  model_obj: "model_object.pkl"
+  model_param_best: "model_param_best.yaml"
+  model_res: "model_result.yaml"
+text:
+  about: "about.txt"
+  cols: "columns.txt"
+split:
+  val: 0.10
+  test: 0.10
+threshold:
+  corr: 0.95
 target: "gender"
 labels: ["Female", "Male"]
 predicted: predicted

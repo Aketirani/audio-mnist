@@ -66,7 +66,7 @@ class Setup:
 
         :return: str, path to the audio folder
         """
-        return os.path.join(self.read_config()["project_path"], "audio")
+        return os.path.join(self.read_config()["project"], "audio")
 
     def set_data_path(self) -> str:
         """
@@ -74,7 +74,7 @@ class Setup:
 
         :return: str, path to the data folder
         """
-        return os.path.join(self.read_config()["project_path"], "data")
+        return os.path.join(self.read_config()["project"], "data")
 
     def set_img_path(self) -> str:
         """
@@ -82,7 +82,7 @@ class Setup:
 
         :return: str, path to the images folder
         """
-        return os.path.join(self.read_config()["project_path"], "images")
+        return os.path.join(self.read_config()["project"], "images")
 
     def set_param_path(self) -> str:
         """
@@ -90,7 +90,7 @@ class Setup:
 
         :return: str, path to the model parameters parameters folder
         """
-        return os.path.join(self.read_config()["project_path"], "parameters")
+        return os.path.join(self.read_config()["project"], "parameters")
 
     def set_plot_path(self) -> str:
         """
@@ -98,7 +98,7 @@ class Setup:
 
         :return: str, path to the plot folder
         """
-        return os.path.join(self.read_config()["project_path"], "plots")
+        return os.path.join(self.read_config()["project"], "plots")
 
     def set_result_path(self) -> str:
         """
@@ -106,7 +106,7 @@ class Setup:
 
         :return: str, path to the plot folder
         """
-        return os.path.join(self.read_config()["project_path"], "results")
+        return os.path.join(self.read_config()["project"], "results")
 
     def set_test_path(self) -> str:
         """
@@ -114,7 +114,7 @@ class Setup:
 
         :return: str, path to the test folder
         """
-        return os.path.join(self.read_config()["project_path"], "test")
+        return os.path.join(self.read_config()["project"], "test")
 
     def set_txt_path(self) -> str:
         """
@@ -122,7 +122,7 @@ class Setup:
 
         :return: str, path to the text folder
         """
-        return os.path.join(self.read_config()["project_path"], "text")
+        return os.path.join(self.read_config()["project"], "text")
 
     def set_model_path(self) -> str:
         """
@@ -130,7 +130,7 @@ class Setup:
 
         :return: str, path to the model parameters parameters folder
         """
-        return os.path.join(self.read_config()["project_path"], "parameters")
+        return os.path.join(self.read_config()["project"], "parameters")
 
     @staticmethod
     def loop_progress(index: int, total: int, show_every: int = 1):

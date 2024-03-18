@@ -27,7 +27,7 @@ class AudioMNIST:
         self.pgs_file = PM.read_config()
 
     def DataPrepare(self):
-        meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta_data"])
+        meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta"])
 
         df = pd.DataFrame()
 
@@ -60,13 +60,13 @@ class AudioMNIST:
                 DV.plot_audio(
                     fs,
                     audio_data,
-                    self.config_file["plots"]["audio"].format(dig[-1], vp, rep),
+                    self.config_file["plot"]["audio"].format(dig[-1], vp, rep),
                     0,
                 )
                 DV.plot_stft(
                     fs,
                     audio_data,
-                    self.config_file["plots"]["stft"].format(dig[-1], vp, rep),
+                    self.config_file["plot"]["stft"].format(dig[-1], vp, rep),
                     0,
                 )
                 DV.play_audio(file, 0)
@@ -89,20 +89,16 @@ class AudioMNIST:
         df = FE.categorize_column_values(df, self.config_file["target"])
 
         DV.plot_column_dist(
-            df,
-            self.config_file["plots"]["column_distribution"],
-            self.config_file["target"],
+            df, self.config_file["plot"]["col_dist"], self.config_file["target"]
         )
 
         corr_matrix = FE.pearson_correlation(df, self.config_file["target"])
 
-        DV.plot_corr_matrix(
-            corr_matrix, self.config_file["plots"]["correlation_matrix"]
-        )
+        DV.plot_corr_matrix(corr_matrix, self.config_file["plot"]["corr_matrix"])
 
         df = FE.remove_correlated_columns(
             df,
-            self.config_file["thresholds"]["correlation"],
+            self.config_file["threshold"]["corr"],
             self.config_file["target"],
         )
 
@@ -119,8 +115,8 @@ class AudioMNIST:
         self.train_df, self.val_df, self.test_df = DS.split(
             df,
             self.config_file["target"],
-            self.config_file["datasplit"]["val_size"],
-            self.config_file["datasplit"]["test_size"],
+            self.config_file["split"]["val"],
+            self.config_file["split"]["test"],
         )
 
         print(
@@ -148,7 +144,7 @@ class AudioMNIST:
         MT.set_params_grid(
             SU.read_file(
                 SU.set_model_path(),
-                self.config_file["parameters"]["model_hyperparameters"],
+                self.config_file["param"]["model_hyperparam"],
             )
         )
         MT.grid_search(
@@ -158,14 +154,12 @@ class AudioMNIST:
             self.y_val,
         )
         MT.save_best_params(
-            SU.set_result_path(), self.config_file["results"]["model_best_params"]
+            SU.set_result_path(), self.config_file["result"]["model_param_best"]
         )
 
     def ModelTrain(self):
         MT.set_params_fit(
-            SU.read_file(
-                SU.set_model_path(), self.config_file["parameters"]["model_parameters"]
-            )
+            SU.read_file(SU.set_model_path(), self.config_file["param"]["model_param"])
         )
         MT.fit(
             self.X_train,
@@ -176,40 +170,38 @@ class AudioMNIST:
 
         MT.save_model_object(
             SU.set_result_path(),
-            self.config_file["results"]["model_object"],
+            self.config_file["result"]["model_obj"],
         )
 
         MT.save_eval_metrics(
             SU.set_result_path(),
-            self.config_file["results"]["model_results"],
+            self.config_file["result"]["model_res"],
         )
 
         df = MT.create_log_df(
-            SU.read_file(
-                SU.set_result_path(), self.config_file["results"]["model_results"]
-            )
+            SU.read_file(SU.set_result_path(), self.config_file["result"]["model_res"])
         )
 
-        DV.plot_feature_importance(
+        DV.plot_feat_imp(
             MT.model,
-            self.config_file["plots"]["feature_importance"],
+            self.config_file["plot"]["feat_imp"],
         )
         DV.plot_loss(
             df["iteration"],
             df["train_loss"],
             df["val_loss"],
-            self.config_file["plots"]["model_loss"],
+            self.config_file["plot"]["model_loss"],
         )
         DV.plot_accuracy(
             df["iteration"],
             df["train_acc"],
             df["val_acc"],
-            self.config_file["plots"]["model_accuracy"],
+            self.config_file["plot"]["model_acc"],
         )
 
     def ModelPredict(self):
         MT.model = MP.load_model(
-            SU.set_result_path(), self.config_file["results"]["model_object"]
+            SU.set_result_path(), self.config_file["result"]["model_obj"]
         )
 
         y_pred = MP.predict(MT.model, self.X_test)
@@ -223,16 +215,16 @@ class AudioMNIST:
             index=False,
         )
 
-        DV.plot_confusion_matrix(
+        DV.plot_conf_matrix(
             self.y_test,
             y_pred,
             self.config_file["labels"],
-            self.config_file["plots"]["confusion_matrix"],
+            self.config_file["plot"]["conf_matrix"],
         )
-        DV.plot_shapley_summary(
+        DV.plot_shap_sum(
             MT.model,
             self.X_test,
-            self.config_file["plots"]["shapley_summary"],
+            self.config_file["plot"]["shap_sum"],
         )
 
         MP.evaluate_predictions(self.y_test, y_pred)
