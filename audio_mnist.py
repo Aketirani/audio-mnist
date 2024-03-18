@@ -182,7 +182,7 @@ class AudioMNIST:
             SU.read_file(SU.set_result_path(), self.config_file["result"]["model_res"])
         )
 
-        DV.plot_feat_imp(
+        DV.plot_feature_importance(
             MT.model,
             self.config_file["plot"]["feat_imp"],
         )
@@ -215,13 +215,13 @@ class AudioMNIST:
             index=False,
         )
 
-        DV.plot_conf_matrix(
+        DV.plot_confusion_matrix(
             self.y_test,
             y_pred,
             self.config_file["labels"],
             self.config_file["plot"]["conf_matrix"],
         )
-        DV.plot_shap_sum(
+        DV.plot_shapley_summary(
             MT.model,
             self.X_test,
             self.config_file["plot"]["shap_sum"],
