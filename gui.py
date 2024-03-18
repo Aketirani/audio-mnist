@@ -11,58 +11,58 @@ from src.setup import Setup
 
 
 class GUI:
-    COLORS = {
-        "gui": "light grey",
-        "title": "navy blue",
-        "run": "green",
-        "exit": "red",
-        "fg": "white",
-        "disp": "black",
-    }
-
-    FONTS = {
-        "title": ("Helvetica", 14, "bold"),
-        "checkbox": ("Helvetica", 10, "bold", "underline"),
-        "button": ("Helvetica", 10, "bold"),
-    }
-
-    TITLE = "Utilizing XGBoost In Voice Gender Classification"
-    INITIAL_TEXT = "Please Select The Boxes And Click Run... ✔️"
-    NOTHING_TEXT = "No Boxes Were Selected, Please Try Again... ⚠️"
-    WAIT_DISPLAY = "Processing, Please Wait... ⏳"
-
-    CHECKBOX_LABELS = [
-        "DATA PREPARATION",
-        "FEATURE ENGINEERING",
-        "DATA SPLITTING",
-        "MODEL TUNING",
-        "MODEL TRAINING",
-        "MODEL PREDICTION",
-        "DATA TO POSTGRESQL",
-    ]
-
-    TOOLTIP_TEXTS = [
-        "CLEAN, PREPARE, ENRICH, AND JOIN DATASETS",
-        "CREATE NEW COLUMNS BY FEATURE ENGINEERING",
-        "SPLIT DATASET INTO TRAINING, VALIDATION, AND TEST SET",
-        "TUNE MODEL HYPERPARAMETERS FOR PERFORMANCE OPTIMIZATION",
-        "TRAIN A XGBOOST MACHINE LEARNING MODEL USING TRAINING SET",
-        "PREDICT ON TEST SET TO EVALUATE MODEL PERFORMANCE",
-        "WRITE CSV DATASETS TO TABLES IN POSTGRESQL",
-    ]
-
     def __init__(self, root: tk.Tk):
         """
         Initialize the GUI application
 
         :param root: tk.Tk, root Tkinter window
         """
+        self.colors = {
+            "gui": "light grey",
+            "title": "navy blue",
+            "run": "green",
+            "exit": "red",
+            "fg": "white",
+            "disp": "black",
+        }
+
+        self.fonts = {
+            "title": ("Helvetica", 14, "bold"),
+            "checkbox": ("Helvetica", 10, "bold", "underline"),
+            "button": ("Helvetica", 10, "bold"),
+        }
+
+        self.title = "Utilizing XGBoost In Voice Gender Classification"
+        self.initial_text = "Please Select The Boxes And Click Run... ✔️"
+        self.nothing_text = "No Boxes Were Selected, Please Try Again... ⚠️"
+        self.wait_display = "Processing, Please Wait... ⏳"
+
+        self.checkbox_labels = [
+            "DATA PREPARATION",
+            "FEATURE ENGINEERING",
+            "DATA SPLITTING",
+            "MODEL TUNING",
+            "MODEL TRAINING",
+            "MODEL PREDICTION",
+            "DATA TO POSTGRESQL",
+        ]
+
+        self.tooltip_texts = [
+            "EXTRACT, TRANSFORM AND LOAD AUDIO DATASET",
+            "PERFORM COMPREHENSIVE FEATURE ENGINEERING",
+            "SPLIT DATASET INTO TRAINING, VALIDATION, AND TEST SETS",
+            "TUNE MODEL HYPERPARAMETERS FOR PERFORMANCE OPTIMIZATION",
+            "TRAIN XGBOOST MODEL USING TRAINING SET",
+            "EVALUATE MODEL PERFORMANCE USING TEST SET",
+            "WRITE CSV DATASETS TO TABLES IN POSTGRESQL",
+        ]
+
         self.SU = Setup("config.yaml")
         self.config_file = self.SU.read_config()
         self.root = root
         root.title("AudioMNIST")
         root.geometry(f"500x750+10+10")
-        root.configure(bg=self.COLORS["gui"])
+        root.configure(bg=self.colors["gui"])
         self.create_menu_bar()
         self.create_widgets()
         self.redirect_output()
@@ -102,7 +102,7 @@ class GUI:
         Create various widgets for the GUI
         """
         self.create_label("", pady=0)
-        self.create_label(self.TITLE, fg=self.COLORS["title"], font=self.FONTS["title"])
+        self.create_label(self.title, fg=self.colors["title"], font=self.fonts["title"])
         self.create_label("", pady=0)
         self.create_image_label()
         self.create_label("", pady=0)
@@ -113,7 +113,7 @@ class GUI:
         self.create_button(
             "RUN",
             self.run_pipeline,
-            self.COLORS["run"],
+            self.colors["run"],
             self.SU.set_img_path(),
             "run.png",
         )
@@ -121,7 +121,7 @@ class GUI:
         self.create_button(
             "EXIT",
             self.exit_app,
-            self.COLORS["exit"],
+            self.colors["exit"],
             self.SU.set_img_path(),
             "exit.png",
         )
@@ -203,7 +203,7 @@ class GUI:
         :param text: str, the label text
         :param kwargs: additional keyword arguments for label creation
         """
-        kwargs["bg"] = self.COLORS["gui"]
+        kwargs["bg"] = self.colors["gui"]
         label = Label(self.root, text=text, **kwargs)
         label.pack()
 
@@ -223,12 +223,12 @@ class GUI:
         """
         Create checkbox widgets for various pipeline steps with corresponding tooltips
         """
-        checkboxes_frame = tk.Frame(self.root, bg=self.COLORS["gui"])
+        checkboxes_frame = tk.Frame(self.root, bg=self.colors["gui"])
         checkboxes_frame.pack()
 
         self.checkbox_vars = []
-        for label, tooltip_text in zip(self.CHECKBOX_LABELS, self.TOOLTIP_TEXTS):
-            checkbox_frame = tk.Frame(checkboxes_frame, bg=self.COLORS["gui"])
+        for label, tooltip_text in zip(self.checkbox_labels, self.tooltip_texts):
+            checkbox_frame = tk.Frame(checkboxes_frame, bg=self.colors["gui"])
             checkbox_frame.grid(sticky="w", padx=20)
 
             var = tk.BooleanVar()
@@ -237,16 +237,16 @@ class GUI:
                 checkbox_frame,
                 text=label,
                 variable=var,
-                bg=self.COLORS["gui"],
-                fg=self.COLORS["disp"],
-                font=self.FONTS["checkbox"],
+                bg=self.colors["gui"],
+                fg=self.colors["disp"],
+                font=self.fonts["checkbox"],
             )
             checkbox.grid(row=0, column=0, sticky="w")
 
             info_icon = Image.open(os.path.join(self.SU.set_img_path(), "info.png"))
             info_icon = info_icon.resize((15, 15), Image.LANCZOS)
             info_image = ImageTk.PhotoImage(info_icon)
-            info_label = Label(checkbox_frame, image=info_image, bg=self.COLORS["gui"])
+            info_label = Label(checkbox_frame, image=info_image, bg=self.colors["gui"])
             info_label.image = info_image
             info_label.grid(row=0, column=1)
             info_label.bind(
@@ -270,9 +270,9 @@ class GUI:
             {
                 "pady": 5,
                 "padx": 5,
-                "fg": self.COLORS["disp"],
-                "bg": self.COLORS["fg"],
-                "font": self.FONTS["button"],
+                "fg": self.colors["disp"],
+                "bg": self.colors["fg"],
+                "font": self.fonts["button"],
                 "width": 50,
                 "height": 12,
                 "wrap": tk.WORD,
@@ -285,7 +285,7 @@ class GUI:
         scrollbar = tk.Scrollbar(output_frame, command=output_text.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         output_text.config(yscrollcommand=scrollbar.set)
-        output_text.insert(tk.END, self.INITIAL_TEXT)
+        output_text.insert(tk.END, self.initial_text)
 
         return output_text
 
@@ -325,7 +325,7 @@ class GUI:
             history_text.insert(tk.END, f"Run Date: {formatted_datetime}\n\n")
             checkbox_labels = [
                 label
-                for label, value in zip(self.CHECKBOX_LABELS, run_details["checkboxes"])
+                for label, value in zip(self.checkbox_labels, run_details["checkboxes"])
                 if value
             ]
             history_text.insert(tk.END, "Selected Checkboxes:\n")
@@ -360,8 +360,8 @@ class GUI:
             text=text,
             command=command,
             bg=bg,
-            fg=self.COLORS["fg"],
-            font=self.FONTS["button"],
+            fg=self.colors["fg"],
+            font=self.fonts["button"],
         )
 
         image_path = os.path.join(filepath, filename)
@@ -463,11 +463,11 @@ class GUI:
         """
         if not any(var.get() for var in self.checkbox_vars):
             self.output_text.delete(1.0, tk.END)
-            self.output_text.insert(tk.END, self.NOTHING_TEXT)
+            self.output_text.insert(tk.END, self.nothing_text)
             return
 
         self.output_text.delete(1.0, tk.END)
-        self.output_text.insert(tk.END, self.WAIT_DISPLAY)
+        self.output_text.insert(tk.END, self.wait_display)
         self.output_text.update()
 
         data_prep = "true" if self.checkbox_vars[0].get() else "false"
