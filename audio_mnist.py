@@ -55,9 +55,7 @@ class AudioMNIST:
                     self.config_file["target"],
                     meta_data[vp][self.config_file["target"]],
                 )
-                df = pd.concat(
-                    [df, pd.DataFrame(features, index=[0])], ignore_index=True
-                )
+                df = pd.concat([df, features], ignore_index=True)
 
                 DV.plot_audio(
                     fs,

@@ -23,6 +23,8 @@ class TestDataPreparation(unittest.TestCase):
         :param feature_dict_t: dict, time-domain features
         :param feature_dict_f: dict, frequency-domain features
         :param df: pd.DataFrame, sample DataFrame
+        :param column_name: str, column name to add
+        :param value: str, value to add
         """
         self.target_sr = 2
         self.data_preparation = DataPreparation(self.target_sr)
@@ -56,6 +58,8 @@ class TestDataPreparation(unittest.TestCase):
             "cent_f": 100,
         }
         self.df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
+        self.column_name = "D"
+        self.value = "new_value"
 
     def test_resample_data(self):
         resampled_data = self.data_preparation.resample_data(self.fs, self.audio_data)
@@ -98,6 +102,18 @@ class TestDataPreparation(unittest.TestCase):
         )
         self.assertEqual(min(normalized_features.values()), 0)
         self.assertEqual(max(normalized_features.values()), 1)
+
+    def test_add_column_dict(self):
+        df = self.data_preparation.add_column_dict(
+            self.feature_dict_t, self.column_name, self.value
+        )
+        self.assertTrue(self.column_name in df.columns)
+        self.assertEqual(df[self.column_name][0], self.value)
+
+    def test_add_column_df(self):
+        df = self.data_preparation.add_column_df(self.df, self.column_name, self.value)
+        self.assertTrue(self.column_name in df.columns)
+        self.assertEqual(df[self.column_name].iloc[0], self.value)
 
     def test_reset_index(self):
         df_reset = self.data_preparation.reset_index(self.df)

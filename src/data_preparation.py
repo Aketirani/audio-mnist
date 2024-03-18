@@ -157,30 +157,31 @@ class DataPreparation:
         return features
 
     @staticmethod
-    def add_column_dict(data: dict, column_name: str, value: str) -> dict:
+    def add_column_dict(df: dict, column_name: str, value: str) -> pd.DataFrame:
         """
-        Add column and value to the dictionary
+        Add column and value to the dictionary and convert to Dataframe
 
-        :param data: dict, input data
+        :param data: dict, input DataFrame
         :param column_name: str, column name to add
         :param value: str, value to add
-        :return: dict, data with column added
+        :return: DataFrame, DataFrame with column added
         """
-        data[column_name] = value
-        return data
+        df[column_name] = value
+        df = pd.DataFrame([df], index=[0])
+        return df
 
     @staticmethod
-    def add_column_df(data: pd.DataFrame, column_name: str, value: str) -> pd.DataFrame:
+    def add_column_df(df: pd.DataFrame, column_name: str, value: str) -> pd.DataFrame:
         """
         Add column and value to the DataFrame
 
-        :param data: DataFrame, input data
+        :param df: DataFrame, input DataFrame
         :param column_name: str, column name to add
         :param value: str, value to add
-        :return: DataFrame, data with column added
+        :return: DataFrame, DataFrame with column added
         """
-        data[column_name] = value
-        return data
+        df[column_name] = value
+        return df
 
     @staticmethod
     def remove_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
