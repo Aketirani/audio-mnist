@@ -1,6 +1,7 @@
 project: "C:/GitProjects/audio-mnist"
 meta: "audioMNIST_meta.txt"
 data:
+  image: "data_image.pkl"
   prepared: "data_prepared.csv"
   engineered: "data_engineered.csv"
   predicted: "data_predicted.csv"

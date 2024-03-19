@@ -1,3 +1,4 @@
+import cv2
 import librosa
 import numpy as np
 import pandas as pd
@@ -17,6 +18,29 @@ class DataPreparation:
         :param target_sr: int, target sample rate for the resampled audio recordings
         """
         self.target_sr = target_sr
+
+    @staticmethod
+    def read_image(file_path: str) -> np.ndarray:
+        """
+        Read an image from the given file path using OpenCV.
+
+        :param file_path: str, path to the image file
+        :return: np.ndarray, image
+        """
+        image = cv2.imread(file_path)
+        return image
+
+    @staticmethod
+    def resize_image(image: np.ndarray, new_size: tuple) -> np.ndarray:
+        """
+        Resize the given image to the specified size
+
+        :param image: np.ndarray, input image
+        :param new_size: tuple, (width, height) of the resized image
+        :return: np.ndarray, resized image
+        """
+        image = cv2.resize(image, new_size, interpolation=cv2.INTER_AREA)
+        return image
 
     @staticmethod
     def read_audio(filepath: str) -> tuple:
@@ -220,3 +244,14 @@ class DataPreparation:
         """
         df.reset_index(drop=True, inplace=True)
         return df
+
+    @staticmethod
+    def encode_labels(labels: list) -> list:
+        """
+        Encode labels from string to numerical values
+
+        :param labels: list, containing labels
+        :return: list, containing encoded labels
+        """
+        encoded_labels = [1 if label == "female" else 0 for label in labels]
+        return encoded_labels

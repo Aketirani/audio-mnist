@@ -26,6 +26,28 @@ class AudioMNIST:
         self.config_file = SU.read_config()
         self.pgs_file = PM.read_config()
 
+    def DataImage(self):
+        meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta"])
+
+        images = []
+        labels = []
+
+        image_folder = os.path.join(SU.set_plot_path(), "stft")
+        image_files = sorted(glob.glob(os.path.join(image_folder, "*")))
+
+        for i, file in enumerate(image_files):
+            SU.loop_progress(i + 1, len(image_files) - 1, 3000)
+            im, dig, vp, rep = SU.extract_image_info(file)
+            image = DP.read_image(file)
+            image = DP.resize_image(image, (100, 100))
+            images.append(image)
+            label = DP.encode_labels(meta_data[vp][self.config_file["target"]])
+            labels.append(label)
+
+        SU.save_file(
+            images, labels, SU.set_data_path(), self.config_file["data"]["image"]
+        )
+
     def DataPrepare(self):
         meta_data = SU.read_file(SU.set_audio_path(), self.config_file["meta"])
 
@@ -279,45 +301,52 @@ if __name__ == "__main__":
         help="Postgres File",
     )
     parser.add_argument(
+        "-i",
+        "--data_img",
+        type=str,
+        default="true",
+        help="Data Preparation Images",
+    )
+    parser.add_argument(
         "-d",
         "--data_prep",
         type=str,
-        default="true",
+        default="false",
         help="Data Preparation",
     )
     parser.add_argument(
         "-f",
         "--feat_eng",
         type=str,
-        default="true",
+        default="false",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="true",
+        default="false",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="true",
+        default="false",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="true",
+        default="false",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="true",
+        default="false",
         help="Model Prediction",
     )
     parser.add_argument(
@@ -344,6 +373,9 @@ if __name__ == "__main__":
         or args.model_tune == "true"
         or args.model_pred == "true"
     )
+
+    if args.data_img == "true":
+        AM.DataImage()
 
     if args.data_prep == "true":
         AM.DataPrepare()

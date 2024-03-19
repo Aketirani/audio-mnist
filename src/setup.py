@@ -1,4 +1,5 @@
 import os
+import pickle
 
 import yaml
 
@@ -50,12 +51,37 @@ class Setup:
         return file_data
 
     @staticmethod
+    def save_file(images: list, labels: list, file_path: str, file_name: str) -> None:
+        """
+        Save images and labels as a pickle file
+
+        :param images: list, containing images
+        :param labels: list, containing labels
+        :param file_path: str, path to the folder
+        :param file_name: str, name of the file
+        """
+        save_path = os.path.join(file_path, file_name)
+        with open(save_path, "wb") as f:
+            pickle.dump((images, labels), f)
+
+    @staticmethod
+    def extract_image_info(filepath: str) -> tuple:
+        """
+        Extracts information from the image path and splits it into parts
+
+        :param filepath: str, path to the file
+        :return: tuple, containing extracted information
+        """
+        im, dig, vp, rep = os.path.splitext(os.path.basename(filepath))[0].split("_")
+        return im, dig, vp, rep
+
+    @staticmethod
     def extract_file_info(filepath: str) -> tuple:
         """
         Extracts information from the file path and splits it into parts
 
         :param filepath: str, path to the file
-        :return: tuple, containing extracted information (dig, vp, rep)
+        :return: tuple, containing extracted information
         """
         dig, vp, rep = os.path.splitext(os.path.basename(filepath))[0].split("_")
         return dig, vp, rep
