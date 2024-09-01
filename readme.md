@@ -41,7 +41,7 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 ├── text                        <-- Text Folder
 |   └── *.txt                   <-- Text Files
 |
-├── .gitignore                  <-- Configuring Ignored Files
+├── .gitignore                  <-- Git Ignore Configuration
 |
 ├── .pre-commit-config.yaml     <-- Pre-Commit Configuration
 |
