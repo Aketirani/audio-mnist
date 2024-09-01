@@ -7,39 +7,39 @@ Voice recordings can be analyzed to infer a myriad of details including the cont
 ### Structure
 ```
 ├── audio                       <-- Audio Folder
-|   ├── recordings              <-- Recordings Folder
-|       ├── *.wav               <-- Audio Recordings
-|   ├── audioMNIST_meta.txt     <-- Meta Information
+|   └── recordings              <-- Recordings Folder
+|       └── *.wav               <-- Audio Recordings
+|   └── audioMNIST_meta.txt     <-- Meta Information
 |
 ├── config                      <-- Configuration Folder
-|   ├── *.yaml                  <-- Configuration Files
+|   └── *.yaml                  <-- Configuration Files
 |
 ├── data                        <-- Data Folder
-|   ├── *.csv                   <-- Data Files
+|   └── *.csv                   <-- Data Files
 |
 ├── images                      <-- Image Folder
-|   ├── *.png                   <-- Image Files
+|   └── *.png                   <-- Image Files
 |
 ├── logs                        <-- Log Folder
-|   ├── *.log                   <-- Log Files
+|   └── *.log                   <-- Log Files
 |
 ├── parameters                  <-- Parameters Folder
-|   ├── *.yaml                  <-- Model Parameters
+|   └── *.yaml                  <-- Model Parameters
 |
 ├── plots                       <-- Plots Folder
-|   ├── *.png                   <-- Plots
+|   └── *.png                   <-- Plots
 |
 ├── results                     <-- Results Folder
-|   ├── *.yaml                  <-- Model Results
+|   └── *.yaml                  <-- Model Results
 |
 ├── src                         <-- Source Folder
-|   ├── *.py                    <-- Source Files
+|   └── *.py                    <-- Source Files
 |
 ├── test                        <-- Test Folder
-|   ├── *.py                    <-- Unit Tests
+|   └── *.py                    <-- Unit Tests
 |
 ├── text                        <-- Text Folder
-|   ├── *.txt                   <-- Text Files
+|   └── *.txt                   <-- Text Files
 |
 ├── .gitignore                  <-- Configuring Ignored Files
 |
