@@ -1,6 +1,19 @@
 # Gender Recognition By Voice Analysis
 This project focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
 
+### Table of Contents
+- [Project Overview](#project-overview)
+- [Project Structure](#project-structure)
+- [Dataset](#dataset)
+- [Model Selection](#model-selection)
+- [Model Architecture](#model-architecture)
+- [Model Features](#model-features)
+- [Model Performance](#model-performance)
+- [PostgreSQL Integration](#postgresql-integration)
+- [Execution](#execution)
+- [Unit Tests](#unit-tests)
+- [Developer Guide](#developer-guide)
+
 ### Project Overview
 Voice recordings can be analyzed to infer a wide range of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
 
@@ -68,31 +81,33 @@ The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Grad
 The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
 
 The model uses the following key parameters:
-
-- `learning_rate`: Learning Rate
-- `max_depth`: Max Depth Of Tree
-- `n_estimators`: Number Of Estimators
-- `objective`: Objective Function
-- `tree_method`: Tree Method
+| Parameter       | Description          |
+|-----------------|----------------------|
+| `learning_rate` | Learning Rate        |
+| `max_depth`     | Max Depth Of Tree    |
+| `n_estimators`  | Number Of Estimators |
+| `objective`     | Objective Function   |
+| `tree_method`   | Tree Method          |
 
 ### Model Features
 The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
 
 These features include:
-
-- `mean`: Mean
-- `std`: Standard Deviation
-- `med`: Median
-- `q25`: 25th Percentiles
-- `q75`: 75th Percentiles
-- `min`: Minimum
-- `max`: Maximum
-- `skew`: Skewness
-- `kurt`: Kurtosis
-- `zeroxrate`: Zero Crossing Rate
-- `entropy`: Entropy
-- `sfm`: Spectral Flatness
-- `cent`: Frequency Centroid
+| Feature     | Description        |
+|-------------|--------------------|
+| `mean`      | Mean               |
+| `std`       | Standard Deviation |
+| `med`       | Median             |
+| `min`       | Minimum            |
+| `q25`       | 25th Percentiles   |
+| `q75`       | 75th Percentiles   |
+| `max`       | Maximum            |
+| `skew`      | Skewness           |
+| `kurt`      | Kurtosis           |
+| `zeroxrate` | Zero Crossing Rate |
+| `entropy`   | Entropy            |
+| `sfm`       | Spectral Flatness  |
+| `cent`      | Frequency Centroid |
 
 ### Model Performance
 The model has achieved a promising accuracy rate of `96.70%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
@@ -107,16 +122,17 @@ This project epitomizes the application of machine learning in voice and speech 
 Execute `audiomnist.sh` to initiate the entire pipeline.
 
 Following arguments can be specified:
-
-- `-c`, `--cfg_file`: Path to the configuration file
-- `-y`, `--pgs_file`: Path to the PostgreSQL configuration file
-- `-d`, `--data_prep`: Execute the data preparation step
-- `-f`, `--feat_eng`: Execute the feature engineering step
-- `-s`, `--data_split`: Execute the data splitting step
-- `-u`, `--model_tune`: Execute the model tuning step
-- `-t`, `--model_train`: Execute the model training step
-- `-p`, `--model_pred`: Execute the model prediction step
-- `-q`, `--data_sql`: Execute the data sql step
+| Argument              | Description                               |
+|-----------------------|-------------------------------------------|
+| `-c`, `--cfg_file`    | Path to the configuration file            |
+| `-y`, `--pgs_file`    | Path to the PostgreSQL configuration file |
+| `-d`, `--data_prep`   | Execute the data preparation step         |
+| `-f`, `--feat_eng`    | Execute the feature engineering step      |
+| `-s`, `--data_split`  | Execute the data splitting step           |
+| `-u`, `--model_tune`  | Execute the model tuning step             |
+| `-t`, `--model_train` | Execute the model training step           |
+| `-p`, `--model_pred`  | Execute the model prediction step         |
+| `-q`, `--data_sql`    | Execute the data sql step                 |
 
 ### Unit Test
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
