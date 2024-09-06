@@ -3,16 +3,17 @@ This project focuses on leveraging acoustic features extracted from voice record
 
 ### Table of Contents
 - [Project Overview](#project-overview)
-- [Project Structure](#project-structure)
+- [Structure](#structure)
 - [Dataset](#dataset)
 - [Model Selection](#model-selection)
 - [Model Architecture](#model-architecture)
 - [Model Features](#model-features)
 - [Model Performance](#model-performance)
 - [PostgreSQL Integration](#postgresql-integration)
+- [Conclusion](#conclusion)
 - [Execution](#execution)
 - [Unit Tests](#unit-tests)
-- [Developer Guide](#developer-guide)
+- [Developer](#developer)
 
 ### Project Overview
 Voice recordings can be analyzed to infer a wide range of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
@@ -118,7 +119,7 @@ PostgreSQL integration enhances the project's data management capabilities. By u
 ### Conclusion
 This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
 
-### Exectuion
+### Execution
 Execute `audiomnist.sh` to initiate the entire pipeline.
 
 Following arguments can be specified:
@@ -134,7 +135,8 @@ Following arguments can be specified:
 | `-p`, `--model_pred`  | Execute the model prediction step         |
 | `-q`, `--data_sql`    | Execute the data sql step                 |
 
-### Unit Test
+
+### Unit Tests
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
 
 ### Developer
