@@ -11,6 +11,7 @@ This project focuses on leveraging acoustic features extracted from voice record
 - [Model Performance](#model-performance)
 - [PostgreSQL Integration](#postgresql-integration)
 - [Conclusion](#conclusion)
+- [Requirements](#requirements)
 - [Execution](#execution)
 - [Unit Tests](#unit-tests)
 - [Developer](#developer)
@@ -118,6 +119,9 @@ PostgreSQL integration enhances the project's data management capabilities. By u
 
 ### Conclusion
 This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
+
+### Requirements
+Execute `pip install -r requirements.txt` to install the required libraries.
 
 ### Execution
 Execute `audiomnist.sh` to initiate the entire pipeline.
