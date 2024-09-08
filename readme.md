@@ -21,7 +21,7 @@ Voice recordings can be analyzed to infer a wide range of details including the 
 
 ### Structure
 ```
-├── audio                       <-- Audio Folder
+┌── audio                       <-- Audio Folder
 |   └── recordings              <-- Recordings Folder
 |       └── *.wav               <-- Audio Recordings
 |   └── audioMNIST_meta.txt     <-- Meta Information
@@ -70,7 +70,7 @@ Voice recordings can be analyzed to infer a wide range of details including the 
 |
 ├── readme.md                   <-- You Are Here
 |
-├── requirements.txt            <-- Package Requirements
+└── requirements.txt            <-- Package Requirements
 ```
 
 ### Dataset
