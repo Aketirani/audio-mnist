@@ -35,6 +35,24 @@ class TestDataVisualization(unittest.TestCase):
             [self.data, self.data, self.data, self.data], columns=self.columns
         )
 
+    def test_plot_column_dist(self):
+        self.data_visualization.plot_column_dist(
+            self.matrix, self.plot_name, target_column="col1"
+        )
+        self.assertTrue(
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
+        )
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
+
+    def test_plot_box(self):
+        self.data_visualization.plot_box(
+            self.matrix, self.plot_name, target_column="col1"
+        )
+        self.assertTrue(
+            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
+        )
+        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
+
     def test_plot_corr_matrix(self):
         self.data_visualization.plot_corr_matrix(self.matrix, self.plot_name)
         self.assertTrue(
@@ -54,15 +72,6 @@ class TestDataVisualization(unittest.TestCase):
     def test_plot_accuracy(self):
         self.data_visualization.plot_accuracy(
             self.data, self.data, self.data, self.plot_name
-        )
-        self.assertTrue(
-            os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
-        )
-        os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
-
-    def test_plot_column_dist(self):
-        self.data_visualization.plot_column_dist(
-            self.matrix, self.plot_name, target_column="col1"
         )
         self.assertTrue(
             os.path.exists(os.path.join(self.setup.set_test_path(), self.plot_name))
