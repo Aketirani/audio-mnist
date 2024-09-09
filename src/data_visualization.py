@@ -176,6 +176,36 @@ class DataVisualization:
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
         plt.clf()
 
+    def plot_box(self, df: pd.DataFrame, plot_name: str, target_column: str) -> None:
+        """
+        Plots the box plot with respect to the target column and saves it
+
+        :param df: pd.DataFrame, dataframe to be plotted
+        :param plot_name: str, name of the plot to be saved
+        :param target_column: str, the target column for distribution comparison
+        """
+        numeric_columns = df.select_dtypes(include=np.number).columns
+        num_columns = len(numeric_columns)
+        num_rows = (num_columns + 1) // 2
+        fig, axes = plt.subplots(num_rows, 2, figsize=(15, 5 * num_rows))
+        axes = axes.flatten()
+        for i, col in enumerate(numeric_columns):
+            ax = axes[i]
+            sns.boxplot(
+                data=df,
+                x=target_column,
+                y=col,
+                palette="pastel",
+                ax=ax,
+            )
+            ax.set_title(f"Box Plot of {col}")
+            ax.set_xlabel(target_column)
+            ax.set_ylabel(col)
+        for i in range(num_columns, num_rows * 2):
+            fig.delaxes(axes[i])
+        plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
+        plt.clf()
+
     def plot_feature_importance(
         self, xgb_model: xgb.XGBClassifier, plot_name: str
     ) -> None:

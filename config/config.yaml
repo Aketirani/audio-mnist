@@ -16,6 +16,7 @@ plot:
   audio: "audio/audio_{0}_{1}_{2}.png"
   stft: "stft/stft_{0}_{1}_{2}.png"
   col_dist: "column_distribution.png"
+  col_box: "column_box.png"
   conf_matrix: "confusion_matrix.png"
   corr_matrix: "correlation_matrix.png"
   feat_imp: "feature_importance.png"
