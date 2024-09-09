@@ -176,7 +176,9 @@ class DataVisualization:
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
         plt.clf()
 
-    def plot_box(self, df: pd.DataFrame, plot_name: str, target_column: str) -> None:
+    def plot_column_box(
+        self, df: pd.DataFrame, plot_name: str, target_column: str
+    ) -> None:
         """
         Plots the box plot with respect to the target column and saves it
 

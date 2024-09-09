@@ -44,8 +44,8 @@ class TestDataVisualization(unittest.TestCase):
         )
         os.remove(os.path.join(self.setup.set_test_path(), self.plot_name))
 
-    def test_plot_box(self):
-        self.data_visualization.plot_box(
+    def test_plot_column_box(self):
+        self.data_visualization.plot_column_box(
             self.matrix, self.plot_name, target_column="col1"
         )
         self.assertTrue(

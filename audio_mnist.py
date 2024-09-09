@@ -92,7 +92,9 @@ class AudioMNIST:
             df, self.config_file["plot"]["col_dist"], self.config_file["target"]
         )
 
-        DV.plot_box(df, self.config_file["plot"]["col_box"], self.config_file["target"])
+        DV.plot_column_box(
+            df, self.config_file["plot"]["col_box"], self.config_file["target"]
+        )
 
         corr_matrix = FE.pearson_correlation(df, self.config_file["target"])
 
