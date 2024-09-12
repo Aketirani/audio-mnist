@@ -61,7 +61,7 @@ class DataVisualization:
             stft = librosa.stft(audio_data)
             stft_magnitude_db = librosa.power_to_db(np.abs(stft), ref=np.max)
             librosa.display.specshow(
-                stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="inferno"
+                stft_magnitude_db, sr=sr, x_axis="time", y_axis="hz", cmap="plasma"
             )
             plt.colorbar(format="%+2.0f dB")
             plt.title("Short-Time Fourier Transform")
