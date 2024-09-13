@@ -71,6 +71,33 @@ class DataVisualization:
             plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
             plt.clf()
 
+    def image_stft(
+        self,
+        sr: int,
+        audio_data: np.ndarray,
+        plot_path: str,
+        plot_flag: int = 1,
+    ) -> None:
+        """
+        Plots the STFT as an image and saves it
+
+        :param sr: int, sample rate for the audio recording
+        :param audio_data: np.ndarray, audio data to be plotted
+        :param plot_path: str, full path where the plot will be saved
+        :param plot_flag: int, flag to determine whether to plot (1) or not (0)
+        """
+        if plot_flag:
+            audio_data = audio_data.astype(float)
+            stft = librosa.stft(audio_data)
+            stft_magnitude_db = librosa.power_to_db(np.abs(stft), ref=np.max)
+            plt.figure(figsize=(10, 4))
+            librosa.display.specshow(
+                stft_magnitude_db, sr=sr, x_axis=None, y_axis=None, cmap="plasma"
+            )
+            plt.axis("off")
+            plt.savefig(plot_path, bbox_inches="tight", pad_inches=0)
+            plt.close()
+
     def plot_corr_matrix(self, corr_matrix: pd.DataFrame, plot_name: str) -> None:
         """
         Plots the correlation matrix and saves it

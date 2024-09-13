@@ -45,45 +45,64 @@ class AudioMNIST:
                 fs, audio_data = DP.read_audio(file)
                 audio_data = DP.resample_data(fs, audio_data)
                 audio_data = DP.zero_pad(audio_data)
-                time_domain_features = DP.feature_creation_time_domain(audio_data)
-                fft_data = DP.fft_data(audio_data)
-                features = DP.feature_creation_frequency_domain(fft_data)
-                features.update(time_domain_features)
-                n_features = DP.normalize_features(features)
-                features = DP.add_column_dict(
-                    n_features,
-                    self.config_file["target"],
-                    meta_data[vp][self.config_file["target"]],
-                )
-                df = pd.concat([df, features], ignore_index=True)
+                # time_domain_features = DP.feature_creation_time_domain(audio_data)
+                # fft_data = DP.fft_data(audio_data)
+                # features = DP.feature_creation_frequency_domain(fft_data)
+                # features.update(time_domain_features)
+                # n_features = DP.normalize_features(features)
+                label = meta_data[vp][self.config_file["target"]]
+                # features = DP.add_column_dict(
+                #     n_features,
+                #     self.config_file["target"],
+                #     label,
+                # )
+                # df = pd.concat([df, features], ignore_index=True)
 
-                DV.plot_audio(
+                # DV.plot_audio(
+                #     fs,
+                #     audio_data,
+                #     self.config_file["plot"]["audio"].format(dig[-1], vp, rep),
+                #     0,
+                # )
+                # DV.plot_stft(
+                #     fs,
+                #     audio_data,
+                #     self.config_file["plot"]["stft"].format(dig[-1], vp, rep),
+                #     0,
+                # )
+                # DV.play_audio(file, 0)
+
+                # CNN
+                DV.image_stft(
                     fs,
                     audio_data,
-                    self.config_file["plot"]["audio"].format(dig[-1], vp, rep),
-                    0,
+                    os.path.join(
+                        os.path.join(
+                            SU.set_data_path(),
+                            self.config_file["data"]["cnn"]["prepared"],
+                        ),
+                        f"{dig[-1]}_{vp}_{rep}_{label}.png",
+                    ),
+                    1,
                 )
-                DV.plot_stft(
-                    fs,
-                    audio_data,
-                    self.config_file["plot"]["stft"].format(dig[-1], vp, rep),
-                    0,
-                )
-                DV.play_audio(file, 0)
+                break
+            break
 
-        df.to_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
-            index=False,
-        )
+        # df.to_csv(
+        #     os.path.join(SU.set_data_path(), self.config_file["data"]["xgb"]["prepared"]),
+        #     index=False,
+        # )
 
-        gender_count = DP.column_value_counts(df, self.config_file["target"])
-        print(f"Female audio recordings: {gender_count[0]}")
-        print(f"Male audio recordings: {gender_count[1]}")
-        print(f"Prepared dataset, columns: {df.shape[1]} and rows: {df.shape[0]}")
+        # gender_count = DP.column_value_counts(df, self.config_file["target"])
+        # print(f"Female audio recordings: {gender_count[0]}")
+        # print(f"Male audio recordings: {gender_count[1]}")
+        # print(f"Prepared dataset, columns: {df.shape[1]} and rows: {df.shape[0]}")
 
     def FeatureEngineer(self):
         df = pd.read_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"])
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["prepared"]
+            )
         )
         df = FE.remove_constant_columns(df, self.config_file["target"])
         df = FE.categorize_column_values(df, self.config_file["target"])
@@ -107,13 +126,17 @@ class AudioMNIST:
         )
 
         df.to_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["engineered"]
+            ),
             index=False,
         )
 
     def DataSplit(self):
         df = pd.read_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"])
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["engineered"]
+            )
         )
 
         self.train_df, self.val_df, self.test_df = DS.split(
@@ -215,7 +238,9 @@ class AudioMNIST:
         df = DP.add_column_df(df, self.config_file["predicted"], y_pred)
 
         df.to_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["predicted"]
+            ),
             index=False,
         )
 
@@ -239,29 +264,41 @@ class AudioMNIST:
         PM.drop_table(self.pgs_file["table"]["predicted"])
 
         PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["prepared"]
+            ),
             self.pgs_file["table"]["prepared"],
             self.config_file["target"],
         )
         PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["engineered"]
+            ),
             self.pgs_file["table"]["engineered"],
         )
         PM.create_table_from_csv(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["predicted"]
+            ),
             self.pgs_file["table"]["predicted"],
         )
 
         PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["prepared"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["prepared"]
+            ),
             self.pgs_file["table"]["prepared"],
         )
         PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["engineered"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["engineered"]
+            ),
             self.pgs_file["table"]["engineered"],
         )
         PM.write_csv_to_table(
-            os.path.join(SU.set_data_path(), self.config_file["data"]["predicted"]),
+            os.path.join(
+                SU.set_data_path(), self.config_file["data"]["xgb"]["predicted"]
+            ),
             self.pgs_file["table"]["predicted"],
         )
 
@@ -293,35 +330,35 @@ if __name__ == "__main__":
         "-f",
         "--feat_eng",
         type=str,
-        default="true",
+        default="false",
         help="Feature Engineering",
     )
     parser.add_argument(
         "-s",
         "--data_split",
         type=str,
-        default="true",
+        default="false",
         help="Data Splitting",
     )
     parser.add_argument(
         "-u",
         "--model_tune",
         type=str,
-        default="true",
+        default="false",
         help="Model Tuning",
     )
     parser.add_argument(
         "-t",
         "--model_train",
         type=str,
-        default="true",
+        default="false",
         help="Model Training",
     )
     parser.add_argument(
         "-p",
         "--model_pred",
         type=str,
-        default="true",
+        default="false",
         help="Model Prediction",
     )
     parser.add_argument(

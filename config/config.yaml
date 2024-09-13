@@ -1,9 +1,14 @@
 project: "C:/GitProjects/audio-mnist"
 meta: "audioMNIST_meta.txt"
 data:
-  prepared: "data_prepared.csv"
-  engineered: "data_engineered.csv"
-  predicted: "data_predicted.csv"
+  cnn:
+    prepared: "cnn/prepared/"
+    engineered: "cnn/engineered/"
+    predicted: "cnn/predicted/"
+  xgb:
+    prepared: "xgb/data_prepared.csv"
+    engineered: "xgb/data_engineered.csv"
+    predicted: "xgb/data_predicted.csv"
 image:
   exit: "exit.png"
   info: "info.png"
