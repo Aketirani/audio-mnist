@@ -1,5 +1,5 @@
 # Gender Recognition By Voice Analysis
-This project focuses on leveraging acoustic features extracted from voice recordings to predict the gender of the speaker. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
+This project leverages acoustic features from voice recordings to predict the speaker's gender. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
 
 ### Table of Contents
 - [Project Overview](#project-overview)
@@ -17,7 +17,7 @@ This project focuses on leveraging acoustic features extracted from voice record
 - [Developer](#developer)
 
 ### Project Overview
-Voice recordings can be analyzed to infer a wide range of details including the content spoken, the emotional state, gender, and even the identity of the speaker. This project centers on gender recognition, aiming to create a model capable of identifying gender-specific patterns and features in voice recordings.
+Voice recordings can reveal a wide range of details, including the content spoken, emotional state, gender, and identity of the speaker. This project focuses on gender recognition, aiming to create a model capable of identifying gender-specific patterns in voice recordings.
 
 ### Structure
 ```
@@ -77,16 +77,16 @@ Voice recordings can be analyzed to infer a wide range of details including the 
 ```
 
 ### Dataset
-This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) encompassing 30,000 spoken digits (0-9) audio samples from 60 distinct speakers. The dataset includes a directory for each speaker containing their respective audio recordings and a meta-information file detailing the gender and age of each speaker.
+This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) with 30,000 spoken digits (0-9) audio samples from 60 distinct speakers. Each speaker's directory contains their audio recordings and a meta-information file.
 
 ### Data Summary
 Explore a detailed data profiling report by opening the `html/profiling_report.html` file in your web browser. This report offers statistical insights, distribution plots, and a comprehensive overview of the dataset's characteristics.
 
 ### Model Selection
-The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 
+The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is based on its efficiency and scalability, especially for large datasets and complex models. It effectively handles missing values, categorical variables, and high-dimensional data, making it well-suited for this project. XGBoost's regularization techniques help prevent overfitting and enhance model generalization.
 
 ### Model Architecture
-The project employs a gradient boosting tree ensemble model within the XGBoost framework. This model synergizes predictions from several decision trees to arrive at a final prediction for the target variable — the speaker's gender. A set of key parameters govern the model, allowing for fine-tuning to attain optimal performance on the dataset.
+A gradient boosting tree ensemble model within the XGBoost framework is employed. This model synergizes predictions from multiple decision trees to determine the speaker's gender. Fine-tuning is achieved through key parameters, allowing for optimal performance.
 
 The model uses the following key parameters:
 | Parameter       | Description          |
@@ -98,7 +98,7 @@ The model uses the following key parameters:
 | `tree_method`   | Tree Method          |
 
 ### Model Features
-The model relies on various statistical features calculated from both the time-domain and frequency-domain data of the audio samples. These features are crucial in training the model to recognize gender-specific patterns in the voice recordings.
+The model uses various statistical features from both time-domain and frequency-domain data of the audio samples. These features are crucial for training the model to recognize gender-specific patterns.
 
 These features include:
 | Feature     | Description        |
@@ -121,10 +121,10 @@ These features include:
 The model has achieved a promising accuracy rate of `96.70%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ### PostgreSQL Integration
-PostgreSQL integration enhances the project's data management capabilities. By utilizing [PostgreSQL](https://www.postgresql.org), an open-source object-relational database system, we ensure scalability, robustness, and efficient storage and retrieval of data. Utilize psycopg2, a Python driver, for seamless interaction with PostgreSQL. Store connection details in the `config/postgres.yaml` file for easy access, and perform database operations using SQL queries.
+PostgreSQL integration enhances data management capabilities. By utilizing [PostgreSQL](https://www.postgresql.org), an open-source object-relational database system, we ensure scalability, robustness, and efficient data storage and retrieval. Store connection details in the `config/postgres.yaml` file and perform database operations using SQL queries.
 
 ### Conclusion
-This project epitomizes the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
+This project exemplifies the application of machine learning in voice and speech analysis, showcasing the potential to discern gender through acoustic features.
 
 ### Requirements
 Execute `pip install -r requirements.txt` to install the required libraries.
