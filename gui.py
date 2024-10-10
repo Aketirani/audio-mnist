@@ -531,11 +531,12 @@ class GUI:
 
             self.output_text.see(tk.END)
         except subprocess.CalledProcessError as e:
-            print("Error:", e)
-            print("Command:", e.cmd)
-            print("Exit Code:", e.returncode)
-            print("Stdout:", e.stdout)
-            print("Stderr:", e.stderr)
+            self.output_text.insert(tk.END, f"Error: {e}\n")
+            self.output_text.insert(tk.END, f"Command: {e.cmd}\n")
+            self.output_text.insert(tk.END, f"Exit Code: {e.returncode}\n")
+            self.output_text.insert(tk.END, f"Stdout: {e.stdout}\n")
+            self.output_text.insert(tk.END, f"Stderr: {e.stderr}\n")
+            self.output_text.see(tk.END)
             messagebox.showerror(
                 "Error", "An error occurred while running the pipeline"
             )

@@ -32,6 +32,9 @@ Voice recordings can be analyzed to infer a wide range of details including the 
 ├── data                        <-- Data Folder
 |   └── *.csv                   <-- Data Files
 |
+├── html                        <-- HTML Folder
+|   └── *.html                  <-- HTML Files
+|
 ├── images                      <-- Image Folder
 |   └── *.png                   <-- Image Files
 |
@@ -75,6 +78,9 @@ Voice recordings can be analyzed to infer a wide range of details including the 
 
 ### Dataset
 This project utilizes a comprehensive [dataset](https://www.kaggle.com/datasets/primaryobjects/voicegender) encompassing 30,000 spoken digits (0-9) audio samples from 60 distinct speakers. The dataset includes a directory for each speaker containing their respective audio recordings and a meta-information file detailing the gender and age of each speaker.
+
+### Data Summary
+You can view the profiling report by clicking [here](html/profiling_report.html).
 
 ### Model Selection
 The choice of [XGBoost](https://xgboost.readthedocs.io/en/stable/) (eXtreme Gradient Boosting) is grounded in its efficiency and scalability, especially for large datasets and complex models. It stands out for its capacity to manage missing values, categorical variables, and high-dimensional data, making it aptly suited for the project. Moreover, it encompasses regularization techniques that deter overfitting and enhance model generalization. 

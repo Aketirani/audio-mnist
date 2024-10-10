@@ -100,6 +100,14 @@ class Setup:
         """
         return os.path.join(self.read_config()["project"], "plots")
 
+    def set_html_path(self) -> str:
+        """
+        Get the path to the folder containing html
+
+        :return: str, path to the html folder
+        """
+        return os.path.join(self.read_config()["project"], "html")
+
     def set_result_path(self) -> str:
         """
         Get the path to the folder containing results

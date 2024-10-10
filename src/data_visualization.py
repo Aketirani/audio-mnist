@@ -9,6 +9,7 @@ import playsound
 import seaborn as sns
 import shap
 import xgboost as xgb
+import ydata_profiling
 from sklearn.metrics import confusion_matrix
 
 
@@ -17,13 +18,15 @@ class DataVisualization:
     This class is used to visualize data
     """
 
-    def __init__(self, plot_path: str):
+    def __init__(self, plot_path: str, html_path: str):
         """
         Initialize the class
 
         :param plot_path: str, directory where the plots will be saved
+        :param html_path: str, directory where the html will be saved
         """
         self.plot_path = plot_path
+        self.html_path = html_path
 
     def plot_audio(
         self, sr: int, audio_data: np.ndarray, plot_name: str, plot_flag: int = 1
@@ -270,3 +273,13 @@ class DataVisualization:
         plt.title("Shapley Summary Plot")
         plt.savefig(os.path.join(self.plot_path, plot_name), bbox_inches="tight")
         plt.clf()
+
+    def profiling_report(self, df: pd.DataFrame, html_name: str) -> None:
+        """
+        Generates a YData Profiling report and saves it
+
+        :param df: pd.DataFrame, the DataFrame to be profiled
+        :param html_name: str, the name of the HTML file to be saved
+        """
+        profile = ydata_profiling.ProfileReport(df, title="Profiling Report")
+        profile.to_file(os.path.join(self.html_path, html_name))
