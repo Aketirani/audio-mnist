@@ -96,6 +96,8 @@ class AudioMNIST:
             df, self.config_file["plot"]["col_box"], self.config_file["target"]
         )
 
+        DV.profiling_report(df, self.config_file["html"]["profile"])
+
         corr_matrix = FE.pearson_correlation(df, self.config_file["target"])
 
         DV.plot_corr_matrix(corr_matrix, self.config_file["plot"]["corr_matrix"])
@@ -336,7 +338,7 @@ if __name__ == "__main__":
     SU = Setup(args.cfg_file)
     PM = PostgresManager(args.pgs_file)
     DP = DataPreparation()
-    DV = DataVisualization(SU.set_plot_path())
+    DV = DataVisualization(SU.set_plot_path(), SU.set_html_path())
     FE = FeatureEngineering()
     DS = DataSplitting()
     MT = ModelTraining()

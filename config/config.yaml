@@ -4,6 +4,8 @@ data:
   prepared: "data_prepared.csv"
   engineered: "data_engineered.csv"
   predicted: "data_predicted.csv"
+html:
+  profile: "profiling_report.html"
 image:
   exit: "exit.png"
   info: "info.png"

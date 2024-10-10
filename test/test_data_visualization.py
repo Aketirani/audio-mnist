@@ -26,7 +26,7 @@ class TestDataVisualization(unittest.TestCase):
         """
         self.setup = Setup(cfg_file="config.yaml")
         self.data_visualization = DataVisualization(
-            plot_path=self.setup.set_test_path()
+            plot_path=self.setup.set_test_path(), html_path=None
         )
         self.data = np.array([0.1, 0.2, 0.3, 0.4])
         self.columns = ["col1", "col2", "col3", "col4"]
