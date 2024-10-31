@@ -3,3 +3,6 @@
 
 # Recognize `.sh` files as Shell
 *.sh linguist-language=Shell
+
+# Force `.html` files to be recognized as Python due to GitHub bug
+*.html linguist-language=Python
