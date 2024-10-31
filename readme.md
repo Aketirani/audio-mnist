@@ -17,7 +17,7 @@ This project leverages acoustic features from voice recordings to predict the sp
 - [Developer](#developer)
 
 ### Project Overview
-Voice recordings can reveal a wide range of details, including the content spoken, emotional state, gender, and identity of the speaker. This project focuses on gender recognition, aiming to create a model capable of identifying gender-specific patterns in voice recordings.
+Voice recordings provide insights into various speaker attributes, including content, emotional state, gender, and identity. This project focuses on gender recognition, aiming to develop a model that accurately identifies gender-specific patterns in voice recordings through acoustic features.
 
 ### Structure
 ```
