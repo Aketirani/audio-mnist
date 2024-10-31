@@ -1,5 +1,8 @@
-# Force GitHub to recognize all .html files as Python code
-*.html linguist-language=Python
+# Recognize `.py` files as Python
+*.py linguist-language=Python
 
-# Mark the contents of .github/fsharp-custom-action as vendored (ignored in language statistics)
+# Recognize `.sh` files as Shell
+*.sh linguist-language=Shell
+
+# Mark vendored files in this directory
 .github/fsharp-custom-action/** linguist-vendored

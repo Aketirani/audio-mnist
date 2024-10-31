@@ -145,7 +145,6 @@ Following arguments can be specified:
 | `-p`, `--model_pred`  | Execute the model prediction step         |
 | `-q`, `--data_sql`    | Execute the data sql step                 |
 
-
 ### Unit Tests
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
 
