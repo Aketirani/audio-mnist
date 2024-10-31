@@ -1,5 +1,5 @@
 # Gender Recognition By Voice Analysis
-This project leverages acoustic features from voice recordings to predict the speaker's gender. Utilizing a large dataset and the XGBoost machine learning library, the project aims to develop a robust model for gender classification.
+This project leverages acoustic features from voice recordings to predict the speaker's gender. Utilizing a large dataset and the XGBoost machine learning library, this project aims to build a high-accuracy model for gender classification based on voice characteristics.
 
 ### Table of Contents
 - [Project Overview](#project-overview)
