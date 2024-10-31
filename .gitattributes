@@ -3,6 +3,3 @@
 
 # Recognize `.sh` files as Shell
 *.sh linguist-language=Shell
-
-# Mark vendored files in this directory
-.github/fsharp-custom-action/** linguist-vendored
