@@ -1,20 +1,21 @@
-# Gender Recognition By Voice Analysis
+# 🎙️ Gender Recognition By Voice Analysis
 This project leverages acoustic features from voice recordings to predict the speaker's gender. Utilizing a large dataset and the XGBoost machine learning library, this project aims to build a high-accuracy model for gender classification based on voice characteristics.
 
-### Table of Contents
-- [Project Overview](#project-overview)
-- [Structure](#structure)
-- [Dataset](#dataset)
-- [Model Selection](#model-selection)
-- [Model Architecture](#model-architecture)
-- [Model Features](#model-features)
-- [Model Performance](#model-performance)
-- [PostgreSQL Integration](#postgresql-integration)
-- [Conclusion](#conclusion)
-- [Requirements](#requirements)
-- [Execution](#execution)
-- [Unit Tests](#unit-tests)
-- [Developer](#developer)
+### 📖 Table of Contents
+- 🔍 [Project Overview](#project-overview)
+- 📂 [Structure](#structure)
+- 🎲 [Data Summary](#data-summary)
+- 📊 [Dataset](#dataset)
+- 🧰 [Model Selection](#model-selection)
+- ⚙️ [Model Architecture](#model-architecture)
+- 🧠 [Model Features](#model-features)
+- 🎯 [Model Performance](#model-performance)
+- 💾 [PostgreSQL Integration](#postgresql-integration)
+- 💡 [Conclusion](#conclusion)
+- 📑 [Requirements](#requirements)
+- ▶️ [Execution](#execution)
+- 🧪 [Unit Tests](#unit-tests)
+- 👤 [Developer](#developer)
 
 ### Project Overview
 Voice recordings provide insights into various speaker attributes, including content, emotional state, gender, and identity. This project focuses on gender recognition, aiming to develop a model that accurately identifies gender-specific patterns in voice recordings through acoustic features.
