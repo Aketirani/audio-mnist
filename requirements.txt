@@ -9,3 +9,9 @@ seaborn==0.12.2
 xgboost==1.7.3
 pre-commit==3.0.4
 psycopg2-binary==2.9.5
+argparse==1.4.0
+glob2==0.7
+shap==0.41.0
+ydata_profiling==4.0.0
+scikit-learn==1.2.0
+joblib==1.2.0
