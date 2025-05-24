@@ -235,7 +235,7 @@ class AudioMNIST:
 
         MP.evaluate_predictions(self.y_test, y_pred)
 
-    def DataPostgres(self):
+    def SavePostgres(self):
         PM.drop_table(self.pgs_file["table"]["prepared"])
         PM.drop_table(self.pgs_file["table"]["engineered"])
         PM.drop_table(self.pgs_file["table"]["predicted"])
@@ -328,10 +328,10 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-q",
-        "--data_sql",
+        "--save_sql",
         type=str,
         default="false",
-        help="Data To PostgreSQL",
+        help="Save To PostgreSQL",
     )
     args = parser.parse_args()
 
@@ -369,5 +369,5 @@ if __name__ == "__main__":
     if args.model_pred == "true":
         AM.ModelPredict()
 
-    if args.data_sql == "true":
-        AM.DataPostgres()
+    if args.save_sql == "true":
+        AM.SavePostgres()

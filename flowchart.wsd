@@ -1,24 +1,42 @@
-@startuml Pipeline Flowchart
-|audio_mnist|
-package "audio-mnist" {
-    :start|
-    partition "audiomnist.sh" {
-        :set paths;
-        :run script;
-        partition "gui.py" {
-            :run application;
-            partition "audiomnist.py" {
-                :data preparation;
-                :feature engineering;
-                :data splitting;
-                :model tuning;
-                :model training;
-                :model prediction;
-                :data to postgres;
-            }
-        }
-        :write to log;
-    }
-    :end|
+@startuml
+title Audio-MNIST Flowchart 🔁
+
+|USER 🟩|
+package "audio-mnist" #D5E8D4 {
+  :Start ✅;
 }
+
+|RUN 🟦|
+package "audiomnist.sh" #DAE8FC {
+  :Set paths 📁;
+  :Start log 📜;
+  :Run GUI 🖥️;
+}
+
+|GUI 🟨|
+package "gui.py" #FFF2CC {
+  :Run application 🏃;
+}
+
+|APP 🟥|
+package "audiomnist.py" #F8CECC {
+  :Data preparation 🧹;
+  :Feature engineering 🧬;
+  :Data splitting 🔀;
+  :Model tuning 🔧;
+  :Model training 🧠;
+  :Model prediction 🎯;
+  :Save to postgres 🛢️;
+}
+
+|RUN 🟦|
+package "audiomnist.sh" #DAE8FC {
+  :Finish log 📜;
+}
+
+|USER 🟩|
+package "audio-mnist" #D5E8D4 {
+  :End 🛑;
+}
+
 @enduml
