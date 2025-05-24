@@ -49,9 +49,8 @@ class AudioMNIST:
                 fft_data = DP.fft_data(audio_data)
                 features = DP.feature_creation_frequency_domain(fft_data)
                 features.update(time_domain_features)
-                n_features = DP.normalize_features(features)
                 features = DP.add_column_dict(
-                    n_features,
+                    features,
                     self.config_file["target"],
                     meta_data[vp][self.config_file["target"]],
                 )

@@ -1,5 +1,5 @@
 learning_rate: 0.1          # Learning Rate
-max_depth: 9                # Max Depth Of Tree
+max_depth: 7                # Max Depth Of Tree
 n_estimators: 300           # Number Of Estimators
 objective: binary:logistic  # Objective Function
 tree_method: hist           # Tree Method

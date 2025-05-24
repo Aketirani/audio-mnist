@@ -122,7 +122,7 @@ These features include:
 | `cent`      | Frequency Centroid |
 
 ### Model Performance
-The model has achieved a promising accuracy rate of `96.70%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
+The model has achieved a promising accuracy rate of `97.83%` on the test dataset, showcasing its potential in gender recognition through voice analysis.
 
 ### PostgreSQL Integration
 PostgreSQL integration enhances data management capabilities. By utilizing [PostgreSQL](https://www.postgresql.org), an open-source object-relational database system, we ensure scalability, robustness, and efficient data storage and retrieval. Store connection details in the `config/postgres.yaml` file and perform database operations using SQL queries.
