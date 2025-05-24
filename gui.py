@@ -44,7 +44,7 @@ class GUI:
             "MODEL TUNING",
             "MODEL TRAINING",
             "MODEL PREDICTION",
-            "DATA TO POSTGRESQL",
+            "SAVE TO POSTGRESQL",
         ]
 
         self.tooltip_texts = [

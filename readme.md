@@ -10,12 +10,13 @@ This project leverages acoustic features from voice recordings to predict the sp
 - [Dataset](#dataset) 📊
 - [Model Selection](#model-selection) 🧰
 - [Model Architecture](#model-architecture) ⚙️
-- [Model Features](#model-features) 🧠
+- [Model Features](#model-features) 🧬
 - [Model Performance](#model-performance) 🎯
 - [PostgreSQL Integration](#postgresql-integration) 🛢️
 - [Conclusion](#conclusion) 💡
 - [Requirements](#requirements) 📑
 - [Execution](#execution) 🏃‍♂️
+- [Flowchart](#flowchart) 🔁
 - [Unit Tests](#unit-tests) 🧪
 - [Developer](#developer) 👤
 
@@ -146,7 +147,10 @@ Following arguments can be specified:
 | `-u`, `--model_tune`  | Execute the model tuning step             |
 | `-t`, `--model_train` | Execute the model training step           |
 | `-p`, `--model_pred`  | Execute the model prediction step         |
-| `-q`, `--data_sql`    | Execute the data sql step                 |
+| `-q`, `--save_sql`    | Execute the save to postgreSQL step       |
+
+### Flowchart
+![AudioMNIST Gif](images/flowchart.svg)
 
 ### Unit Tests
 Execute `python -m unittest discover test` to run all unit tests, ensuring the reliability of the code base.
